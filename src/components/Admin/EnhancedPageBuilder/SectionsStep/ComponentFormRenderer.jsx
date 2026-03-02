@@ -2,6 +2,44 @@ import { useState } from "react";
 import Button from "../../../UI/Button";
 import DynamicFormGenerator from "../../../UI/DynamicFormGenerator";
 
+// Safely parse contentJson which may arrive as a string or already-parsed object
+const safeParseContentJson = (contentJson, fallback = {}) => {
+  if (!contentJson) return fallback;
+  if (typeof contentJson === "object") return contentJson;
+  try {
+    return JSON.parse(contentJson);
+  } catch (e) {
+    console.error("[ComponentFormRenderer] Failed to parse contentJson:", e);
+    return fallback;
+  }
+};
+
+/**
+ * Migrate legacy data shapes to match the current schema field names.
+ * This is needed when existing DB records were saved with old key names.
+ */
+const migrateComponentData = (data, componentType) => {
+  if (!data || typeof data !== "object") return data;
+
+  // PayrollPainPointsSection: legacy used `items` [{text, icon}] → now `painPoints` [{title, description, icon}]
+  if (componentType === "PayrollPainPointsSection") {
+    const hasPainPoints = Array.isArray(data.painPoints) && data.painPoints.length > 0;
+    const hasLegacyItems = Array.isArray(data.items) && data.items.length > 0;
+    if (!hasPainPoints && hasLegacyItems) {
+      return {
+        ...data,
+        painPoints: data.items.map((item) => ({
+          title: item.title || item.text || "",
+          description: item.description || "",
+          icon: item.icon || "",
+        })),
+      };
+    }
+  }
+
+  return data;
+};
+
 const ComponentFormRenderer = ({
   component,
   index,
@@ -54,7 +92,11 @@ const ComponentFormRenderer = ({
         </div>
         <textarea
           rows={6}
-          value={component.contentJson || "{}"}
+          value={
+            typeof component.contentJson === "string"
+              ? component.contentJson
+              : JSON.stringify(component.contentJson ?? {}, null, 2)
+          }
           onChange={(e) => onUpdate(index, "contentJson", e.target.value)}
           placeholder='{"title": "Example Title", "description": "Example Description"}'
           className="block w-full rounded-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:border-blue-400 focus:ring-blue-400/20 shadow-sm font-mono text-sm resize-none"
@@ -68,7 +110,9 @@ const ComponentFormRenderer = ({
             variant="outline"
             onClick={() => {
               const formatted = validateAndFormatJSON(
-                component.contentJson || "{}",
+                typeof component.contentJson === "string"
+                  ? component.contentJson
+                  : JSON.stringify(component.contentJson ?? {}),
               );
               onUpdate(index, "contentJson", formatted);
             }}
@@ -109,18 +153,21 @@ const ComponentFormRenderer = ({
         {componentSchema ? (
           <DynamicFormGenerator
             schema={componentSchema.schema}
-            data={
-              component.contentJson
-                ? JSON.parse(component.contentJson)
-                : componentSchema.defaultData || {}
-            }
+            data={migrateComponentData(
+              safeParseContentJson(
+                component.contentJson,
+                componentSchema.defaultData || {}
+              ),
+              component.componentType
+            )}
             onChange={(formData) => {
               onUpdate(index, "contentJson", JSON.stringify(formData, null, 2));
             }}
             onFieldChange={(field, value) => {
-              const currentData = component.contentJson
-                ? JSON.parse(component.contentJson)
-                : {};
+              const currentData = migrateComponentData(
+                safeParseContentJson(component.contentJson),
+                component.componentType
+              );
 
               // Handle nested paths like "slides.0.image" or "ctaButton.text"
               const pathParts = field.split(".");
@@ -157,13 +204,11 @@ const ComponentFormRenderer = ({
           <DynamicFormGenerator
             schema={
               generateDynamicSchema(
-                component.contentJson ? JSON.parse(component.contentJson) : {},
+                safeParseContentJson(component.contentJson),
                 component.componentType,
               ).schema
             }
-            data={
-              component.contentJson ? JSON.parse(component.contentJson) : {}
-            }
+            data={safeParseContentJson(component.contentJson)}
             onChange={(formData) => {
               onUpdate(index, "contentJson", JSON.stringify(formData, null, 2));
             }}

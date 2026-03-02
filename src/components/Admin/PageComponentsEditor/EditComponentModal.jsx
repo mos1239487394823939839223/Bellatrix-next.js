@@ -74,6 +74,33 @@ const EditComponentModal = ({
           normalizedJson = Object.keys(displayFields).length > 0
             ? displayFields
             : parsedJson;
+
+          // PayrollPainPointsSection: normalizeProps wraps painPoints into a nested
+          // object { title, description, painPoints: [...], image }. Flatten it back
+          // to a plain array so DynamicFormGenerator renders the array correctly.
+          if (componentType === "PayrollPainPointsSection") {
+            const pp = normalizedJson.painPoints;
+            if (pp && !Array.isArray(pp)) {
+              normalizedJson = {
+                ...normalizedJson,
+                painPoints: Array.isArray(pp.painPoints) ? pp.painPoints : [],
+              };
+            }
+            // Also handle legacy `items` key → painPoints migration
+            if (
+              (!normalizedJson.painPoints || normalizedJson.painPoints.length === 0) &&
+              Array.isArray(normalizedJson.items) && normalizedJson.items.length > 0
+            ) {
+              normalizedJson = {
+                ...normalizedJson,
+                painPoints: normalizedJson.items.map((item) => ({
+                  title: item.title || item.text || "",
+                  description: item.description || "",
+                  icon: item.icon || "",
+                })),
+              };
+            }
+          }
         } catch (e) {
           // fallback to raw parsed data
         }

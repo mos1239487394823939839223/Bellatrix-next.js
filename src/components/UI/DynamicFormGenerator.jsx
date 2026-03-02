@@ -328,7 +328,7 @@ const DynamicFormGenerator = ({
 
     const arrayKey = pathArray[pathArray.length - 1];
 
-    if (!current[arrayKey]) {
+    if (!Array.isArray(current[arrayKey])) {
       current[arrayKey] = [];
     }
 
@@ -352,7 +352,9 @@ const DynamicFormGenerator = ({
 
     const arrayKey = pathArray[pathArray.length - 1];
 
-    current[arrayKey].splice(index, 1);
+    if (Array.isArray(current[arrayKey])) {
+      current[arrayKey].splice(index, 1);
+    }
 
     setFormData(updatedData);
 
@@ -371,6 +373,8 @@ const DynamicFormGenerator = ({
     }
 
     const arrayKey = pathArray[pathArray.length - 1];
+
+    if (!Array.isArray(current[arrayKey])) return;
 
     const item = current[arrayKey][fromIndex];
 

@@ -256,7 +256,10 @@ const EnhancedPageBuilder = () => {
 
                 theme: component.theme ?? 1,
 
-                contentJson: component.contentJson || JSON.stringify({}),
+                contentJson:
+                  typeof component.contentJson === "string"
+                    ? component.contentJson || JSON.stringify({})
+                    : JSON.stringify(component.contentJson ?? {}),
               })) || [],
           });
 

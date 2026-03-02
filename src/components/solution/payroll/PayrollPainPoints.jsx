@@ -49,9 +49,16 @@ const PayrollPainPoints = ({ painPoints, image }) => {
               <ul className="space-y-5">
                 {items.map((item, idx) => (
                   <li key={idx} className="flex items-start">
-                    <span className="text-lg text-[var(--color-text-secondary)]">
-                      {item.title}
-                    </span>
+                    <div>
+                      <span className="text-lg text-[var(--color-text-secondary)]">
+                        {item.title || item.text}
+                      </span>
+                      {item.description && (
+                        <p className="text-sm text-[var(--color-text-muted)] mt-1">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>

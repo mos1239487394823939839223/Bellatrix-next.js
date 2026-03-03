@@ -72,35 +72,7 @@ const Services = ({
 
 
 
-  // Debug logging for real-time updates
 
-  console.log(" [Services] Component received data:", {
-
-    hasPropsServices: propsServices.length > 0,
-
-    propsServices: propsServices,
-
-    hasPropsSectionHeader: Object.keys(propsSectionHeader).length > 0,
-
-    propsSectionHeader: propsSectionHeader,
-
-    hasPropsViewAllButton: Object.keys(propsViewAllButton).length > 0,
-
-    propsViewAllButton: propsViewAllButton,
-
-    hasData: !!data,
-
-    data: data,
-
-    finalServices: services,
-
-    finalSectionHeader: sectionHeader,
-
-    finalViewAllButton: viewAllButton,
-
-    timestamp: new Date().toISOString()
-
-  });
 
   const [showAllServices, setShowAllServices] = useState(false);
 

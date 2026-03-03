@@ -4,6 +4,22 @@
 @import "./styles/skeleton.css";
 /* ss */
 
+/* ============================
+   Hero text slide transition
+   ============================ */
+.hero-text-transition {
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  will-change: opacity, transform;
+}
+.hero-text-enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-text-exit {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
 /* About Values Section - Description Text */
 .about-values-description {
   color: var(--color-white) !important;

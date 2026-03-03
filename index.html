@@ -17,10 +17,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+  <!-- Preload hero video so it starts downloading immediately -->
+  <link rel="preload" as="video" href="/Videos/implementation/homepage_hero.mp4" type="video/mp4" />
+
+  <!-- Inline critical CSS for instant dark hero background before JS loads -->
+  <style>
+    #root { min-height: 100dvh; }
+    /* Instant dark hero placeholder — visible before React mounts */
+    .hero-instant-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    }
+  </style>
+
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Instant dark hero background — removed by React on mount -->
+    <div class="hero-instant-bg" aria-hidden="true"></div>
+  </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 

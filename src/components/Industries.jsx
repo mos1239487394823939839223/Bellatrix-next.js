@@ -51,29 +51,7 @@ const Industries = ({ industries: propsIndustries = [], sectionHeader: propsSect
 
 
 
-  // Debug logging for real-time updates
 
-  console.log(" [Industries] Component received data:", {
-
-    hasPropsIndustries: propsIndustries.length > 0,
-
-    propsIndustries: propsIndustries,
-
-    hasPropsSectionHeader: Object.keys(propsSectionHeader).length > 0,
-
-    propsSectionHeader: propsSectionHeader,
-
-    hasData: !!data,
-
-    data: data,
-
-    finalIndustries: industries,
-
-    finalSectionHeader: sectionHeader,
-
-    timestamp: new Date().toISOString()
-
-  });
 
   const [selectedIndustry, setSelectedIndustry] = useState(null);
 

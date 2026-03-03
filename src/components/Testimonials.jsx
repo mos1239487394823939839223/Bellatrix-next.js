@@ -14,29 +14,7 @@ const Testimonials = ({ testimonials: propsTestimonials = [], sectionHeader: pro
 
 
 
-  // Debug logging for real-time updates
 
-  console.log(" [Testimonials] Component received data:", {
-
-    hasPropsTestimonials: propsTestimonials.length > 0,
-
-    propsTestimonials: propsTestimonials,
-
-    hasPropsSectionHeader: Object.keys(propsSectionHeader).length > 0,
-
-    propsSectionHeader: propsSectionHeader,
-
-    hasData: !!data,
-
-    data: data,
-
-    finalTestimonials: testimonials,
-
-    finalSectionHeader: sectionHeader,
-
-    timestamp: new Date().toISOString()
-
-  });
 
   const videoRef = useRef(null);
 
@@ -60,11 +38,7 @@ const Testimonials = ({ testimonials: propsTestimonials = [], sectionHeader: pro
 
           if (error.name === "AbortError" || error.name === "NotAllowedError") {
 
-            console.log(
-
-              "Testimonials video autoplay blocked by browser - this is normal"
-
-            );
+            // Autoplay blocked — expected on some browsers
 
           }
 
@@ -168,7 +142,7 @@ const Testimonials = ({ testimonials: propsTestimonials = [], sectionHeader: pro
 
         playsInline
 
-        preload="auto"
+        preload="none"
 
         onLoadedData={() => {
 
@@ -180,13 +154,7 @@ const Testimonials = ({ testimonials: propsTestimonials = [], sectionHeader: pro
 
             videoRef.current.play().catch(() => {
 
-              // Silently handle autoplay restrictions - this is expected
-
-              console.log(
-
-                "Testimonials video autoplay blocked by browser (normal behavior)"
-
-              );
+              // Silently handle autoplay restrictions
 
             });
 
@@ -194,11 +162,7 @@ const Testimonials = ({ testimonials: propsTestimonials = [], sectionHeader: pro
 
         }}
 
-        onError={(e) => {
-
-          console.log("Testimonials video loading error:", e.target.error);
-
-        }}
+        onError={() => {}}
 
       />
 

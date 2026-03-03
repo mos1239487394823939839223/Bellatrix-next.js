@@ -1,21 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, memo } from "react";
 
 import SEO from "./SEO";
 
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-
-import { AnimatePresence } from "framer-motion";
-
-
-
-const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
+const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
   const videoRef = useRef(null);
+  const prevVideoRef = useRef(null);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const [isPlaying, setIsPlaying] = useState(true);
-  const [videoReady, setVideoReady] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [fadeClass, setFadeClass] = useState("hero-text-enter");
 
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
 
@@ -70,84 +66,51 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
 
   const slides = propsSlides.length > 0 ? propsSlides : (data?.slides?.length > 0 ? data.slides : defaultSlides);
-
   const stats = propsStats.length > 0 ? propsStats : (data?.stats || []);
 
-
-
-  // Debug logging for real-time updates
-
-  console.log(" [Hero] Component received data:", {
-
-    hasPropsSlides: propsSlides.length > 0,
-
-    propsSlides: propsSlides,
-
-    hasPropsStats: propsStats.length > 0,
-
-    propsStats: propsStats,
-
-    hasData: !!data,
-
-    data: data,
-
-    finalSlides: slides,
-
-    finalStats: stats,
-
-    timestamp: new Date().toISOString()
-
-  });
-
-
-
-  // Handle video play/pause with error handling
-
-  useEffect(() => {
-
-    const playVideo = async () => {
-
-      if (videoRef.current && isPlaying) {
-
-        try {
-
-          await videoRef.current.play();
-
-        } catch (error) {
-
-          // Handle autoplay restrictions
-
-          if (error.name === "AbortError" || error.name === "NotAllowedError") {
-
-            console.log(
-
-              "Video autoplay blocked by browser - this is normal behavior"
-
-            );
-
-            setIsPlaying(false);
-
-          } else {
-
-            console.warn("Video playback error:", error);
-
-          }
-
-        }
-
-      } else if (videoRef.current && !isPlaying) {
-
-        videoRef.current.pause();
-
+  // Play the current video with autoplay-restriction handling
+  const tryPlayVideo = useCallback(async (videoEl) => {
+    if (!videoEl) return;
+    try {
+      await videoEl.play();
+      setIsPlaying(true);
+    } catch (error) {
+      if (error.name === "AbortError" || error.name === "NotAllowedError") {
+        setIsPlaying(false);
       }
+    }
+  }, []);
 
-    };
+  // Handle video play/pause
+  useEffect(() => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      tryPlayVideo(videoRef.current);
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isPlaying, tryPlayVideo]);
 
+  // When slide changes, load new video source and trigger text fade
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
+    // CSS fade transition for text
+    setFadeClass("hero-text-exit");
+    const fadeTimer = setTimeout(() => setFadeClass("hero-text-enter"), 50);
 
-    playVideo();
+    // Only reload video if the src actually changed
+    const newSrc = slides[currentSlide]?.video;
+    if (prevVideoRef.current !== newSrc) {
+      prevVideoRef.current = newSrc;
+      video.src = newSrc;
+      video.load();
+      tryPlayVideo(video);
+    }
 
-  }, [isPlaying, currentSlide]);
+    return () => clearTimeout(fadeTimer);
+  }, [currentSlide, slides, tryPlayVideo]);
 
 
 
@@ -167,51 +130,33 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
 
 
-  // eslint-disable-next-line no-unused-vars
-  const nextSlide = () => {
-
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-
-    setIsPlaying(true);
-
-  };
-
-
-
-  // eslint-disable-next-line no-unused-vars
-  const prevSlide = () => {
-
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-
-    setIsPlaying(true);
-
-  };
-
-
+  // Prefetch next slide video after current one is playing
+  useEffect(() => {
+    if (!videoLoaded) return;
+    const nextIndex = (currentSlide + 1) % slides.length;
+    const nextVideoUrl = slides[nextIndex]?.video;
+    if (nextVideoUrl && nextVideoUrl !== slides[currentSlide]?.video) {
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.as = "video";
+      link.href = nextVideoUrl;
+      document.head.appendChild(link);
+      return () => { try { document.head.removeChild(link); } catch {} };
+    }
+  }, [videoLoaded, currentSlide, slides]);
 
   // Handle user interaction to enable video playback
 
-  const handleUserInteraction = async () => {
+  const handleUserInteraction = useCallback(async () => {
 
     if (!hasUserInteracted && videoRef.current) {
 
       setHasUserInteracted(true);
-
-      try {
-
-        await videoRef.current.play();
-
-        setIsPlaying(true);
-
-      } catch {
-
-        console.log("Video playback still blocked after user interaction");
-
-      }
+      tryPlayVideo(videoRef.current);
 
     }
 
-  };
+  }, [hasUserInteracted, tryPlayVideo]);
 
 
 
@@ -237,9 +182,14 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
       />
 
+      {/* Dark gradient background visible instantly while video loads */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 transition-opacity duration-700"
+        style={{ opacity: videoLoaded ? 0 : 1, zIndex: 1 }}
+        aria-hidden="true"
+      />
 
-
-      {/* Background Video */}
+      {/* Background Video — preload=metadata to avoid downloading entire file */}
 
       <video
 
@@ -253,45 +203,19 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
         playsInline
 
-        preload="auto"
+        preload="metadata"
+        fetchpriority="high"
 
-        className="absolute inset-0 w-full h-full object-cover"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${videoLoaded ? "opacity-100" : "opacity-0"}`}
 
-        onCanPlay={() => setVideoReady(true)}
+        onCanPlayThrough={() => setVideoLoaded(true)}
 
         onLoadedData={() => {
-
-          // Attempt to play when video is loaded
-
-          if (videoRef.current && isPlaying) {
-
-            videoRef.current.play().catch(() => {
-
-              // Silently handle autoplay restrictions - this is expected behavior
-
-              console.log(
-
-                "Hero video autoplay blocked by browser (normal behavior)"
-
-              );
-
-            });
-
-          }
-
+          setVideoLoaded(true);
+          tryPlayVideo(videoRef.current);
         }}
 
-        onError={(e) => {
-
-          console.log("Video loading error:", e.target.error);
-
-        }}
-
-      >
-
-        <source src={slides[currentSlide].video} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      />
 
       {/* Content */}
       <section
@@ -304,9 +228,7 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
         <div className="w-full max-w-6xl mx-auto px-6">
 
-          <AnimatePresence mode="wait">
-
-            <article key={currentSlide} className="">
+            <article className={`hero-text-transition ${fadeClass}`}>
 
               {/* Subtitle */}
 
@@ -350,8 +272,6 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
             </article>
 
-          </AnimatePresence>
-
         </div>
 
       </section>
@@ -360,9 +280,9 @@ const Hero = ({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
   );
 
-};
+});
 
-
+Hero.displayName = "Hero";
 
 export default Hero;
 

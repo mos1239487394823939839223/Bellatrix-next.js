@@ -272,7 +272,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-20">
             {/* Premium Logo */}
             <a href="/" className="flex items-center group">
-              <div className="flex items-center justify-center h-20 w-20 md:h-56 md:w-56 mr-2 relative">
+              <div className="flex items-center justify-center h-32 w-32 md:h-56 md:w-56 mr-2 relative">
                 <div className="absolute top-0 left-0 h-full w-full">
                   <img
                     src={
@@ -284,10 +284,10 @@ const Navbar = () => {
                     }
                     alt="Bellatrix Logo"
                     className={`absolute top-1/2 left-1/2 object-contain -translate-x-1/2 -translate-y-1/2 transition-all duration-250 ${navbarTheme === "light"
-                      ? "h-10 w-10 md:h-24 md:w-24"
+                      ? "h-16 w-16 md:h-24 md:w-24"
                       : scrolled
-                        ? "h-10 w-10 md:h-24 md:w-24"
-                        : "h-14 w-14 md:h-36 md:w-36"
+                        ? "h-16 w-16 md:h-24 md:w-24"
+                        : "h-28 w-28 md:h-36 md:w-36"
                       }`}
                   />
                 </div>

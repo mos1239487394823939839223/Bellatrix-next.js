@@ -5,7 +5,7 @@ import DynamicPageRenderer from '../../src/components/DynamicPageRenderer/index'
 export default function HomePageClient({ initialCategories = [] }) {
   return (
     <Layout initialCategories={initialCategories}>
-      <DynamicPageRenderer />
+      <DynamicPageRenderer slug="home" />
     </Layout>
   )
 }

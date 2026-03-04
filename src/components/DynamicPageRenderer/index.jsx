@@ -10,8 +10,9 @@ import PageSection from "./PageSection";
 
 const EMPTY = [];
 
-const DynamicPageRenderer = () => {
-  const { slug } = useParams();
+const DynamicPageRenderer = ({ slug: slugProp }) => {
+  const params = useParams();
+  const slug = slugProp || params.slug;
   const { pageData, loading, error } = usePageData(slug);
 
   // Stable reference: avoids new [] on every render when pageData is null/undefined

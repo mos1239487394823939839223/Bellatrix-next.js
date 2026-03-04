@@ -6,12 +6,9 @@ const getBaseUrl = () => {
     return "/api"; // Use Next.js rewrites proxy in development
   }
   if (process.env.NEXT_PUBLIC_API_BASE_URL) {
-    return process.env.NEXT_PUBLIC_API_BASE_URL;
+    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`;
   }
-  if (typeof window !== "undefined" && window.location?.origin) {
-    return window.location.origin; // Match current origin to avoid CORS mismatches
-  }
-  return "https://bellatrixinc.com";
+  return "https://www.bellatrixinc.com/api";
 };
 
 const api = axios.create({

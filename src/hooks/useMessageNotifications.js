@@ -65,16 +65,14 @@ export const useMessageNotifications = () => {
 
     } catch (error) {
 
-      // If it's a 401 error, stop polling permanently (no permission for this endpoint)
-
+      // 401 → stop polling permanently; 0 (timeout/network) → skip silently
       if (error.status === 401) {
 
         authErrorRef.current = true;
         _contactMessagesBlocked = true;
-
         setIsConnected(false);
 
-      } else {
+      } else if (error.status !== 0) {
 
         console.error('Error fetching message stats:', error);
 
@@ -186,16 +184,14 @@ export const useMessageNotifications = () => {
 
     } catch (error) {
 
-      // If it's a 401 error, stop polling permanently (no permission for this endpoint)
-
+      // 401 → stop polling permanently; 0 (timeout/network) → skip silently
       if (error.status === 401) {
 
         authErrorRef.current = true;
         _contactMessagesBlocked = true;
-
         setIsConnected(false);
 
-      } else {
+      } else if (error.status !== 0) {
 
         console.error('Error checking for new messages:', error);
 

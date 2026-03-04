@@ -5353,9 +5353,9 @@ const EnhancedPageBuilder = () => {
         );
       }
 
-      if (createPageDTO.metaTitle.trim().length > 60) {
+      if (createPageDTO.metaTitle.trim().length > 70) {
         return validateAndReturn(
-          "SEO Meta Title must be 60 characters or less - عنوان الميتا يجب أن يكون 60 حرفاً أو أقل",
+          "SEO Meta Title must be 70 characters or less - عنوان الميتا يجب أن يكون 70 حرفاً أو أقل",
         );
       }
 
@@ -5374,9 +5374,9 @@ const EnhancedPageBuilder = () => {
         );
       }
 
-      if (createPageDTO.metaDescription.trim().length > 160) {
+      if (createPageDTO.metaDescription.trim().length > 200) {
         return validateAndReturn(
-          "SEO Meta Description must be 160 characters or less - وصف الميتا يجب أن يكون 160 حرفاً أو أقل",
+          "SEO Meta Description must be 200 characters or less - وصف الميتا يجب أن يكون 200 حرفاً أو أقل",
         );
       }
 

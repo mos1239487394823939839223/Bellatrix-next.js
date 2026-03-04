@@ -331,7 +331,7 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
                     className={`bg-white/10 border-white/20 text-white placeholder:text-gray-400 ${
                       errors.metaTitle ? "border-red-500" : ""
                     }`}
-                    maxLength={60}
+                    maxLength={70}
                   />
                   {errors.metaTitle && (
                     <p className="text-sm text-red-400 flex items-center">
@@ -340,7 +340,7 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
                     </p>
                   )}
                   <p className="text-xs text-gray-400">
-                    {formData.metaTitle.length}/60 characters
+                    {formData.metaTitle.length}/70 characters
                   </p>
                 </div>
 
@@ -359,7 +359,7 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
                     className={`w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
                       errors.metaDescription ? "border-red-500" : ""
                     }`}
-                    maxLength={160}
+                    maxLength={200}
                   />
                   {errors.metaDescription && (
                     <p className="text-sm text-red-400 flex items-center">
@@ -368,7 +368,7 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
                     </p>
                   )}
                   <p className="text-xs text-gray-400">
-                    {formData.metaDescription.length}/160 characters
+                    {formData.metaDescription.length}/200 characters
                   </p>
                 </div>
               </div>

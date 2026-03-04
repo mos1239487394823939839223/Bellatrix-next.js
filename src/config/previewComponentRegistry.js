@@ -46,11 +46,6 @@ import TrainingHero from "../components/Services/training/HeroSection";
 import TrainingPrograms from "../components/Services/training/ProgramsSection";
 import TrainingKeyModules from "../components/Services/training/KeyModulesSection";
 import TrainingWhyChoose from "../components/Services/training/WhyChooseSection";
-import IntegrationHero from "../components/Services/Integration/HeroSection";
-import IntegrationTypes from "../components/Services/Integration/IntegrationTypes";
-import IntegrationBenefits from "../components/Services/Integration/BenefitsSection";
-import IntegrationPopular from "../components/Services/Integration/PopularIntegrations";
-import IntegrationCta from "../components/Services/Integration/CtaSection";
 import ServiceGrid from "../components/Services/ServiceGrid";
 
 // Industries Components - Manufacturing
@@ -70,11 +65,7 @@ import RetailFeatures from "../components/industries/retail/FeaturesSection";
 import RetailCaseStudies from "../components/industries/retail/CaseStudiesSection";
 import RetailCTA from "../components/industries/retail/CTASection";
 
-// Customization Components
-import CustomizationHeroSection from "../components/Services/Customization/HeroSection";
-import CustomizationServicesSection from "../components/Services/Customization/ServicesSection";
-import CustomizationProcessSection from "../components/Services/Customization/ProcessSection";
-import CustomizationCtaSection from "../components/Services/Customization/CtaSection";
+
 
 // Support Components
 import BellatrixSupportHero from "../components/Support/BellatrixSupportHero";
@@ -159,13 +150,7 @@ export const componentRegistry = {
   KeyModulesSection: TrainingKeyModules, // Legacy alias for persisted data
   TrainingWhyChooseSection: TrainingWhyChoose,
 
-  // Integration Components
-  IntegrationHeroSection: IntegrationHero,
-  IntegrationTypesSection: IntegrationTypes,
-  IntegrationBenefitsSection: IntegrationBenefits,
-  IntegrationPopularSection: IntegrationPopular,
-  IntegrationCtaSection: IntegrationCta,
-  IntegrationCTASection: IntegrationCta, // Alias
+
 
   // ===========================================
   // INDUSTRY COMPONENTS - MANUFACTURING
@@ -188,15 +173,7 @@ export const componentRegistry = {
   RetailCaseStudies: RetailCaseStudies,
   RetailCTASection: RetailCTA,
 
-  // ===========================================
-  // CUSTOMIZATION COMPONENTS
-  // ===========================================
-  CustomizationHero: CustomizationHeroSection,
-  CustomizationHeroSection: CustomizationHeroSection,
-  CustomizationServicesSection: CustomizationServicesSection,
-  CustomizationProcessSection: CustomizationProcessSection,
-  CustomizationCTASection: CustomizationCtaSection,
-  CustomizationCtaSection: CustomizationCtaSection,
+
 
   // ===========================================
   // SUPPORT COMPONENTS

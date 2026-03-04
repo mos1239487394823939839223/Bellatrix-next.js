@@ -88,14 +88,6 @@ export const idToPathMap = {
   RetailCTASection: "industries/retail/CTASection",
 
   // ===========================================
-  // CUSTOMIZATION COMPONENTS
-  // ===========================================
-  CustomizationHero: "Services/Customization/HeroSection",
-  CustomizationServicesSection: "Services/Customization/ServicesSection",
-  CustomizationProcessSection: "Services/Customization/ProcessSection",
-  CustomizationCTASection: "Services/Customization/CtaSection",
-
-  // ===========================================
   // SUPPORT COMPONENTS
   // ===========================================
   SupportHeroSection: "Support/BellatrixSupportHero",
@@ -245,18 +237,6 @@ export const loadComponent = async (componentPath) => {
         import("./industries/retail/ImplementationSection"),
       "industries/retail/CTASection": () =>
         import("./industries/retail/CTASection"),
-
-      // ===========================================
-      // CUSTOMIZATION COMPONENTS
-      // ===========================================
-      "Services/Customization/HeroSection": () =>
-        import("./Services/Customization/HeroSection"),
-      "Services/Customization/ServicesSection": () =>
-        import("./Services/Customization/ServicesSection"),
-      "Services/Customization/ProcessSection": () =>
-        import("./Services/Customization/ProcessSection"),
-      "Services/Customization/CtaSection": () =>
-        import("./Services/Customization/CtaSection"),
 
       // ===========================================
       // SUPPORT COMPONENTS

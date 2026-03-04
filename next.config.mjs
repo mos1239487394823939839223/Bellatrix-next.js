@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://www.bellatrixinc.com/api/:path*',
+        destination: 'https://bellatrixinc.com/api/:path*',
       },
     ]
   },

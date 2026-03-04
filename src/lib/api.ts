@@ -8,7 +8,7 @@ const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_API_BASE_URL) {
     return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`;
   }
-  return "https://www.bellatrixinc.com/api";
+  return "https://bellatrixinc.com/api";
 };
 
 const api = axios.create({

@@ -2,9 +2,9 @@
 import Layout from '../../src/components/Layout'
 import DynamicPageRenderer from '../../src/components/DynamicPageRenderer/index'
 
-export default function HomePageClient() {
+export default function HomePageClient({ initialCategories = [] }) {
   return (
-    <Layout>
+    <Layout initialCategories={initialCategories}>
       <DynamicPageRenderer />
     </Layout>
   )

@@ -6,23 +6,19 @@ import { NotificationContainer } from './NotificationToast';
 // Footer is below the fold — lazy load so it doesn't block first paint
 const Footer = lazy(() => import('./Footer'));
 
-const Layout = ({ children }) => {
+const Layout = ({ children, initialCategories = [] }) => {
   return (
     <div className="min-h-[100dvh] flex flex-col">
-      {/* Fixed Navbar - fetches its own categories from /api/Categories/navbar */}
-      <Navbar />
+      <Navbar initialCategories={initialCategories} />
 
-      {/* Page Content */}
       <main className="flex-1">
         {children}
       </main>
 
-      {/* Footer — deferred so it doesn't block first paint */}
       <Suspense fallback={null}>
-        <Footer />
+        <Footer initialCategories={initialCategories} />
       </Suspense>
 
-      {/* Notification System */}
       <NotificationContainer />
     </div>
   );

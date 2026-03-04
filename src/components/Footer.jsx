@@ -130,12 +130,12 @@ const footerStyles = `
 
 `;
 
-const Footer = () => {
+const Footer = ({ initialCategories = [] }) => {
   const [showTop, setShowTop] = useState(false);
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(initialCategories);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialCategories.length === 0);
 
   const [error, setError] = useState(null);
 
@@ -240,9 +240,9 @@ const Footer = () => {
     fetchFooterSettings();
   }, []);
 
-  // Fetch categories for Quick Links
-
+  // Fetch categories for Quick Links — skip if SSR data already provided
   useEffect(() => {
+    if (initialCategories.length > 0) return;
     const fetchCategories = async () => {
       try {
         setLoading(true);
@@ -264,7 +264,7 @@ const Footer = () => {
     };
 
     fetchCategories();
-  }, []);
+  }, [initialCategories]);
 
   return (
     <footer

@@ -33,16 +33,14 @@ import { setupSectionThemeDetection } from "../utils/sectionThemeDetection";
 import { getApiBaseUrlWithApi } from "../config/api.js";
 import { cachedFetch } from "../lib/apiCache.js";
 
-const Navbar = () => {
-  // Dynamic navbar categories
+const Navbar = ({ initialCategories = [] }) => {
+  // Dynamic navbar categories — use SSR-provided data if available
+  const [categories, setCategories] = useState(initialCategories);
+  const [loadingCategories, setLoadingCategories] = useState(initialCategories.length === 0);
 
-  const [categories, setCategories] = useState([]);
-
-  const [loadingCategories, setLoadingCategories] = useState(true);
-
-  // Fetch navbar categories from API — cached for 5 minutes so navigating
-  // between pages does not trigger a new network request every time.
+  // Fetch navbar categories from API only when not provided server-side
   useEffect(() => {
+    if (initialCategories.length > 0) return; // already have data from SSR
     const fetchCategories = async () => {
       setLoadingCategories(true);
       try {
@@ -55,7 +53,6 @@ const Navbar = () => {
           5 * 60 * 1000 // 5 minutes
         );
 
-        // Accepts: { data: [...] }, { result: [...] }, or array
         let cats = [];
         if (Array.isArray(data)) {
           cats = data;
@@ -73,7 +70,7 @@ const Navbar = () => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [initialCategories]);
   const { theme, toggleTheme } = useTheme();
   const [navbarTheme, setNavbarTheme] = useState("dark");
 

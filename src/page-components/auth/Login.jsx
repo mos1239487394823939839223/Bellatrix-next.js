@@ -234,7 +234,7 @@ const Login = () => {
                   <span className="text-sm text-white/60">Remember me</span>
                 </label>
                 <Link
-                  to="/auth/forgot-password"
+                  href="/auth/forgot-password"
                   className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
                 >
                   Forgot password?
@@ -263,7 +263,7 @@ const Login = () => {
               <p className="text-white/50 text-sm">
                 Don't have an account?{' '}
                 <Link
-                  to="/auth/register"
+                  href="/auth/register"
                   className="text-blue-400 font-medium hover:text-blue-300 transition-colors"
                 >
                   Create Account

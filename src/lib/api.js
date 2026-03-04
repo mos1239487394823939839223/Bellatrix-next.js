@@ -54,10 +54,10 @@ api.interceptors.response.use(
       console.error(" [AUTH ERROR] Please log in again");
 
       // Optional: Clear invalid token
-
-      localStorage.removeItem("authToken");
-
-      localStorage.removeItem("adminToken");
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("adminToken");
+      }
 
       // Optional: Redirect to login (uncomment if needed)
 
@@ -82,16 +82,18 @@ api.interceptors.response.use(
 api.interceptors.request.use(
   (config) => {
     // ALWAYS try to get token from localStorage first (primary source: "authToken")
+    const isBrowser = typeof window !== 'undefined';
 
-    let token = localStorage.getItem("authToken");
+    let token = isBrowser ? localStorage.getItem("authToken") : null;
 
     // Fallback to other token storage locations
 
     if (!token) {
-      token =
-        localStorage.getItem("adminToken") ||
-        sessionStorage.getItem("authToken") ||
-        getAuthToken(); // Last resort: use tokenManager function
+      token = isBrowser
+        ? (localStorage.getItem("adminToken") ||
+           sessionStorage.getItem("authToken") ||
+           sessionStorage.getItem("adminToken"))
+        : getAuthToken(); // SSR fallback
     }
 
     if (token) {

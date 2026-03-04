@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 import {
 
@@ -326,7 +326,7 @@ const SortableSection = ({ section, onEdit, onDelete, index }) => {
 
 const SectionBuilder = ({ page }) => {
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { templates, api } = useAdmin();
 
@@ -626,7 +626,7 @@ const SectionBuilder = ({ page }) => {
 
                 startIcon={<BackIcon />}
 
-                onClick={() => navigate('/admin/pages')}
+                onClick={() => router.push('/admin/pages')}
 
                 variant="outlined"
 

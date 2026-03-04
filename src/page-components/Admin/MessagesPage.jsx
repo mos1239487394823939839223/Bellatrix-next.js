@@ -1,5 +1,6 @@
+'use client'
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -31,7 +32,7 @@ import {
 } from "../../lib/contactMessagesAPI";
 
 const MessagesPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const [filteredMessages, setFilteredMessages] = useState([]);
   const [loading, setLoading] = useState(true);

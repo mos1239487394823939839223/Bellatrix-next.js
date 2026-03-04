@@ -1,6 +1,7 @@
+'use client'
 import React, { useState, useEffect } from "react";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter, usePathname } from 'next/navigation';
 
 import {
 
@@ -56,9 +57,9 @@ import SettingsManager from "../../components/Admin/SettingsManager";
 
 const AdminDashboard = () => {
 
-  const location = useLocation();
+  const pathname = usePathname();
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [pageData, setPageData] = useState([]);
 
@@ -170,7 +171,7 @@ const AdminDashboard = () => {
 
   const getCurrentView = () => {
 
-    const path = location.pathname;
+    const path = pathname;
 
     if (path.includes("/pages")) return "pages";
 
@@ -554,7 +555,7 @@ const AdminDashboard = () => {
 
               startIcon={<AddIcon />}
 
-              onClick={() => navigate("/admin/pages")}
+              onClick={() => router.push("/admin/pages")}
 
               className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl px-6 py-2"
 
@@ -658,7 +659,7 @@ const AdminDashboard = () => {
 
                       title="Edit"
 
-                      onClick={() => navigate(`/admin/pages/${page.id}`)}
+                      onClick={() => router.push(`/admin/pages/${page.id}`)}
 
                       className="hover:bg-gray-600 hover:text-emerald-400 transition-colors text-gray-300"
 
@@ -738,7 +739,7 @@ const AdminDashboard = () => {
 
                     className="h-16 border-2 border-dashed border-gray-600 text-gray-300 hover:border-blue-400 hover:bg-gray-700 hover:text-blue-400 transition-all duration-200 rounded-xl justify-start"
 
-                    onClick={() => navigate("/admin/pages")}
+                    onClick={() => router.push("/admin/pages")}
 
                   >
 
@@ -770,7 +771,7 @@ const AdminDashboard = () => {
 
                     className="h-16 border-2 border-dashed border-gray-600 text-gray-300 hover:border-emerald-400 hover:bg-gray-700 hover:text-emerald-400 transition-all duration-200 rounded-xl justify-start"
 
-                    onClick={() => navigate("/admin/templates")}
+                    onClick={() => router.push("/admin/templates")}
 
                   >
 
@@ -802,7 +803,7 @@ const AdminDashboard = () => {
 
                     className="h-16 border-2 border-dashed border-gray-600 text-gray-300 hover:border-violet-400 hover:bg-gray-700 hover:text-violet-400 transition-all duration-200 rounded-xl justify-start"
 
-                    onClick={() => navigate("/admin/settings")}
+                    onClick={() => router.push("/admin/settings")}
 
                   >
 
@@ -926,7 +927,7 @@ const AdminDashboard = () => {
 
         }}
 
-        onClick={() => navigate("/admin/pages")}
+        onClick={() => router.push("/admin/pages")}
 
       >
 

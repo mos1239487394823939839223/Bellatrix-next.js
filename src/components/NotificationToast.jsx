@@ -5,9 +5,11 @@ import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 let notificationCallbacks = [];
 
 // Global function to show notifications
-window.showUpdateNotification = (message, type = 'info') => {
-  notificationCallbacks.forEach(callback => callback(message, type));
-};
+if (typeof window !== 'undefined') {
+  window.showUpdateNotification = (message, type = 'info') => {
+    notificationCallbacks.forEach(callback => callback(message, type));
+  };
+}
 
 // Toast notification component
 export const NotificationToast = ({ message, type, onClose, duration = 5000 }) => {

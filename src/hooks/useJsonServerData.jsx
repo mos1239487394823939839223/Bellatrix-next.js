@@ -1,6 +1,7 @@
+'use client'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, usePathname } from 'next/navigation';
 
 import { getApiBaseUrlWithApi } from "../config/api.js";
 
@@ -168,7 +169,7 @@ export const getEndpointFromRoute = (pathname) => {
 
 export const usePageData = (pageName = null, options = {}) => {
 
-  const location = useLocation();
+  const pathname = usePathname();
 
   const params = useParams();
 
@@ -192,7 +193,7 @@ export const usePageData = (pageName = null, options = {}) => {
 
       // Get from current route
 
-      endpoint = getEndpointFromRoute(location.pathname);
+      endpoint = getEndpointFromRoute(pathname);
 
     }
 
@@ -252,13 +253,13 @@ export const useDynamicPageData = (options = {}) => {
 
   const { slug } = useParams();
 
-  const location = useLocation();
+  const pathname = usePathname();
 
 
 
   // Get endpoint from slug or location
 
-  const endpoint = slug || getEndpointFromRoute(location.pathname);
+  const endpoint = slug || getEndpointFromRoute(pathname);
 
 
 

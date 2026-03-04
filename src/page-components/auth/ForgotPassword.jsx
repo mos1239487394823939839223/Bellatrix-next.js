@@ -1,5 +1,7 @@
+'use client'
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import { motion } from 'framer-motion';
@@ -13,16 +15,16 @@ const ForgotPassword = () => {
   const [countdown, setCountdown] = useState(5);
 
   const { forgotPassword } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (isSubmitted && countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (isSubmitted && countdown === 0) {
-      navigate('/auth/reset-password', { state: { email: email } });
+      router.push(`/auth/reset-password?email=${encodeURIComponent(email)}`);
     }
-  }, [isSubmitted, countdown, navigate, email]);
+  }, [isSubmitted, countdown, router, email]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

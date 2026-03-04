@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from "react";
 import {
   Snackbar,
@@ -15,11 +16,11 @@ import {
   Visibility as ViewIcon,
 } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 
 const MessageNotification = ({ notification, onClose, onReply, onView }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (notification) {
@@ -43,7 +44,7 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
     if (onView) {
       onView(notification.message);
     }
-    navigate("/admin/messages");
+    router.push("/admin/messages");
     handleClose();
   };
 

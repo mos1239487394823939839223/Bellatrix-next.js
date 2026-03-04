@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { DndContext } from "@dnd-kit/core";
@@ -6,7 +7,7 @@ import { SortableContext } from "@dnd-kit/sortable";
 
 import { DraggableComponent } from "./DraggableComponent";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useRouter, useParams } from 'next/navigation';
 
 import {
   PlusIcon,
@@ -69,7 +70,7 @@ import {
 } from "./EnhancedPageBuilder/index";
 
 const EnhancedPageBuilder = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // const location = useLocation();
 
@@ -5628,7 +5629,7 @@ const EnhancedPageBuilder = () => {
 
       // Navigate to pages management after a brief delay
       setTimeout(() => {
-        navigate("/admin/pages");
+        router.push("/admin/pages");
       }, 1500);
     } catch (error) {
       console.error(" Failed to save page:", error);
@@ -5913,7 +5914,7 @@ const EnhancedPageBuilder = () => {
             <div className="flex items-center space-x-4">
               <Button
                 variant="outline"
-                onClick={() => navigate("/admin/pages")}
+                onClick={() => router.push("/admin/pages")}
                 className="bg-[var(--color-white-10)] backdrop-blur-sm border-[var(--color-white-20)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-20)] hover:border-[var(--color-white-30)] transition-all duration-200"
               >
                 Cancel

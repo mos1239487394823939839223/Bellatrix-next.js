@@ -1,5 +1,7 @@
+'use client'
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import { motion } from 'framer-motion';
@@ -19,7 +21,7 @@ const ChangePassword = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const { changePassword, user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +49,7 @@ const ChangePassword = () => {
       const result = await changePassword(formData);
       if (result.success) {
         setIsSuccess(true);
-        setTimeout(() => navigate('/admin/dashboard'), 2000);
+        setTimeout(() => router.push('/admin/dashboard'), 2000);
       }
     } catch (error) {
       console.error('Change password error:', error);

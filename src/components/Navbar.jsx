@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 
 import SEO from "./SEO";
@@ -23,7 +24,7 @@ const ChevronDown = ({ className = "ml-1 h-4 w-4 shrink-0" }) => (
   </svg>
 );
 
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { useTheme } from "../context/ThemeContext";
 
@@ -329,7 +330,7 @@ const Navbar = () => {
                     return (
                       <Link
                         key={cat.id}
-                        to={mainPageUrl}
+                        href={mainPageUrl}
                         className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-300 border ${navbarTheme === "light"
                           ? "text-black hover:text-[var(--color-primary)] border-transparent hover:border-black/20"
                           : "text-white hover:text-[var(--color-primary-light)] border-transparent hover:border-white/20"
@@ -377,7 +378,7 @@ const Navbar = () => {
                             .map((page) => (
                               <Link
                                 key={page.id}
-                                to={page.slug ? `/${page.slug}` : `/${page.id}`}
+                                href={page.slug ? `/${page.slug}` : `/${page.id}`}
                                 className="block px-5 py-3 text-gray-800 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-all duration-150 text-base font-medium"
                               >
                                 {page.title}
@@ -431,7 +432,7 @@ const Navbar = () => {
                                         .map((page) => (
                                           <Link
                                             key={page.id}
-                                            to={page.slug ? `/${page.slug}` : `/${page.id}`}
+                                            href={page.slug ? `/${page.slug}` : `/${page.id}`}
                                             className="block px-5 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-all duration-150 text-sm font-medium ml-2"
                                           >
                                             {page.title}
@@ -525,7 +526,7 @@ const Navbar = () => {
                     return (
                       <Link
                         key={cat.id}
-                        to={mainPageUrl}
+                        href={mainPageUrl}
                         onClick={() => setMobileMenuOpen(false)}
                         className={`w-full flex justify-between items-center px-4 py-3 text-base font-medium rounded-xl hover:bg-white/10 transition-colors duration-300 border border-white/10 text-white`}
                       >
@@ -552,7 +553,7 @@ const Navbar = () => {
                             {cat.pages.map((page) => (
                               <Link
                                 key={page.id}
-                                to={page.slug ? `/${page.slug}` : `/${page.id}`}
+                                href={page.slug ? `/${page.slug}` : `/${page.id}`}
                                 onClick={() => {
                                   setMobileMenuOpen(false);
                                   setOpenDropdown(null);

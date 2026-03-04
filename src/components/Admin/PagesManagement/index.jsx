@@ -1,5 +1,6 @@
+'use client'
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -21,7 +22,7 @@ import ViewPageModal from "./ViewPageModal";
 import DeletePageModal from "./DeletePageModal";
 
 const PagesManagement = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedPage, setSelectedPage] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -166,7 +167,7 @@ const PagesManagement = () => {
         <div className="mt-4 sm:mt-0 flex space-x-2">
           <Button
             icon={<PlusIcon className="h-4 w-4" />}
-            onClick={() => navigate("/admin/pages/enhanced-create")}
+            onClick={() => router.push("/admin/pages/enhanced-create")}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Enhanced Page Builder

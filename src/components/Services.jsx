@@ -1,8 +1,7 @@
+'use client'
 import { useState } from "react";
-
 import SEO from "./SEO";
-
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import {
 

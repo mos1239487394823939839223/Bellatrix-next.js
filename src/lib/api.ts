@@ -2,11 +2,11 @@ import axios from "axios";
 
 // Get API base URL - use proxy in dev, direct URL in production
 const getBaseUrl = () => {
-  if (import.meta.env.DEV) {
-    return ""; // Use Vite proxy in development
+  if (process.env.NODE_ENV === 'development') {
+    return "/api"; // Use Next.js rewrites proxy in development
   }
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+  if (process.env.NEXT_PUBLIC_API_BASE_URL) {
+    return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
   if (typeof window !== "undefined" && window.location?.origin) {
     return window.location.origin; // Match current origin to avoid CORS mismatches
@@ -72,6 +72,15 @@ export const uploadForm = async (
  */
 export const getAuthToken = (state: any): string | null => {
   return state.auth?.token || null;
+};
+
+// Alias for backward compatibility with store slices
+export const getAuthTokenFromState = getAuthToken;
+
+// Lightweight helper for JSON POSTs (returns unwrapped data)
+export const postJson = async (url: string, payload: any, options: any = {}) => {
+  const res = await api.post(url, payload, options);
+  return res.data;
 };
 
 export default api;

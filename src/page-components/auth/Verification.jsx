@@ -1,5 +1,7 @@
+'use client'
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import { motion } from 'framer-motion';
@@ -15,21 +17,16 @@ const Verification = () => {
   const [serverError, setServerError] = useState('');
 
   const { verify } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [searchParams] = useSearchParams();
-
-  const emailFromState = location.state?.email || '';
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const emailFromQuery = searchParams.get('email');
     const codeFromQuery = searchParams.get('code');
-    const emailToUse = emailFromState || emailFromQuery || '';
-    const codeToUse = codeFromQuery || '';
-    if (emailToUse || codeToUse) {
-      setFormData(prev => ({ ...prev, email: emailToUse, code: codeToUse }));
+    if (emailFromQuery || codeFromQuery) {
+      setFormData(prev => ({ ...prev, email: emailFromQuery || prev.email, code: codeFromQuery || prev.code }));
     }
-  }, [emailFromState, searchParams]);
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +55,7 @@ const Verification = () => {
         code: formData.code.trim(),
       });
       if (result.success) {
-        navigate('/auth/login', { state: { message: 'Email verified successfully! You can now sign in.' } });
+        router.push('/auth/login?message=' + encodeURIComponent('Email verified successfully! You can now sign in.'));
       } else if (result.message) {
         setServerError(result.message);
       }

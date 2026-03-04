@@ -1,6 +1,7 @@
+'use client'
 import React, { useState, useEffect } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useRouter, useParams } from 'next/navigation';
 
 import {
 
@@ -76,7 +77,7 @@ import SectionBuilder from "./SectionBuilder";
 
 const PageManager = () => {
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { pageId } = useParams();
 
@@ -218,7 +219,7 @@ const PageManager = () => {
 
       setOpenDialog(false);
 
-      navigate("/admin/pages");
+      router.push("/admin/pages");
 
     } catch (error) {
 
@@ -860,7 +861,7 @@ const PageManager = () => {
 
                               onClick={() =>
 
-                                navigate(`/admin/pages/${page.id}`)
+                                router.push(`/admin/pages/${page.id}`)
 
                               }
 
@@ -994,7 +995,7 @@ const PageManager = () => {
 
                   variant="outlined"
 
-                  onClick={() => navigate("/admin/templates")}
+                  onClick={() => router.push("/admin/templates")}
 
                   className="border-gray-600 text-gray-300 hover:border-blue-400 hover:bg-blue-500/10 hover:text-blue-400 rounded-xl px-8 py-3 transition-all duration-300 backdrop-blur-sm"
 

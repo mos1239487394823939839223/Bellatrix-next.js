@@ -4,7 +4,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import Toast from "../UI/Toast";
-import FooterSettings from "../../pages/FooterSettings";
+import FooterSettings from "../../page-components/FooterSettings";
 
 const SettingsManagement = () => {
   const [activeTab, setActiveTab] = useState("footer");

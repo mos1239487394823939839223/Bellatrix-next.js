@@ -1,13 +1,14 @@
+'use client'
 import { useAuth } from '../../hooks/useAuth.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const AuthDashboard = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLogout = () => {
     logout();
-    navigate('/auth/login');
+    router.push('/auth/login');
   };
 
   return (

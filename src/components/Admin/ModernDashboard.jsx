@@ -1,8 +1,9 @@
+'use client'
 import React, { useState, useEffect } from "react";
 
 import { motion } from "framer-motion";
 
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 
 import {
 
@@ -38,7 +39,7 @@ import toast from "react-hot-toast";
 
 const ModernDashboard = () => {
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
 
 
@@ -190,7 +191,7 @@ const ModernDashboard = () => {
 
       case 1: // Create New Page
 
-        navigate("/admin/pages/enhanced-create");
+        router.push("/admin/pages/enhanced-create");
 
         toast.success("Redirecting to page creation...");
 
@@ -198,7 +199,7 @@ const ModernDashboard = () => {
 
       case 2: // Manage Pages
 
-        navigate("/admin/pages");
+        router.push("/admin/pages");
 
         toast.success("Opening pages management...");
 

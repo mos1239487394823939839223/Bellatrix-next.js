@@ -36,7 +36,7 @@ const store = configureStore({
         ignoredPaths: ["payload.signal"],
       },
     }),
-  devTools: import.meta.env.MODE !== "production",
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export default store;

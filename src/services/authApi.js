@@ -2,13 +2,13 @@ import axios from "axios";
 import { clearAuthData } from "../utils/tokenManager";
 
 // Create axios instance with base URL
-// In development, use empty string to leverage Vite's proxy
+// In development, use empty string to leverage Next.js rewrites proxy
 // In production, use the actual API URL
 const getBaseUrl = () => {
-  if (import.meta.env.DEV) {
-    return ""; // Use Vite proxy in development
+  if (process.env.NODE_ENV === 'development') {
+    return ""; // Use Next.js rewrites proxy in development
   }
-  return import.meta.env.VITE_API_BASE_URL || "https://www.bellatrixinc.com";
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.bellatrixinc.com";
 };
 
 const authApi = axios.create({

@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { initCacheManager } from '../utils/cacheManager.js';
@@ -33,7 +34,7 @@ const DataProvider = ({ children }) => {
     <QueryClientProvider client={queryClient}>
       {children}
       {/* Enable React Query DevTools in development */}
-      {import.meta.env.DEV && (
+      {process.env.NODE_ENV === 'development' && (
         <Suspense fallback={null}>
           <ReactQueryDevtools initialIsOpen={false} />
         </Suspense>

@@ -1,9 +1,10 @@
+'use client'
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import api from "../../../lib/api";
 
 const CategorySelector = ({ value, onChange }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,7 +46,7 @@ const CategorySelector = ({ value, onChange }) => {
           </p>
         </div>
         <button
-          onClick={() => navigate("/admin/categories")}
+          onClick={() => router.push("/admin/categories")}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-[var(--color-text-inverse)] font-bold rounded-xl shadow hover:from-[var(--color-primary-light)] hover:to-[var(--color-primary)] hover:text-[var(--color-text-primary)] transition-all duration-200 text-lg mt-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-light)] focus:ring-offset-2"
         >
           <svg

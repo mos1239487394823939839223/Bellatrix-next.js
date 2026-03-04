@@ -1,0 +1,356 @@
+@import "tailwindcss";
+@import "../src/styles/theme-colors.css";
+@import "../src/styles/animations.css";
+@import "../src/styles/skeleton.css";
+
+/* ============================
+   Hero text slide transition
+   ============================ */
+.hero-text-transition {
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  will-change: opacity, transform;
+}
+.hero-text-enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-text-exit {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* About Values Section - Description Text */
+.about-values-description {
+  color: var(--color-white) !important;
+}
+/* ==================================================
+   GLOBAL CTA BUTTON STYLES - Primary Theme
+   ================================================== */
+
+/* ==================================================
+   GLOBAL CTA BUTTON & UI COMPONENT STYLES - Theme Aware
+   ================================================== */
+
+/* Primary CTA Buttons - Uses Theme Variables (Blue in Default, Silver in Secondary) */
+.theme-cta-button,
+.cta-button,
+button.btn-primary,
+a.btn-primary,
+.btn-cta {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--color-primary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.theme-cta-button:hover,
+.cta-button:hover,
+button.btn-primary:hover,
+a.btn-primary:hover,
+.btn-cta:hover {
+  background-color: var(--color-hover) !important;
+  color: #ffffff !important;
+  border-color: var(--color-hover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px var(--color-shadow) !important;
+}
+
+/* Gradients - Theme aware through CSS variable mapping */
+[class*="bg-gradient"] {
+  /* We allow gradients to work, but ensure they use theme-mapped colors */
+  transition: all 0.3s ease !important;
+}
+
+/* Individual Gradient Stops */
+.from-blue-400 {
+  --tw-gradient-from: var(--color-blue-400) !important;
+}
+
+.from-blue-500 {
+  --tw-gradient-from: var(--color-blue-500) !important;
+}
+
+.from-blue-600 {
+  --tw-gradient-from: var(--color-blue-600) !important;
+}
+
+.to-blue-600 {
+  --tw-gradient-to: var(--color-blue-600) !important;
+}
+
+.to-blue-700 {
+  --tw-gradient-to: var(--color-blue-700) !important;
+}
+
+.to-blue-800 {
+  --tw-gradient-to: var(--color-blue-800) !important;
+}
+
+.to-blue-900 {
+  --tw-gradient-to: var(--color-blue-900) !important;
+}
+
+/* Gray Palette Mapping */
+.bg-gray-50 {
+  background-color: var(--tw-gray-50) !important;
+}
+
+.bg-gray-100 {
+  background-color: var(--tw-gray-100) !important;
+}
+
+.bg-gray-200 {
+  background-color: var(--tw-gray-200) !important;
+}
+
+.text-gray-600 {
+  color: var(--tw-gray-600) !important;
+}
+
+.text-gray-700 {
+  color: var(--tw-gray-700) !important;
+}
+
+.text-gray-800 {
+  color: var(--tw-gray-800) !important;
+}
+
+.text-gray-900 {
+  color: var(--tw-gray-900) !important;
+}
+
+.border-gray-100 {
+  border-color: var(--tw-gray-100) !important;
+}
+
+.border-gray-200 {
+  border-color: var(--tw-gray-200) !important;
+}
+
+.border-gray-300 {
+  border-color: var(--tw-gray-300) !important;
+}
+
+/* Gray Gradients */
+.from-gray-100 {
+  --tw-gradient-from: var(--tw-gray-100) !important;
+}
+
+.from-gray-200 {
+  --tw-gradient-from: var(--tw-gray-200) !important;
+}
+
+.to-gray-100 {
+  --tw-gradient-to: var(--tw-gray-100) !important;
+}
+
+.to-gray-200 {
+  --tw-gradient-to: var(--tw-gray-200) !important;
+}
+
+.to-gray-300 {
+  --tw-gradient-to: var(--tw-gray-300) !important;
+}
+
+/* Gradients - Theme aware through CSS variable mapping */
+[style*="background-color: #001248"],
+[style*="background-color:#001248"],
+.bg-navy-900,
+.bg-\[\#001248\] {
+  background-color: var(--color-brand-dark-navy) !important;
+}
+
+/* Pagination Dots and Swiper Accents */
+.swiper-pagination-bullet-active {
+  background: var(--color-primary) !important;
+}
+
+.swiper-pagination-bullet {
+  background: var(--color-text-muted) !important;
+  opacity: 0.5;
+}
+
+/* Prevent horizontal scroll */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  position: relative;
+}
+
+/* Force dark color scheme on admin/dashboard pages - prevents system theme from affecting form elements */
+/* This overrides Windows light/dark mode preferences */
+
+/* Apply to root when admin-layout or data-dashboard is present */
+:root:has(.admin-layout),
+:root:has([data-dashboard="true"]) {
+  color-scheme: dark only !important;
+}
+
+.admin-layout,
+.admin-layout *,
+[data-dashboard="true"],
+[data-dashboard="true"] * {
+  color-scheme: dark only !important;
+}
+
+/* Force ALL form elements and cards in admin to use dark theme colors explicitly */
+/* IMPORTANT: Exclude checkboxes and radio buttons from appearance:none to keep them clickable */
+.admin-layout input:not([type="checkbox"]):not([type="radio"]),
+.admin-layout textarea,
+.admin-layout select,
+.admin-layout button,
+[data-dashboard="true"] input:not([type="checkbox"]):not([type="radio"]),
+[data-dashboard="true"] textarea,
+[data-dashboard="true"] select,
+[data-dashboard="true"] button {
+  color-scheme: dark only !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Keep checkboxes and radio buttons with proper styling but allow native behavior */
+.admin-layout input[type="checkbox"],
+.admin-layout input[type="radio"],
+[data-dashboard="true"] input[type="checkbox"],
+[data-dashboard="true"] input[type="radio"] {
+  color-scheme: dark only !important;
+  accent-color: var(--color-primary);
+}
+
+/* Override any system light mode styles on inputs */
+.admin-layout input:not([type="checkbox"]):not([type="radio"]),
+.admin-layout textarea,
+[data-dashboard="true"] input:not([type="checkbox"]):not([type="radio"]),
+[data-dashboard="true"] textarea {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Placeholder text color */
+.admin-layout input::placeholder,
+.admin-layout textarea::placeholder,
+[data-dashboard="true"] input::placeholder,
+[data-dashboard="true"] textarea::placeholder {
+  color: rgba(156, 163, 175, 1) !important;
+  opacity: 1 !important;
+}
+
+/* Autofill styles - prevent browser from making it white */
+.admin-layout input:-webkit-autofill,
+.admin-layout input:-webkit-autofill:hover,
+.admin-layout input:-webkit-autofill:focus,
+.admin-layout textarea:-webkit-autofill,
+[data-dashboard="true"] input:-webkit-autofill,
+[data-dashboard="true"] input:-webkit-autofill:hover,
+[data-dashboard="true"] input:-webkit-autofill:focus,
+[data-dashboard="true"] textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px rgba(30, 41, 59, 1) inset !important;
+  -webkit-text-fill-color: white !important;
+  caret-color: white !important;
+}
+
+/* Auth form exception - light inputs for auth pages */
+.auth-form-input,
+.auth-form-input:focus,
+.auth-form-input:-webkit-autofill,
+.auth-form-input:-webkit-autofill:hover,
+.auth-form-input:-webkit-autofill:focus {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  caret-color: #111827 !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  border-color: #d1d5db !important;
+}
+
+/* Custom White Color Classes with Opacity */
+@layer utilities {
+  .text-white-100 {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .text-white-200 {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .text-white-300 {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .text-white-400 {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .text-white-500 {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .bg-white-100 {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .bg-white-200 {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .bg-white-300 {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .bg-white-400 {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .bg-white-500 {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Image Input Styles for DynamicContentForm */
+
+.image-input-group {
+  margin-bottom: 1rem;
+}
+
+.image-input-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.image-url-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+}
+
+.browse-media-btn {
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.browse-media-btn:hover {
+  background: var(--color-hover);
+}
+
+.image-preview {
+  margin-top: 0.5rem;
+  max-width: 200px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+}

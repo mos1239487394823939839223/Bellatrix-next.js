@@ -1,6 +1,7 @@
+'use client'
 import React, { useEffect, useState } from "react";
 
-import { useLocation } from "react-router-dom";
+import { usePathname } from 'next/navigation';
 
 import MainManufacturing from "./Manufacturing/MainManufacturing";
 
@@ -12,7 +13,7 @@ import Retail from "./retail/Retail";
 
 const IndustryMain = ({ data: propsData = null }) => {
 
-  const location = useLocation();
+  const pathname = usePathname();
 
   const [industryData, setIndustryData] = useState(null);
 
@@ -42,15 +43,15 @@ const IndustryMain = ({ data: propsData = null }) => {
 
     let dataFile = null;
 
-    if (location.pathname.toLowerCase().includes("manufacturing")) {
+    if (pathname.toLowerCase().includes("manufacturing")) {
 
       dataFile = "/data/manufacturing-data.json";
 
-    } else if (location.pathname.toLowerCase().includes("retail")) {
+    } else if (pathname.toLowerCase().includes("retail")) {
 
       dataFile = "/data/retail-data.json";
 
-    } else if (location.pathname.toLowerCase().includes("healthcare")) {
+    } else if (pathname.toLowerCase().includes("healthcare")) {
 
       dataFile = "/data/healthcare-data.json";
 
@@ -92,7 +93,7 @@ const IndustryMain = ({ data: propsData = null }) => {
 
       .finally(() => setLoading(false));
 
-  }, [location.pathname, propsData]);
+  }, [pathname, propsData]);
 
 
 
@@ -130,19 +131,19 @@ const IndustryMain = ({ data: propsData = null }) => {
 
   // Render the correct industry component with its data
 
-  if (location.pathname.toLowerCase().includes("manufacturing")) {
+  if (pathname.toLowerCase().includes("manufacturing")) {
 
     return <MainManufacturing data={industryData} />;
 
   }
 
-  if (location.pathname.toLowerCase().includes("retail")) {
+  if (pathname.toLowerCase().includes("retail")) {
 
     return <Retail data={industryData} />;
 
   }
 
-  // if (location.pathname.toLowerCase().includes("healthcare")) {
+  // if (pathname.toLowerCase().includes("healthcare")) {
 
   //   return <Healthcare data={industryData} />;
 

@@ -1,5 +1,6 @@
+'use client'
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { useCTAModal } from '../contexts/CTAModalContext';
 import { shouldOpenContactModal, autoGenerateModalConfig } from '../utils/ctaUtils';
 
@@ -17,7 +18,7 @@ import { shouldOpenContactModal, autoGenerateModalConfig } from '../utils/ctaUti
  */
 const GlobalCTAInterceptor = ({ children }) => {
   const { openCTAModal } = useCTAModal();
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     /**
@@ -85,7 +86,7 @@ const GlobalCTAInterceptor = ({ children }) => {
       if (!ctaElement) return;
 
       // Skip interception on Admin routes
-      if (location.pathname.toLowerCase().startsWith('/admin')) {
+      if (pathname.toLowerCase().startsWith('/admin')) {
         return;
       }
 
@@ -120,7 +121,7 @@ const GlobalCTAInterceptor = ({ children }) => {
     return () => {
       document.removeEventListener('click', handleGlobalClick, true);
     };
-  }, [openCTAModal, location]); // Re-bind if location changes
+  }, [openCTAModal, pathname]); // Re-bind if pathname changes
 
   return children;
 };

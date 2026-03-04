@@ -9,13 +9,16 @@ const TOKEN_KEYS = {
   ADMIN_USER: 'adminUser'
 };
 
+const isBrowser = typeof window !== 'undefined';
+
 /**
  * Get the current authentication token from localStorage
  * Checks both token storage keys for compatibility
  * @returns {string|null} The authentication token or null if not found
  */
 export const getAuthToken = () => {
-  return localStorage.getItem(TOKEN_KEYS.AUTH_TOKEN) || 
+  if (!isBrowser) return null;
+  return localStorage.getItem(TOKEN_KEYS.AUTH_TOKEN) ||
          localStorage.getItem(TOKEN_KEYS.ADMIN_TOKEN) ||
          sessionStorage.getItem(TOKEN_KEYS.AUTH_TOKEN) ||
          sessionStorage.getItem(TOKEN_KEYS.ADMIN_TOKEN);
@@ -26,10 +29,9 @@ export const getAuthToken = () => {
  * @param {string} token - The authentication token to store
  */
 export const setAuthToken = (token) => {
-  if (token) {
-    localStorage.setItem(TOKEN_KEYS.AUTH_TOKEN, token);
-    localStorage.setItem(TOKEN_KEYS.ADMIN_TOKEN, token);
-  }
+  if (!isBrowser || !token) return;
+  localStorage.setItem(TOKEN_KEYS.AUTH_TOKEN, token);
+  localStorage.setItem(TOKEN_KEYS.ADMIN_TOKEN, token);
 };
 
 /**
@@ -37,9 +39,8 @@ export const setAuthToken = (token) => {
  * @param {Object} userData - The user data to store
  */
 export const setUserData = (userData) => {
-  if (userData) {
-    localStorage.setItem(TOKEN_KEYS.ADMIN_USER, JSON.stringify(userData));
-  }
+  if (!isBrowser || !userData) return;
+  localStorage.setItem(TOKEN_KEYS.ADMIN_USER, JSON.stringify(userData));
 };
 
 /**
@@ -47,6 +48,7 @@ export const setUserData = (userData) => {
  * @returns {Object|null} The user data or null if not found
  */
 export const getUserData = () => {
+  if (!isBrowser) return null;
   try {
     const userData = localStorage.getItem(TOKEN_KEYS.ADMIN_USER);
     return userData ? JSON.parse(userData) : null;
@@ -61,11 +63,12 @@ export const getUserData = () => {
  * Removes tokens and user data from both localStorage and sessionStorage
  */
 export const clearAuthData = () => {
+  if (!isBrowser) return;
   // Clear localStorage
   localStorage.removeItem(TOKEN_KEYS.AUTH_TOKEN);
   localStorage.removeItem(TOKEN_KEYS.ADMIN_TOKEN);
   localStorage.removeItem(TOKEN_KEYS.ADMIN_USER);
-  
+
   // Clear sessionStorage
   sessionStorage.removeItem(TOKEN_KEYS.AUTH_TOKEN);
   sessionStorage.removeItem(TOKEN_KEYS.ADMIN_TOKEN);
@@ -78,7 +81,7 @@ export const clearAuthData = () => {
 export const isAuthenticated = () => {
   const token = getAuthToken();
   if (!token) return false;
-  
+
   try {
     // Basic JWT token validation (check if it has 3 parts)
     const parts = token.split('.');

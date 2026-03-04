@@ -1,5 +1,7 @@
+'use client'
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import { motion } from 'framer-motion';
@@ -19,15 +21,14 @@ const ResetPassword = () => {
   const [step, setStep] = useState(1);
 
   const { resetPassword } = useAuth();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const email = searchParams.get('email') || location.state?.email;
+    const email = searchParams.get('email');
     const code = searchParams.get('code');
     if (email) setFormData(prev => ({ ...prev, email, resetToken: code || '' }));
-  }, [searchParams, location.state]);
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +64,7 @@ const ResetPassword = () => {
     try {
       const result = await resetPassword(formData);
       if (result.success) {
-        navigate('/auth/login', { state: { message: 'Password reset successfully!' } });
+        router.push('/auth/login?message=' + encodeURIComponent('Password reset successfully!'));
       }
     } catch (error) {
       console.error('Reset password error:', error);

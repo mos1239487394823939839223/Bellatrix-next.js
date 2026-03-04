@@ -1,5 +1,6 @@
+'use client'
 import React, { useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -30,14 +31,14 @@ import { useTheme } from "../../context/ThemeContext";
 import { useMessageNotifications } from "../../hooks/useMessageNotifications";
 import MessageNotification from "./MessageNotification";
 
-const ModernAdminLayout = () => {
+const ModernAdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const { isDark, theme, toggleTheme, toggleColorTheme } = useTheme();
   const { logout } = useAuth();
-  const isEnhancedCreate = location.pathname.startsWith(
+  const isEnhancedCreate = pathname.startsWith(
     "/admin/pages/enhanced-create"
   );
   const {
@@ -94,21 +95,21 @@ const ModernAdminLayout = () => {
   const getCurrentPageTitle = () => {
     const currentItem = menuItems.find(
       (item) =>
-        item.path === location.pathname ||
-        location.pathname.startsWith(item.path + "/")
+        item.path === pathname ||
+        pathname.startsWith(item.path + "/")
     );
     return currentItem?.name || "Dashboard";
   };
 
   const isActive = (path) => {
     if (path === "/admin") {
-      return location.pathname === "/admin" || location.pathname === "/admin/";
+      return pathname === "/admin" || pathname === "/admin/";
     }
-    return location.pathname.startsWith(path);
+    return pathname.startsWith(path);
   };
 
   const handleNavigation = (path) => {
-    navigate(path);
+    router.push(path);
     setSidebarOpen(false);
   };
 
@@ -229,7 +230,7 @@ const ModernAdminLayout = () => {
           {/* Bottom section with Change Password and Logout */}
           <div className="border-t border-[var(--color-white-10)] p-4 space-y-2">
             <button
-              onClick={() => navigate('/admin/change-password')}
+              onClick={() => router.push('/admin/change-password')}
               className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 group"
             >
               <KeyIcon className="mr-3 h-5 w-5" />
@@ -238,7 +239,7 @@ const ModernAdminLayout = () => {
             <button
               onClick={() => {
                 logout();
-                navigate('/auth/login');
+                router.push('/auth/login');
               }}
               className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-red-400 hover:bg-red-500/10 hover:text-red-300 group"
             >
@@ -294,7 +295,7 @@ const ModernAdminLayout = () => {
             isEnhancedCreate ? "p-0" : "p-4 sm:p-6 lg:p-8"
           } overflow-auto`}
         >
-          <Outlet />
+          {children}
         </main>
       </div>
 
@@ -304,8 +305,8 @@ const ModernAdminLayout = () => {
           key={notification.id}
           notification={notification}
           onClose={() => removeNotification(notification.id)}
-          onReply={() => navigate("/admin/messages")}
-          onView={() => navigate("/admin/messages")}
+          onReply={() => router.push("/admin/messages")}
+          onView={() => router.push("/admin/messages")}
         />
       ))}
     </div>

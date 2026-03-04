@@ -1,5 +1,6 @@
+'use client'
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -296,7 +297,7 @@ import {
 
             icon={<PlusIcon className="h-4 w-4" />}
 
-            onClick={() => navigate("/admin/pages/enhanced-create")}
+            onClick={() => router.push("/admin/pages/enhanced-create")}
 
             className="bg-blue-600 hover:bg-blue-700 text-white"
 

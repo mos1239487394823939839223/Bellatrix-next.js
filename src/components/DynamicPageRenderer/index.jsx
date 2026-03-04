@@ -1,5 +1,6 @@
+'use client'
 import React, { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import { usePageData } from "../../hooks/usePageData";
 import { useComponentLoader } from "../../hooks/useComponentLoader";
 import LoadingState from "./LoadingState";

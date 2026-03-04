@@ -1,5 +1,6 @@
+'use client'
 import React, { useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../../hooks/useAuth";
 import {
   AppBar,
@@ -40,13 +41,13 @@ import {
 
 const drawerWidth = 280;
 
-const AdminLayout = () => {
+const AdminLayout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationAnchor, setNotificationAnchor] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const { logout } = useAuth();
 
   const handleDrawerToggle = () => {
@@ -64,7 +65,7 @@ const AdminLayout = () => {
   const handleExitAdmin = () => {
     // Use the centralized logout function from useAuth
     logout();
-    navigate('/auth/login');
+    router.push('/auth/login');
     handleProfileMenuClose();
   };
 
@@ -81,28 +82,28 @@ const AdminLayout = () => {
       text: "Dashboard",
       icon: <DashboardIcon />,
       path: "/admin",
-      active: location.pathname === "/admin" || location.pathname === "/admin/",
+      active: pathname === "/admin" || pathname === "/admin/",
       description: "Overview & Analytics",
     },
     {
       text: "Pages",
       icon: <PagesIcon />,
       path: "/admin/pages",
-      active: location.pathname.startsWith("/admin/pages"),
+      active: pathname.startsWith("/admin/pages"),
       description: "Content Management",
     },
     {
       text: "Messages",
       icon: <MessageIcon />,
       path: "/admin/messages",
-      active: location.pathname.startsWith("/admin/messages"),
+      active: pathname.startsWith("/admin/messages"),
       description: "Contact Messages",
     },
     {
       text: "Settings",
       icon: <SettingsIcon />,
       path: "/admin/settings",
-      active: location.pathname.startsWith("/admin/settings"),
+      active: pathname.startsWith("/admin/settings"),
       description: "System Configuration",
     },
   ];
@@ -147,7 +148,7 @@ const AdminLayout = () => {
           {menuItems.map((item) => (
             <ListItem key={item.text} disablePadding>
               <ListItemButton
-                onClick={() => navigate(item.path)}
+                onClick={() => router.push(item.path)}
               className={`rounded-2xl mx-2 transition-all duration-200 ${
                   item.active
                   ? "bg-[#0b163a] text-blue-300 shadow border border-gray-700"
@@ -209,7 +210,7 @@ const AdminLayout = () => {
           </Typography>
           <div className="space-y-3">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => router.push("/")}
               className="flex items-center space-x-3 text-gray-300 hover:text-white transition-all duration-200 w-full text-left p-3 rounded-xl hover:bg-white/10"
             >
               <HomeIcon fontSize="small" />
@@ -550,7 +551,7 @@ const AdminLayout = () => {
 
         {/* Content Area */}
         <div className="flex-1 bg-gray-900">
-          <Outlet />
+          {children}
         </div>
       </Box>
     </Box>

@@ -1,39 +1,44 @@
+'use client'
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import { motion } from 'framer-motion';
-import { UserPlusIcon, EnvelopeIcon, UserIcon, ArrowRightIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import { UserIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
-const Register = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
-    username: '',
+    password: '',
+    rememberMe: false,
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { register } = useAuth();
-  const navigate = useNavigate();
+  const { login } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const from = searchParams.get('from') || '/admin/dashboard';
+  const successMessage = searchParams.get('message');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    else if (formData.firstName.length < 2) newErrors.firstName = 'Min 2 characters';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    else if (formData.lastName.length < 2) newErrors.lastName = 'Min 2 characters';
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email';
-    if (!formData.username.trim()) newErrors.username = 'Username is required';
-    else if (formData.username.length < 3) newErrors.username = 'Min 3 characters';
+    if (!formData.password.trim()) newErrors.password = 'Password is required';
+    else if (formData.password.length < 6) newErrors.password = 'Min 6 characters';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -43,12 +48,10 @@ const Register = () => {
     if (!validateForm()) return;
     setIsSubmitting(true);
     try {
-      const result = await register(formData);
-      if (result.success) {
-        navigate('/auth/verification', { state: { email: formData.email } });
-      }
+      const result = await login(formData);
+      if (result.success) router.replace(from);
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Login error:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -85,7 +88,7 @@ const Register = () => {
             transition={{ delay: 0.3 }}
             className="text-3xl font-bold text-white text-center mb-3"
           >
-            Create Account
+            Welcome Back!
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -93,10 +96,10 @@ const Register = () => {
             transition={{ delay: 0.4 }}
             className="text-white/60 text-center text-lg mb-8"
           >
-            Join us to get started
+            Sign in to access your dashboard
           </motion.p>
           
-          {/* Info Card */}
+          {/* Features */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -105,22 +108,22 @@ const Register = () => {
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                <EnvelopeIcon className="w-5 h-5 text-blue-400" />
+                <LockClosedIcon className="w-5 h-5 text-blue-400" />
               </div>
-              <h3 className="text-white font-semibold">After Registration</h3>
+              <h3 className="text-white font-semibold">Secure Access</h3>
             </div>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-white/70 text-sm">
                 <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                Verification code email
+                Encrypted connection
               </li>
               <li className="flex items-center gap-3 text-white/70 text-sm">
                 <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                Temporary password email
+                Multi-factor authentication
               </li>
               <li className="flex items-center gap-3 text-white/70 text-sm">
                 <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
-                Access to dashboard
+                Session management
               </li>
             </ul>
           </motion.div>
@@ -141,97 +144,101 @@ const Register = () => {
               alt="Bellatrix Logo" 
               className="w-40 h-40 object-contain mx-auto mb-4 brightness-0 invert"
             />
-            <h1 className="text-xl font-bold text-white">Create Account</h1>
+            <h1 className="text-xl font-bold text-white">Sign In</h1>
           </div>
 
           {/* Form Card */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-8">
+            {/* Success Message */}
+            {successMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 bg-green-500/20 border border-green-500/30 rounded-xl p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <CheckCircleIcon className="w-5 h-5 text-green-400" />
+                  <p className="text-sm text-green-300">{successMessage}</p>
+                </div>
+              </motion.div>
+            )}
+
             <div className="text-center mb-6">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-500/30 mb-4">
-                <UserPlusIcon className="w-6 h-6 text-blue-400" />
+                <UserIcon className="w-6 h-6 text-blue-400" />
               </div>
-              <h2 className="text-xl font-bold text-white">Admin Registration</h2>
-              <p className="text-white/50 text-sm mt-1">Create your admin account</p>
+              <h2 className="text-xl font-bold text-white">Sign In</h2>
+              <p className="text-white/50 text-sm mt-1">Enter your credentials to continue</p>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name Fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/80 mb-2">First Name</label>
-                  <input
-                    name="firstName"
-                    type="text"
-                    autoComplete="given-name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 bg-white/5 border ${
-                      errors.firstName ? 'border-red-500/50' : 'border-white/10'
-                    } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all`}
-                    placeholder="First name"
-                  />
-                  {errors.firstName && <p className="mt-1 text-xs text-red-400">{errors.firstName}</p>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white/80 mb-2">Last Name</label>
-                  <input
-                    name="lastName"
-                    type="text"
-                    autoComplete="family-name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 bg-white/5 border ${
-                      errors.lastName ? 'border-red-500/50' : 'border-white/10'
-                    } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all`}
-                    placeholder="Last name"
-                  />
-                  {errors.lastName && <p className="mt-1 text-xs text-red-400">{errors.lastName}</p>}
-                </div>
-              </div>
-
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email Field */}
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Email Address</label>
-                <input
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-white/5 border ${
-                    errors.email ? 'border-red-500/50' : 'border-white/10'
-                  } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all`}
-                  placeholder="Enter your email"
-                />
-                {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
-              </div>
-
-              {/* Username Field */}
-              <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Username</label>
-                <input
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-white/5 border ${
-                    errors.username ? 'border-red-500/50' : 'border-white/10'
-                  } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all`}
-                  placeholder="Choose a username"
-                />
-                {errors.username && <p className="mt-1 text-xs text-red-400">{errors.username}</p>}
-              </div>
-
-              {/* Info Box */}
-              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <InformationCircleIcon className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-blue-300">
-                    <p className="font-medium mb-1">What happens after registration?</p>
-                    <p className="text-blue-300/70">📧 You'll receive <strong>2 emails</strong>: verification code and temporary password.</p>
-                  </div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <input
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 bg-white/5 border ${
+                      errors.email ? 'border-red-500/50' : 'border-white/10'
+                    } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all`}
+                    placeholder="Enter your email"
+                  />
                 </div>
+                {errors.email && <p className="mt-2 text-xs text-red-400">{errors.email}</p>}
+              </div>
+              
+              {/* Password Field */}
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 pr-12 bg-white/5 border ${
+                      errors.password ? 'border-red-500/50' : 'border-white/10'
+                    } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all`}
+                    placeholder="Enter your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+                  >
+                    {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                  </button>
+                </div>
+                {errors.password && <p className="mt-2 text-xs text-red-400">{errors.password}</p>}
+              </div>
+
+              {/* Remember Me & Forgot Password */}
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    name="rememberMe"
+                    type="checkbox"
+                    checked={formData.rememberMe}
+                    onChange={handleChange}
+                    className="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/50"
+                  />
+                  <span className="text-sm text-white/60">Remember me</span>
+                </label>
+                <Link
+                  to="/auth/forgot-password"
+                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  Forgot password?
+                </Link>
               </div>
 
               {/* Submit Button */}
@@ -244,22 +251,22 @@ const Register = () => {
                   <LoadingSpinner size="sm" />
                 ) : (
                   <>
-                    <span>Create Admin Account</span>
+                    <span>Sign In</span>
                     <ArrowRightIcon className="w-5 h-5" />
                   </>
                 )}
               </button>
             </form>
 
-            {/* Login Link */}
+            {/* Register Link */}
             <div className="mt-6 pt-6 border-t border-white/10 text-center">
               <p className="text-white/50 text-sm">
-                Already have an admin account?{' '}
+                Don't have an account?{' '}
                 <Link
-                  to="/auth/login"
+                  to="/auth/register"
                   className="text-blue-400 font-medium hover:text-blue-300 transition-colors"
                 >
-                  Sign in
+                  Create Account
                 </Link>
               </p>
             </div>
@@ -275,4 +282,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

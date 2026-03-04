@@ -59,6 +59,7 @@ const SERVICE_KEYWORDS = [
 const EXCLUDED_PATTERNS = [/^auth/, /^admin/, /^api/];
 
 // ─── Helpers ────────────────────────────────────────────────
+
 const today = () => new Date().toISOString().split("T")[0];
 
 function getMeta(slug) {
@@ -193,7 +194,7 @@ async function main() {
 
   console.log(`\n🗺️   Sitemap written → ${OUTPUT_SITEMAP}`);
   console.log(`🤖  Robots.txt written → ${OUTPUT_ROBOTS}`);
-  console.log(`\n    Total URLs: ${validSlugs.length}`);
+  console.log(`\n   The Total URLs: ${validSlugs.length}`);
   console.log(`    ┌─────────────────────────────────────┐`);
   console.log(`    │  Priority 1.0 (Homepage)    : ${tiers["1.0"]}     │`);
   console.log(`    │  Priority 0.9 (Core pages)  : ${tiers["0.9"]}     │`);

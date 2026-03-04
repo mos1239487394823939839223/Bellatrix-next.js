@@ -195,7 +195,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
         playsInline
 
         preload="auto"
-        fetchpriority="high"
+        fetchPriority="high"
 
         className="absolute inset-0 w-full h-full object-cover"
 

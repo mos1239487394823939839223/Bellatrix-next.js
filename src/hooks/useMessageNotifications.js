@@ -230,7 +230,9 @@ export const useMessageNotifications = () => {
 
     // Check if user is authenticated before starting polling
 
-    const token = localStorage.getItem('authToken') || localStorage.getItem('adminToken');
+    const token = typeof window !== 'undefined'
+      ? (localStorage.getItem('authToken') || localStorage.getItem('adminToken'))
+      : null;
 
     
 
@@ -409,6 +411,12 @@ export const useMessagePolling = (interval = 30000) => {
 
 
   useEffect(() => {
+
+    const token = typeof window !== 'undefined'
+      ? (localStorage.getItem('authToken') || localStorage.getItem('adminToken'))
+      : null;
+
+    if (!token) return;
 
     const intervalId = setInterval(checkForNewMessages, interval);
 

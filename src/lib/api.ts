@@ -17,10 +17,31 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// Response interceptor to normalize errors
+// Response interceptor: unwrap { data, success, message } envelope and normalize errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (
+      response.data &&
+      typeof response.data === "object" &&
+      "data" in response.data
+    ) {
+      if (response.data.success === false) {
+        const error: any = new Error(response.data.message || "API request failed");
+        error.response = { status: response.status, data: response.data };
+        throw error;
+      }
+      return { ...response, data: response.data.data };
+    }
+    return response;
+  },
   (error) => {
+    if (error.response?.status === 401) {
+      const isBrowser = typeof window !== 'undefined';
+      if (isBrowser) {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("adminToken");
+      }
+    }
     const normalizedError = {
       message:
         error.response?.data?.message || error.message || "An error occurred",
@@ -31,10 +52,19 @@ api.interceptors.response.use(
   },
 );
 
-// Request interceptor to add auth token if available
+// Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    // Token will be added by individual thunks when needed
+    const isBrowser = typeof window !== 'undefined';
+    let token = isBrowser ? localStorage.getItem('authToken') : null;
+    if (!token && isBrowser) {
+      token = localStorage.getItem('adminToken') ||
+              sessionStorage.getItem('authToken') ||
+              sessionStorage.getItem('adminToken');
+    }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => Promise.reject(error),

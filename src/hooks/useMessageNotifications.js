@@ -1,6 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 import api from '../lib/api';
+
+// Module-level flags: _blocked persists across remounts, _inFlight prevents StrictMode double-invoke
+let _contactMessagesBlocked = false;
+let _fetchInFlight = false;
 
 
 
@@ -11,6 +15,9 @@ export const useMessageNotifications = () => {
   const [unreadCount, setUnreadCount] = useState(0);
 
   const [isConnected, setIsConnected] = useState(false);
+
+  // Stop polling permanently after a 401 (permissions issue)
+  const authErrorRef = useRef(_contactMessagesBlocked);
 
 
 
@@ -27,6 +34,10 @@ export const useMessageNotifications = () => {
   // Fetch initial unread count
 
   const fetchUnreadCount = useCallback(async () => {
+
+    if (authErrorRef.current) return;
+    if (_fetchInFlight) return; // StrictMode double-invoke guard
+    _fetchInFlight = true;
 
     try {
 
@@ -54,19 +65,24 @@ export const useMessageNotifications = () => {
 
     } catch (error) {
 
-      console.error('Error fetching message stats:', error);
-
-      
-
-      // If it's a 401 error, the user might not be authenticated
+      // If it's a 401 error, stop polling permanently (no permission for this endpoint)
 
       if (error.status === 401) {
 
-        console.warn(' [AUTH WARNING] User not authenticated for message stats');
+        authErrorRef.current = true;
+        _contactMessagesBlocked = true;
 
-        // Don't set unread count, keep it at 0
+        setIsConnected(false);
+
+      } else {
+
+        console.error('Error fetching message stats:', error);
 
       }
+
+    } finally {
+
+      _fetchInFlight = false;
 
     }
 
@@ -77,6 +93,8 @@ export const useMessageNotifications = () => {
   // Check for new messages (simulate real-time updates)
 
   const checkForNewMessages = useCallback(async () => {
+
+    if (authErrorRef.current) return;
 
     try {
 
@@ -168,19 +186,18 @@ export const useMessageNotifications = () => {
 
     } catch (error) {
 
-      console.error('Error checking for new messages:', error);
-
-      
-
-      // If it's a 401 error, the user might not be authenticated
+      // If it's a 401 error, stop polling permanently (no permission for this endpoint)
 
       if (error.status === 401) {
 
-        console.warn(' [AUTH WARNING] User not authenticated for recent messages');
+        authErrorRef.current = true;
+        _contactMessagesBlocked = true;
 
-        // Don't process messages, just return
+        setIsConnected(false);
 
-        return;
+      } else {
+
+        console.error('Error checking for new messages:', error);
 
       }
 

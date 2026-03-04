@@ -10,19 +10,11 @@ export const metadata = {
     description: 'Empowering your business with next-gen enterprise software solutions.',
     url: 'https://bellatrixinc.com',
     siteName: 'Bellatrix',
-    images: [
-      {
-        url: 'https://bellatrixinc.com/images/logoOne.png',
-        width: 800,
-        height: 600,
-      },
-    ],
     locale: 'en_US',
     type: 'website',
   },
   icons: {
     icon: '/favicon.ico',
-    apple: '/images/logoOne.png',
   },
 }
 

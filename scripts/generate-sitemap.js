@@ -56,7 +56,7 @@ const SERVICE_KEYWORDS = [
 ];
 
 // Slugs to exclude from sitemap
-const EXCLUDED_PATTERNS = [/^auth/, /^admin/, /^api/];
+const EXCLUDED_PATTERNS = [/^auth/, /^admin/, /^api/, /^integration$/, /^customization$/];
 
 // ─── Helpers ────────────────────────────────────────────────
 

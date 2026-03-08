@@ -493,17 +493,19 @@ const Footer = ({ initialCategories = [] }) => {
                 <span style={{ color: "var(--color-text-muted)" }}>Loading...</span>
               ) : (
                 (() => {
-                  const servicePages = categories
-                    .filter(cat => !["home", "about"].includes(cat.name?.toLowerCase()))
-                    .flatMap(cat =>
-                      (cat.pages || [])
+                  const servicesCategory = categories.find(
+                    cat => cat.name?.toLowerCase() === "services"
+                  );
+
+                  const servicePages = servicesCategory
+                    ? (servicesCategory.pages || [])
                         .filter(page => page.isPublished === true)
                         .map(page => ({
                           id: page.id,
                           title: page.title,
                           href: page.slug ? `/${page.slug}` : `/${page.id}`,
                         }))
-                    );
+                    : [];
 
                   if (servicePages.length === 0) {
                     return <span style={{ opacity: 0.6 }}>No services available</span>;

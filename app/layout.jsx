@@ -14,7 +14,19 @@ export const metadata = {
     type: 'website',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '16x16' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '32x32' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '48x48' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '64x64' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '96x96' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '128x128' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '192x192' },
+      { url: '/images/logoThree.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/images/logoThree.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 }
 

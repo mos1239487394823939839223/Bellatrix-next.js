@@ -281,8 +281,11 @@ const Navbar = ({ initialCategories = [] }) => {
                           : "/images/logoOne.png"
                     }
                     alt="Bellatrix Logo"
-                    className={`absolute top-1/2 left-1/2 object-contain -translate-x-1/2 -translate-y-1/2 transition-all duration-250 ${navbarTheme === "light"
-                      ? "h-16 w-16 md:h-24 md:w-24"
+                    title="Bellatrix - Expert ERP Solutions & Consultancy"
+                    className={`absolute top-1/2 left-1/2 object-contain -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out ${navbarTheme === "light"
+                      ? scrolled
+                        ? "h-8 w-8 md:h-14 md:w-14"
+                        : "h-14 w-14 md:h-20 md:w-20"
                       : scrolled
                         ? "h-16 w-16 md:h-24 md:w-24"
                         : "h-28 w-28 md:h-36 md:w-36"

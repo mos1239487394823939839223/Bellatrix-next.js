@@ -7,12 +7,17 @@ const nextConfig = {
         source: '/api/:path*',
         destination: 'https://bellatrixinc.com/api/:path*',
       },
+      {
+        source: '/uploads/:path*',
+        destination: 'https://bellatrixinc.com/uploads/:path*',
+      },
     ]
   },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'www.bellatrixinc.com' },
       { protocol: 'https', hostname: 'bellatrixinc.com' },
+      { protocol: 'http', hostname: '68.178.169.236' },
     ],
   },
   // Remove console.log in production

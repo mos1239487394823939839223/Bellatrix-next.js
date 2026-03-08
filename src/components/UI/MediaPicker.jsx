@@ -23,6 +23,8 @@ import axios from "axios";
 
 import mediaAPI from "../../lib/mediaAPI";
 
+import api from "../../lib/api.js";
+
 import { getApiBaseUrlWithApi, getAbsoluteBaseUrl } from "../../config/api.js";
 
 // API Constants
@@ -259,9 +261,41 @@ const MediaPicker = ({
 
   const [toast, setToast] = useState(null);
 
+  const [blobUrls, setBlobUrls] = useState({});
+
   const fileInputRef = useRef(null);
 
   const loadingRef = useRef(false);
+
+  // Fetch media file with auth and return a blob URL (needed because /uploads/* requires auth)
+  const fetchBlobUrl = useCallback(async (mediaId) => {
+    if (!mediaId || blobUrls[mediaId]) return;
+    try {
+      const res = await api.get(`/Media/public/${mediaId}`, { responseType: 'blob' });
+      const url = URL.createObjectURL(res.data);
+      setBlobUrls(prev => ({ ...prev, [mediaId]: url }));
+    } catch (err) {
+      console.error('[MediaPicker] Failed to fetch blob for', mediaId, err);
+    }
+  }, [blobUrls]);
+
+  // Fetch blob URLs for all media items when media list changes
+  useEffect(() => {
+    media.forEach((item) => {
+      if (item.id && !blobUrls[item.id]) {
+        fetchBlobUrl(item.id);
+      }
+    });
+  }, [media, fetchBlobUrl]);
+
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(blobUrls).forEach((url) => {
+        if (url && url.startsWith('blob:')) URL.revokeObjectURL(url);
+      });
+    };
+  }, []);
 
   // Show toast notification
 
@@ -641,8 +675,8 @@ const MediaPicker = ({
   const renderMediaItem = (mediaItem) => {
     const isSelected = selectedItems.find((item) => item.id === mediaItem.id);
 
-    // Use direct file link for displaying media
-    const fullUrl = toFullUrl(mediaItem.fileUrl);
+    // Use authenticated blob URL if available, fall back to direct file link
+    const fullUrl = blobUrls[mediaItem.id] || toFullUrl(mediaItem.fileUrl);
 
     // Determine media type from contentType OR filename/URL
     const fileName = mediaItem.fileName || mediaItem.fileUrl || "";

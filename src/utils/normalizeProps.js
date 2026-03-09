@@ -2273,6 +2273,28 @@ export const normalizeProps = (componentType, contentJson) => {
       };
     },
 
+    SolutionsGallery: (data) => {
+      const solutions = Array.isArray(data.solutions) ? data.solutions : [];
+      return {
+        title: data.title || "",
+        subtitle: data.subtitle || "",
+        ctaButtonText: data.ctaButtonText || "",
+        solutions: solutions.map((s) => ({
+          id: s.id || s.title?.toLowerCase().replace(/\s+/g, "-") || "",
+          title: s.title || "",
+          subtitle: s.subtitle || "",
+          category: s.category || "",
+          description: s.description || "",
+          image: s.image ? rewriteUploadsUrl(s.image) : "",
+          href: s.href || "",
+          accentColor: s.accentColor || "#6366f1",
+          featured: !!s.featured,
+          features: Array.isArray(s.features) ? s.features : [],
+        })),
+        data: data,
+      };
+    },
+
 
 
 

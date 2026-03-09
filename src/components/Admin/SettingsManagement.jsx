@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Cog6ToothIcon,
+  LinkIcon,
 } from "@heroicons/react/24/outline";
 import Toast from "../UI/Toast";
 import FooterSettings from "../../page-components/FooterSettings";
+import QuickLinksSettings from "../../page-components/QuickLinksSettings";
 
 const SettingsManagement = () => {
   const [activeTab, setActiveTab] = useState("footer");
@@ -21,6 +23,12 @@ const SettingsManagement = () => {
       name: "Footer Settings",
       description: "Manage footer content and links",
       icon: Cog6ToothIcon,
+    },
+    {
+      id: "quick-links",
+      name: "Quick Links",
+      description: "Manage footer quick links",
+      icon: LinkIcon,
     },
   ];
 
@@ -87,6 +95,7 @@ const SettingsManagement = () => {
       >
         <div className="[&_input]:bg-[var(--color-white-5)] [&_input]:border-[var(--color-white-20)] [&_input]:text-[var(--color-text-inverse)] [&_textarea]:bg-[var(--color-white-5)] [&_textarea]:border-[var(--color-white-20)] [&_textarea]:text-[var(--color-text-inverse)]">
           {activeTab === "footer" && <FooterSettings />}
+          {activeTab === "quick-links" && <QuickLinksSettings />}
         </div>
       </motion.div>
 

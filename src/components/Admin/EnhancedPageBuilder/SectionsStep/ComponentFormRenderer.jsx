@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "../../../UI/Button";
 import DynamicFormGenerator from "../../../UI/DynamicFormGenerator";
+import SolutionsGalleryConfig from "./SolutionsGalleryConfig";
 
 // Safely parse contentJson which may arrive as a string or already-parsed object
 const safeParseContentJson = (contentJson, fallback = {}) => {
@@ -52,6 +53,16 @@ const ComponentFormRenderer = ({
   onUpdate,
 }) => {
   const [viewMode, setViewMode] = useState(component.viewMode || "form");
+
+  if (component.componentType === "SolutionsGallery") {
+    return (
+      <SolutionsGalleryConfig
+        component={component}
+        index={index}
+        onUpdate={onUpdate}
+      />
+    );
+  }
 
   const handleViewModeChange = (mode) => {
     setViewMode(mode);

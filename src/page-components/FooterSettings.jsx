@@ -293,7 +293,7 @@ const FooterSettings = () => {
       <div className="admin-component flex items-center justify-center h-64" data-dashboard="true">
         <div className="text-center">
           <ArrowPathIcon className="w-12 h-12 text-[var(--color-primary)] animate-spin mx-auto mb-4" />
-          <p className="text-[var(--color-ww-100)] text-lg">Loading footer settings...</p>
+          <p className="text-[var(--color-text-inverse)] text-lg">Loading footer settings...</p>
         </div>
       </div>
     );
@@ -314,7 +314,7 @@ const FooterSettings = () => {
           <h2 className="text-2xl font-bold text-[var(--color-text-inverse)] mb-1">
             Footer Settings
           </h2>
-          <p className="text-[var(--color-ww-100)]">
+          <p className="text-[var(--color-text-inverse)]">
             Manage footer content, contact information, and social media links
           </p>
         </div>
@@ -368,7 +368,7 @@ const FooterSettings = () => {
             <CardTitle className="text-[var(--color-text-inverse)] text-xl font-semibold">
               Footer Field Settings
             </CardTitle>
-            <p className="text-[var(--color-ww-100)] mt-2 text-sm">
+            <p className="text-[var(--color-text-inverse)] mt-2 text-sm">
               Configure individual footer settings. Changes are tracked and
               can be saved all at once.
             </p>

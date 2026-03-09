@@ -6,6 +6,58 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+
+const PHONE_FLAGS = [
+  { flag: "", label: "No flag" },
+  { flag: "🇺🇸", label: "🇺🇸 United States" },
+  { flag: "🇬🇧", label: "🇬🇧 United Kingdom" },
+  { flag: "🇨🇦", label: "🇨🇦 Canada" },
+  { flag: "🇦🇺", label: "🇦🇺 Australia" },
+  { flag: "🇦🇪", label: "🇦🇪 UAE" },
+  { flag: "🇸🇦", label: "🇸🇦 Saudi Arabia" },
+  { flag: "🇪🇬", label: "🇪🇬 Egypt" },
+  { flag: "🇩🇪", label: "🇩🇪 Germany" },
+  { flag: "🇫🇷", label: "🇫🇷 France" },
+  { flag: "🇮🇹", label: "🇮🇹 Italy" },
+  { flag: "🇪🇸", label: "🇪🇸 Spain" },
+  { flag: "🇳🇱", label: "🇳🇱 Netherlands" },
+  { flag: "🇸🇪", label: "🇸🇪 Sweden" },
+  { flag: "🇨🇭", label: "🇨🇭 Switzerland" },
+  { flag: "🇵🇱", label: "🇵🇱 Poland" },
+  { flag: "🇹🇷", label: "🇹🇷 Turkey" },
+  { flag: "🇷🇺", label: "🇷🇺 Russia" },
+  { flag: "🇮🇳", label: "🇮🇳 India" },
+  { flag: "🇨🇳", label: "🇨🇳 China" },
+  { flag: "🇯🇵", label: "🇯🇵 Japan" },
+  { flag: "🇰🇷", label: "🇰🇷 South Korea" },
+  { flag: "🇸🇬", label: "🇸🇬 Singapore" },
+  { flag: "🇭🇰", label: "🇭🇰 Hong Kong" },
+  { flag: "🇧🇷", label: "🇧🇷 Brazil" },
+  { flag: "🇲🇽", label: "🇲🇽 Mexico" },
+  { flag: "🇦🇷", label: "🇦🇷 Argentina" },
+  { flag: "🇳🇬", label: "🇳🇬 Nigeria" },
+  { flag: "🇿🇦", label: "🇿🇦 South Africa" },
+  { flag: "🇵🇰", label: "🇵🇰 Pakistan" },
+  { flag: "🇧🇩", label: "🇧🇩 Bangladesh" },
+  { flag: "🇮🇩", label: "🇮🇩 Indonesia" },
+  { flag: "🇵🇭", label: "🇵🇭 Philippines" },
+  { flag: "🇲🇾", label: "🇲🇾 Malaysia" },
+  { flag: "🇹🇭", label: "🇹🇭 Thailand" },
+  { flag: "🇻🇳", label: "🇻🇳 Vietnam" },
+  { flag: "🇯🇴", label: "🇯🇴 Jordan" },
+  { flag: "🇱🇧", label: "🇱🇧 Lebanon" },
+  { flag: "🇰🇼", label: "🇰🇼 Kuwait" },
+  { flag: "🇶🇦", label: "🇶🇦 Qatar" },
+  { flag: "🇴🇲", label: "🇴🇲 Oman" },
+  { flag: "🇧🇭", label: "🇧🇭 Bahrain" },
+  { flag: "🇮🇶", label: "🇮🇶 Iraq" },
+  { flag: "🇮🇷", label: "🇮🇷 Iran" },
+  { flag: "🇲🇦", label: "🇲🇦 Morocco" },
+  { flag: "🇹🇳", label: "🇹🇳 Tunisia" },
+  { flag: "🇩🇿", label: "🇩🇿 Algeria" },
+  { flag: "🇱🇾", label: "🇱🇾 Libya" },
+  { flag: "🇸🇩", label: "🇸🇩 Sudan" },
+];
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 import { validateField } from "../constants/settingsMap";
@@ -25,17 +77,25 @@ const SettingField = ({
   existingId,
   onSaveSuccess,
 }) => {
-  // For phone_array, parse JSON array or use single value
+  // For phone_array, parse JSON array into [{flag, number}] objects
   const parseInitialValue = (val, type) => {
     if (type === "phone_array") {
-      if (!val) return [""];
+      if (!val) return [{ flag: "", number: "" }];
       try {
         const parsed = JSON.parse(val);
-        return Array.isArray(parsed) && parsed.length > 0 ? parsed : [""];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Normalise: plain strings → {flag:"", number:string}
+          return parsed.map((item) =>
+            typeof item === "string"
+              ? { flag: "", number: item }
+              : { flag: item.flag || "", number: item.number || "" }
+          );
+        }
       } catch {
-        // If not JSON, treat as single phone
-        return val ? [val] : [""];
+        // Not JSON — treat as single plain-string phone
+        return [{ flag: "", number: val }];
       }
+      return [{ flag: "", number: "" }];
     }
     return val || "";
   };
@@ -76,24 +136,22 @@ const SettingField = ({
   };
 
   /**
-   * Handle phone array item change
+   * Handle phone array item field change (flag or number)
    */
-  const handlePhoneChange = (index, newPhone) => {
-    const newPhones = [...value];
-    newPhones[index] = newPhone;
+  const handlePhoneChange = (index, field, val) => {
+    const newPhones = value.map((p, i) =>
+      i === index ? { ...p, [field]: val } : p
+    );
     setValue(newPhones);
     setIsDirty(true);
-
-    if (validationError) {
-      setValidationError(null);
-    }
+    if (validationError) setValidationError(null);
   };
 
   /**
    * Add new phone number
    */
   const addPhone = () => {
-    setValue([...value, ""]);
+    setValue([...value, { flag: "", number: "" }]);
     setIsDirty(true);
   };
 
@@ -102,8 +160,7 @@ const SettingField = ({
    */
   const removePhone = (index) => {
     if (value.length > 1) {
-      const newPhones = value.filter((_, i) => i !== index);
-      setValue(newPhones);
+      setValue(value.filter((_, i) => i !== index));
       setIsDirty(true);
     }
   };
@@ -113,8 +170,8 @@ const SettingField = ({
    */
   const getValueForSave = () => {
     if (dataType === "phone_array") {
-      const cleanedPhones = value.filter(phone => phone && phone.trim() !== "");
-      return JSON.stringify(cleanedPhones);
+      const cleaned = value.filter((p) => p.number && p.number.trim() !== "");
+      return JSON.stringify(cleaned);
     }
     return value || "";
   };
@@ -307,7 +364,7 @@ const SettingField = ({
           )}
         </label>
         {description && (
-          <p className="text-xs text-[var(--color-ww-100)] mb-2">
+          <p className="text-xs text-[var(--color-text-inverse)] mb-2">
             {description}
           </p>
         )}
@@ -317,15 +374,30 @@ const SettingField = ({
       <div className="flex items-start gap-3">
         <div className="flex-1">
           {isPhoneArray ? (
-            /* Phone Array Input */
+            /* Phone Array Input with flag selector */
             <div className="space-y-2">
               {Array.isArray(value) && value.map((phone, index) => (
                 <div key={index} className="flex items-center gap-2">
+                  {/* Flag selector */}
+                  <select
+                    value={phone.flag || ""}
+                    onChange={(e) => handlePhoneChange(index, "flag", e.target.value)}
+                    disabled={isSaving}
+                    className="w-44 px-2 py-2.5 border rounded-lg text-sm bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] disabled:opacity-50 cursor-pointer appearance-none"
+                  >
+                    {PHONE_FLAGS.map((f) => (
+                      <option key={f.flag} value={f.flag}>
+                        {f.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Phone number input */}
                   <input
                     type="tel"
-                    value={phone}
-                    onChange={(e) => handlePhoneChange(index, e.target.value)}
-                    placeholder={`${placeholder} ${index + 1}`}
+                    value={phone.number || ""}
+                    onChange={(e) => handlePhoneChange(index, "number", e.target.value)}
+                    placeholder={placeholder}
                     disabled={isSaving}
                     className={`flex-1 px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] placeholder-[var(--color-text-muted)]
                       ${
@@ -337,6 +409,7 @@ const SettingField = ({
                       disabled:opacity-50 disabled:cursor-not-allowed
                       focus:outline-none focus:ring-2`}
                   />
+
                   {value.length > 1 && (
                     <button
                       type="button"

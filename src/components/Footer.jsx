@@ -6,6 +6,7 @@ import {
   ArrowUpward,
   Instagram,
   YouTube,
+  KeyboardArrowDown,
 } from "@mui/icons-material";
 
 import { useState, useEffect } from "react";
@@ -21,111 +22,85 @@ import { getApiBaseUrlWithApi } from "../config/api.js";
 const footerStyles = `
 
   .footer-social-link:hover {
-
     background-color: var(--color-hover) !important;
-
   }
 
   .footer-social-link:hover span {
-
     color: #ffffff !important;
-
   }
 
   .footer-social-link span {
-
     color: #ffffff !important;
-
     opacity: 0.9;
-
   }
 
-  
-
   /* Silver Theme - White icons */
-
   [data-theme="purple"] .footer-social-link span {
-
     color: #ffffff !important;
-
     opacity: 0.9;
-
   }
 
   [data-theme="purple"] .footer-social-link:hover span {
-
     color: #ffffff !important;
-
     opacity: 1;
-
   }
 
   [data-theme="purple"] .footer-social-link:hover {
-
     background-color: #6c757d !important;
-
   }
 
-  
-
   .footer-link:hover {
-
     color: var(--color-primary) !important;
-
     opacity: 1 !important;
-
   }
 
   .footer-scroll-btn:hover {
-
     background-color: var(--color-hover) !important;
-
   }
 
-  
-
   /* Quick Links - White text in both themes */
-
   .footer-link {
-
     color: #ffffff !important;
-
     opacity: 0.9;
-
   }
 
   .footer-link:hover {
-
     color: var(--color-primary) !important;
-
     opacity: 1 !important;
-
   }
 
-  
-
   /* Silver Theme - White text for footer links */
-
   [data-theme="purple"] .footer-link {
-
     color: #ffffff !important;
-
     opacity: 0.9;
-
   }
 
   [data-theme="purple"] .footer-link:hover {
-
-    color: #8b95a1 !important; /* silver-400 - medium silver */
-
+    color: #8b95a1 !important;
     opacity: 1 !important;
-
   }
 
   [data-theme="purple"] .footer-contact-text {
+    color: #b0b8c1 !important;
+  }
 
-    color: #b0b8c1 !important; /* silver-300 - same as quick links */
+  /* Mobile accordion chevron animation */
+  .footer-chevron {
+    transition: transform 0.3s ease;
+  }
 
+  .footer-chevron.open {
+    transform: rotate(180deg);
+  }
+
+  /* Mobile section dividers */
+  @media (max-width: 767px) {
+    .footer-mobile-section {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .footer-mobile-section:last-child {
+      border-bottom: none;
+    }
   }
 
 `;
@@ -137,7 +112,16 @@ const Footer = ({ initialCategories = [] }) => {
 
   const [loading, setLoading] = useState(initialCategories.length === 0);
 
-  const [error, setError] = useState(null);
+
+  // Mobile accordion state
+  const [openSections, setOpenSections] = useState({ quickLinks: false, services: false });
+  const toggleSection = (key) =>
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  // Quick links from settings API
+  const [quickLinks, setQuickLinks] = useState([]);
+  const [quickLinksLoading, setQuickLinksLoading] = useState(true);
+
 
   // Footer settings from API
 
@@ -240,14 +224,31 @@ const Footer = ({ initialCategories = [] }) => {
     fetchFooterSettings();
   }, []);
 
-  // Fetch categories for Quick Links — skip if SSR data already provided
+  // Fetch quick links from settings API
+  useEffect(() => {
+    const fetchQuickLinks = async () => {
+      setQuickLinksLoading(true);
+      try {
+        const res = await getPublicDictionary();
+        if (res.success && res.data && res.data.footer_quick_links) {
+          const parsed = JSON.parse(res.data.footer_quick_links);
+          setQuickLinks(Array.isArray(parsed) ? parsed : []);
+        }
+      } catch {
+        // keep empty
+      } finally {
+        setQuickLinksLoading(false);
+      }
+    };
+    fetchQuickLinks();
+  }, []);
+
+  // Fetch categories for Services column — skip if SSR data already provided
   useEffect(() => {
     if (initialCategories.length > 0) return;
     const fetchCategories = async () => {
       try {
         setLoading(true);
-
-        setError(null);
 
         const res = await fetch(`${getApiBaseUrlWithApi()}/Categories/navbar`);
 
@@ -256,8 +257,8 @@ const Footer = ({ initialCategories = [] }) => {
         const json = await res.json();
 
         setCategories(Array.isArray(json.data) ? json.data : []);
-      } catch (err) {
-        setError(err.message || "Error loading categories");
+      } catch {
+        // categories unavailable — services column will show empty state
       } finally {
         setLoading(false);
       }
@@ -297,11 +298,11 @@ const Footer = ({ initialCategories = [] }) => {
         }}
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
-          {/* Brand Column */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-8 md:py-12">
 
-          <div className="flex flex-col items-center lg:items-start gap-4">
+          {/* Brand Column */}
+          <div className="footer-mobile-section flex flex-col items-center lg:items-start gap-4 py-8 md:py-0">
             <h3
               className="text-3xl font-extrabold tracking-tight drop-shadow"
               style={{ color: "var(--color-text-inverse)" }}
@@ -310,197 +311,128 @@ const Footer = ({ initialCategories = [] }) => {
             </h3>
 
             <p
-              className="text-center lg:text-left max-w-xs"
-              style={{ color: "var(--color-text-inverse)", opacity: 0.8 }}
+              className="text-center lg:text-left max-w-xs text-sm leading-relaxed"
+              style={{ color: "var(--color-text-inverse)", opacity: 0.75 }}
             >
               {footerSettings.companyDescription}
             </p>
 
-            <div className="flex space-x-4 mt-2">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3 mt-1">
               {[
-                {
-                  icon: <Twitter fontSize="medium" />,
-
-                  href: footerSettings.twitter,
-
-                  label: "Twitter",
-                },
-
-                {
-                  icon: <LinkedIn fontSize="medium" />,
-
-                  href: footerSettings.linkedin,
-
-                  label: "LinkedIn",
-                },
-
-                {
-                  icon: <Facebook fontSize="medium" />,
-
-                  href: footerSettings.facebook,
-
-                  label: "Facebook",
-                },
-
-                {
-                  icon: <Instagram fontSize="medium" />,
-
-                  href: footerSettings.instagram,
-
-                  label: "Instagram",
-                },
-
-                {
-                  icon: <YouTube fontSize="medium" />,
-
-                  href: footerSettings.youtube,
-
-                  label: "YouTube",
-                },
-              ].map((item, idx) => (
-                <a
-                  key={idx}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="footer-social-link group p-2 rounded-full transition-colors duration-300 shadow hover:scale-110"
-                  style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  }}
-                  aria-label={item.label}
-                >
-                  <span className="transition-colors duration-300">
-                    {item.icon}
-                  </span>
-                </a>
-              ))}
+                { icon: <Twitter />, href: footerSettings.twitter, label: "Twitter" },
+                { icon: <LinkedIn />, href: footerSettings.linkedin, label: "LinkedIn" },
+                { icon: <Facebook />, href: footerSettings.facebook, label: "Facebook" },
+                { icon: <Instagram />, href: footerSettings.instagram, label: "Instagram" },
+                { icon: <YouTube />, href: footerSettings.youtube, label: "YouTube" },
+              ]
+                .filter((item) => item.href && item.href.trim() !== "" && item.href !== "#")
+                .map((item, idx) => (
+                  <a
+                    key={idx}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-social-link p-2.5 rounded-full transition-all duration-300 shadow hover:scale-110 active:scale-95"
+                    style={{ backgroundColor: "rgba(255, 255, 255, 0.12)" }}
+                    aria-label={item.label}
+                  >
+                    <span className="transition-colors duration-300 flex items-center justify-center">
+                      {item.icon}
+                    </span>
+                  </a>
+                ))}
             </div>
           </div>
 
           {/* Quick Links Column */}
+          <div className="footer-mobile-section md:flex md:flex-col md:items-start md:gap-3">
+            {/* Mobile: collapsible header */}
+            <button
+              className="md:hidden w-full flex items-center justify-between py-4"
+              onClick={() => toggleSection("quickLinks")}
+              aria-expanded={openSections.quickLinks}
+            >
+              <h4 className="text-lg font-semibold" style={{ color: "var(--color-text-inverse)" }}>
+                Quick Links
+              </h4>
+              <KeyboardArrowDown
+                className={`footer-chevron ${openSections.quickLinks ? "open" : ""}`}
+                style={{ color: "var(--color-text-inverse)", opacity: 0.7 }}
+              />
+            </button>
 
-          <div className="flex flex-col items-center lg:items-start gap-3">
+            {/* Desktop: static header */}
             <h4
-              className="text-xl font-semibold mb-2"
+              className="hidden md:block text-xl font-semibold mb-2"
               style={{ color: "var(--color-text-inverse)" }}
             >
               Quick Links
             </h4>
 
-            <ul className="flex flex-col gap-2" style={{ color: "#ffffff" }}>
-              {loading ? (
-                <li style={{ color: "var(--color-text-muted)" }}>Loading...</li>
-              ) : error ? (
-                <li style={{ color: "var(--color-error)" }}>{error}</li>
-              ) : categories.length === 0 ? (
-                <li style={{ color: "var(--color-text-muted)" }}>
-                  No links available
-                </li>
+            <ul
+              className={`flex-col gap-2 pb-4 md:pb-0 ${openSections.quickLinks ? "flex" : "hidden"} md:flex`}
+              style={{ color: "var(--color-text-inverse)" }}
+            >
+              {quickLinksLoading ? (
+                <li style={{ opacity: 0.6 }}>Loading...</li>
+              ) : quickLinks.length === 0 ? (
+                <li style={{ opacity: 0.6 }}>No links available</li>
               ) : (
-                categories.map((cat) => {
-                  // Check if category is Home or About (case-insensitive)
-                  const isHomeOrAbout = ["home", "about"].includes(
-                    cat.name?.toLowerCase(),
-                  );
-
-                  // Get main page URL from category data
-                  const nameSlug = cat.name?.toLowerCase().replace(/\s+/g, "-");
-                  const mainPageUrl = cat.mainPageSlug
-                    ? `/${cat.mainPageSlug}`
-                    : cat.pages && cat.pages.length > 0
-                    ? cat.pages[0].slug
-                      ? `/${cat.pages[0].slug}`
-                      : `/${cat.pages[0].id}`
-                    : `/${nameSlug || ""}`;
-
-                  // For Home/About categories - direct link to main page
-                  if (isHomeOrAbout) {
-                    return (
-                      <li key={cat.id}>
-                        <a
-                          href={mainPageUrl}
-                          className="footer-link transition-colors duration-300 cursor-pointer"
-                        >
-                          {cat.name}
-                        </a>
-                      </li>
-                    );
-                  }
-
-                  // For other categories - check for homepage in pages
-                  const homePage = Array.isArray(cat.pages)
-                    ? cat.pages.find((p) => p.isHomepage)
-                    : null;
-
-                  if (homePage) {
-                    return (
-                      <li key={cat.id}>
-                        <a
-                          href={`/${homePage.slug}`}
-                          className="footer-link transition-colors duration-300 cursor-pointer"
-                        >
-                          {cat.name}
-                        </a>
-                      </li>
-                    );
-                  }
-
-                  return (
-                    <li key={cat.id}>
-                      {cat.pages && cat.pages.length > 0 ? (
-                        (() => {
-                          const homePage = cat.pages.find((p) => p.isHomepage);
-
-                          return homePage ? (
-                            <a
-                              href={`/pages/${homePage.slug}`}
-                              className="footer-link transition duration-200 cursor-pointer"
-                            >
-                              {cat.name}
-                            </a>
-                          ) : (
-                            <span style={{ color: "#ffffff", opacity: 0.9 }}>
-                              {cat.name}
-                            </span>
-                          );
-                        })()
-                      ) : (
-                        <span style={{ color: "#ffffff", opacity: 0.9 }}>
-                          {cat.name}
-                        </span>
-                      )}
-                    </li>
-                  );
-                })
+                quickLinks.map((link, idx) => (
+                  <li key={idx}>
+                    <a
+                      href={link.url}
+                      className="footer-link transition-colors duration-300 cursor-pointer text-sm md:text-base"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))
               )}
             </ul>
           </div>
 
           {/* Our Services Column */}
+          <div className="footer-mobile-section md:flex md:flex-col md:items-start md:gap-3">
+            {/* Mobile: collapsible header */}
+            <button
+              className="md:hidden w-full flex items-center justify-between py-4"
+              onClick={() => toggleSection("services")}
+              aria-expanded={openSections.services}
+            >
+              <h4 className="text-lg font-semibold" style={{ color: "var(--color-text-inverse)" }}>
+                Our Services
+              </h4>
+              <KeyboardArrowDown
+                className={`footer-chevron ${openSections.services ? "open" : ""}`}
+                style={{ color: "var(--color-text-inverse)", opacity: 0.7 }}
+              />
+            </button>
 
-          <div className="flex flex-col items-center lg:items-start gap-3">
+            {/* Desktop: static header */}
             <h4
-              className="text-xl font-semibold mb-2"
+              className="hidden md:block text-xl font-semibold mb-2"
               style={{ color: "var(--color-text-inverse)" }}
             >
               Our Services
             </h4>
 
             <div
-              style={{ color: "var(--color-text-inverse)", opacity: 0.8 }}
+              className={`pb-4 md:pb-0 ${openSections.services ? "block" : "hidden"} md:block`}
+              style={{ color: "var(--color-text-inverse)" }}
             >
               {loading ? (
-                <span style={{ color: "var(--color-text-muted)" }}>Loading...</span>
+                <span style={{ opacity: 0.6 }}>Loading...</span>
               ) : (
                 (() => {
                   const servicesCategory = categories.find(
-                    cat => cat.name?.toLowerCase() === "services"
+                    (cat) => cat.name?.toLowerCase() === "services"
                   );
 
                   const servicePages = servicesCategory
                     ? (servicesCategory.pages || [])
-                        .filter(page => page.isPublished === true)
-                        .map(page => ({
+                        .filter((page) => page.isPublished === true)
+                        .map((page) => ({
                           id: page.id,
                           title: page.title,
                           href: page.slug ? `/${page.slug}` : `/${page.id}`,
@@ -514,19 +446,12 @@ const Footer = ({ initialCategories = [] }) => {
                   const useGrid = servicePages.length > 6;
 
                   return (
-                    <div
-                      className={
-                        useGrid
-                          ? "grid grid-cols-2 gap-x-6 gap-y-2"
-                          : "flex flex-col gap-2"
-                      }
-                    >
-                      {servicePages.map(page => (
+                    <div className={useGrid ? "grid grid-cols-2 gap-x-6 gap-y-2" : "flex flex-col gap-2"}>
+                      {servicePages.map((page) => (
                         <a
                           key={page.id}
                           href={page.href}
-                          className="footer-link transition-colors duration-300"
-                          style={{ color: "inherit" }}
+                          className="footer-link transition-colors duration-300 text-sm md:text-base"
                         >
                           {page.title}
                         </a>
@@ -539,55 +464,54 @@ const Footer = ({ initialCategories = [] }) => {
           </div>
 
           {/* Contact Column */}
-
           <div
-            className="flex flex-col items-center lg:items-start gap-3 text-sm footer-contact-text"
-            style={{ color: "var(--color-text-inverse)", opacity: 0.9 }}
+            className="footer-mobile-section flex flex-col items-start gap-3 text-sm footer-contact-text py-6 md:py-0"
+            style={{ color: "var(--color-text-inverse)" }}
           >
             <h4
-              className="text-xl font-semibold mb-2"
+              className="text-lg md:text-xl font-semibold mb-1"
               style={{ color: "var(--color-text-inverse)" }}
             >
               Contact Us
             </h4>
 
-            <div className="flex flex-col gap-2 footer-contact-text">
-              <div className="flex items-center gap-2">
-                <Email fontSize="small" />
-
-                <span>{footerSettings.contactEmail}</span>
+            <div className="flex flex-col gap-3 footer-contact-text w-full">
+              <div className="flex items-start gap-2">
+                <Email fontSize="small" style={{ marginTop: 2, flexShrink: 0 }} />
+                <span className="break-all">{footerSettings.contactEmail}</span>
               </div>
 
-              <div>{footerSettings.contactAddress}</div>
+              <div className="leading-snug" style={{ opacity: 0.85 }}>
+                {footerSettings.contactAddress}
+              </div>
 
-              <div>
-                <span>Phone: </span>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium" style={{ opacity: 0.7 }}>Phone</span>
                 {(() => {
-                  // Try to parse as JSON array for multiple phones
                   let phones = [];
                   try {
                     const parsed = JSON.parse(footerSettings.contactPhone);
-                    phones = Array.isArray(parsed)
-                      ? parsed
-                      : [footerSettings.contactPhone];
+                    phones = Array.isArray(parsed) ? parsed : [footerSettings.contactPhone];
                   } catch {
                     phones = [footerSettings.contactPhone];
                   }
 
-                  const filteredPhones = phones.filter(
-                    (p) => p && p.trim && p.trim(),
-                  );
+                  const normalised = phones
+                    .map((p) =>
+                      typeof p === "string"
+                        ? { flag: "", number: p }
+                        : { flag: p.flag || "", number: p.number || "" }
+                    )
+                    .filter((p) => p.number && p.number.trim());
 
-                  // Single phone - display inline
-                  if (filteredPhones.length === 1) {
-                    return <span>{filteredPhones[0]}</span>;
-                  }
+                  if (normalised.length === 0) return null;
 
-                  // Multiple phones - display stacked
                   return (
-                    <div className="mt-1 space-y-1 pl-6">
-                      {filteredPhones.map((phone, index) => (
-                        <div key={index}>{phone}</div>
+                    <div className="flex flex-col gap-1">
+                      {normalised.map((p, index) => (
+                        <span key={index}>
+                          {p.flag ? `${p.flag} ` : ""}{p.number}
+                        </span>
                       ))}
                     </div>
                   );
@@ -598,24 +522,16 @@ const Footer = ({ initialCategories = [] }) => {
         </div>
 
         <div
-          className="text-center pt-6 text-xs"
+          className="text-center py-5 text-xs px-4"
           style={{
             color: "var(--color-text-inverse)",
-
-            opacity: 0.7,
-
-            borderTop: "1px solid",
-
-            borderColor: "var(--color-border-primary)",
-
-            borderTopOpacity: 0.4,
+            opacity: 0.65,
+            borderTop: "1px solid rgba(255,255,255,0.1)",
           }}
         >
           <p>
             {footerSettings.copyrightText ||
-              `© ${new Date().getFullYear()} ${
-                footerSettings.companyName
-              }. All rights reserved.`}
+              `© ${new Date().getFullYear()} ${footerSettings.companyName}. All rights reserved.`}
           </p>
         </div>
 

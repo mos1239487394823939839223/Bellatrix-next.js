@@ -212,36 +212,40 @@ export const validateField = (key, value) => {
     if (!Array.isArray(value)) {
       return { isValid: true, error: null };
     }
-    
+
+    // Support both plain strings and {flag, number} objects
+    const extractNumber = (item) =>
+      typeof item === "string" ? item : (item?.number || "");
+
     // Filter out empty values
-    const nonEmptyPhones = value.filter(phone => phone && phone.trim() !== "");
-    
+    const nonEmptyPhones = value.filter((item) => {
+      const num = extractNumber(item);
+      return num && num.trim() !== "";
+    });
+
     // Required validation for arrays
     if (validation.required && nonEmptyPhones.length === 0) {
       return { isValid: false, error: `${field.label} is required` };
     }
-    
+
     // Validate each phone number
     for (let i = 0; i < nonEmptyPhones.length; i++) {
-      const phone = nonEmptyPhones[i].trim();
-      
-      // Min length validation
+      const phone = extractNumber(nonEmptyPhones[i]).trim();
+
       if (validation.minLength && phone.length < validation.minLength) {
         return {
           isValid: false,
           error: `Phone ${i + 1} must be at least ${validation.minLength} characters`,
         };
       }
-      
-      // Max length validation
+
       if (validation.maxLength && phone.length > validation.maxLength) {
         return {
           isValid: false,
           error: `Phone ${i + 1} must not exceed ${validation.maxLength} characters`,
         };
       }
-      
-      // Pattern validation
+
       if (validation.pattern && !validation.pattern.test(phone)) {
         return {
           isValid: false,
@@ -249,7 +253,7 @@ export const validateField = (key, value) => {
         };
       }
     }
-    
+
     return { isValid: true, error: null };
   }
 

@@ -45,6 +45,7 @@ export const buildSafeProps = (props) => {
     "types",
     "programs",
     "keyModules",
+    "solutions",
   ];
   const safe = { ...(props || {}) };
   commonArrayKeys.forEach((key) => {

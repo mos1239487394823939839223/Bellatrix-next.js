@@ -2322,6 +2322,29 @@ const ComponentPreview = ({
           return transformedData;
         }
 
+        case "SolutionsGallery": {
+          const solutions = Array.isArray(componentData.solutions)
+            ? componentData.solutions
+            : [];
+          return {
+            title: componentData.title || "",
+            subtitle: componentData.subtitle || "",
+            ctaButtonText: componentData.ctaButtonText || "",
+            solutions: solutions.map((s) => ({
+              id: s.id || s.title?.toLowerCase().replace(/\s+/g, "-") || "",
+              title: s.title || "",
+              subtitle: s.subtitle || "",
+              category: s.category || "",
+              description: s.description || "",
+              image: s.image || "",
+              href: s.href || "",
+              accentColor: s.accentColor || "#6366f1",
+              featured: !!s.featured,
+              features: Array.isArray(s.features) ? s.features : [],
+            })),
+          };
+        }
+
         default:
           // Generic prop structure for unknown components
           console.log(" [DEFAULT TRANSFORM] Input data:", componentData);

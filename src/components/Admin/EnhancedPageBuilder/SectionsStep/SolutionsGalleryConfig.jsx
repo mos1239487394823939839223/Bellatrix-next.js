@@ -160,6 +160,19 @@ const SolutionsGalleryConfig = ({ component, index, onUpdate }) => {
               className={`${inputCls} resize-none`}
             />
           </div>
+          <div>
+            <label className={labelCls}>CTA Button Text</label>
+            <input
+              type="text"
+              value={data.ctaButtonText || ""}
+              onChange={(e) => updateTopField("ctaButtonText", e.target.value)}
+              placeholder="Talk to an Expert"
+              className={inputCls}
+            />
+            <p className="text-[10px] text-gray-600 mt-1">
+              The button at the bottom of the section that opens the contact form.
+            </p>
+          </div>
         </div>
 
         <hr className="border-white/10" />

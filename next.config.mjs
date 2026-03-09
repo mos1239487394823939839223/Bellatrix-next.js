@@ -5,11 +5,11 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://bellatrixinc.com/api/:path*',
+        destination: 'https://www.bellatrixinc.com/api/:path*',
       },
       {
         source: '/uploads/:path*',
-        destination: 'https://bellatrixinc.com/uploads/:path*',
+        destination: 'https://www.bellatrixinc.com/uploads/:path*',
       },
     ]
   },

@@ -432,14 +432,15 @@ const PageComponentsEditor = ({
       const latestComponents = await pagesAPI.getPageComponents(pageId);
 
       // Calculate safe next order index
+      // Use a large offset to avoid ghost rows (soft-deleted components that
+      // still hold their unique orderIndex slot in the DB)
 
       const maxOrderIndex = latestComponents.length
         ? Math.max(...latestComponents.map((c) => c.orderIndex ?? 0))
         : -1;
 
-      // Start from at least 1 to avoid 0-index issues, and use max+1 normally
-
-      let nextOrderIndex = Math.max(maxOrderIndex + 1, 1);
+      // Add a 100-step gap so ghost rows from prior deletes don't conflict
+      let nextOrderIndex = Math.max(maxOrderIndex + 100, 100);
 
       console.log(
         " [ADD COMPONENT] Calculated nextOrderIndex:",

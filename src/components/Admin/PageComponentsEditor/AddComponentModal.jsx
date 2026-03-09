@@ -38,6 +38,8 @@ import { useComponentCategories } from "../../../hooks/useComponentCategories";
 
 import { useFilteredComponents } from "../../../hooks/useFilteredComponents";
 
+import SolutionsGalleryConfig from "../EnhancedPageBuilder/SectionsStep/SolutionsGalleryConfig";
+
 
 
 const AddComponentModal = ({
@@ -524,9 +526,16 @@ const AddComponentModal = ({
 
                   </h4>
 
-
-
-                  {dynamicFields.length > 0 ? (
+                  {formData.componentType === "SolutionsGallery" ? (
+                    <SolutionsGalleryConfig
+                      component={{ contentJson: formData.contentJson }}
+                      index={0}
+                      onUpdate={(_idx, _field, value) => {
+                        setFormData((prev) => ({ ...prev, contentJson: value }));
+                        try { setJsonData(JSON.parse(value)); } catch {}
+                      }}
+                    />
+                  ) : dynamicFields.length > 0 ? (
 
                     <div className="space-y-4">
 

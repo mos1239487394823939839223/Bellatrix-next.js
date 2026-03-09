@@ -8,6 +8,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import Modal, { ModalFooter } from "../../UI/Modal";
+import SolutionsGalleryConfig from "../EnhancedPageBuilder/SectionsStep/SolutionsGalleryConfig";
 import Button from "../../UI/Button";
 import Input from "../../UI/Input";
 import DynamicFormGenerator from "../../UI/DynamicFormGenerator";
@@ -201,6 +202,39 @@ const EditComponentModal = ({
 
   if (!component) return null;
 
+  // ── Dedicated full-screen editor for SolutionsGallery ──────────────────────
+  if (formData.componentType === "SolutionsGallery") {
+    return (
+      <Modal isOpen={isOpen} onClose={onClose} title="Edit Solutions Gallery" size="xl">
+        <div className="overflow-y-auto" style={{ maxHeight: "75vh" }}>
+          <SolutionsGalleryConfig
+            component={{ contentJson: formData.contentJson }}
+            index={0}
+            onUpdate={(_idx, _field, value) => {
+              setFormData((prev) => ({ ...prev, contentJson: value }));
+              try { setJsonData(JSON.parse(value)); } catch {}
+            }}
+          />
+        </div>
+        <div className="flex justify-end gap-2 pt-3 border-t border-white/10 mt-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg text-sm text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors border border-white/10"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className="px-5 py-2 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors disabled:opacity-50"
+          >
+            {loading ? "Saving…" : "Save Changes"}
+          </button>
+        </div>
+      </Modal>
+    );
+  }
+
   const dynamicFields = generateFormFieldsFromJson(
     jsonData,
     handleJsonFieldChange
@@ -293,8 +327,8 @@ const EditComponentModal = ({
             )}
           </div>
 
-          {/* Schema-based Form */}
           {currentSchema && useSchemaMode ? (
+            /* Schema-based Form */
             <div className="bg-white/5 rounded-lg p-4 border border-white/10">
               <DynamicFormGenerator
                 schema={currentSchema.schema}

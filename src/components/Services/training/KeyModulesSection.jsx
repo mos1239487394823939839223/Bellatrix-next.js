@@ -36,9 +36,9 @@ const KeyModulesSection = ({ keyModulesSection, keyModules }) => {
           <header className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               {firstWord}{" "}
-              <span className="text-blue-400">{highlightedTitle}</span>
+              <span style={{ color: "#60a5fa" }}>{highlightedTitle}</span>
             </h2>
-            <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-lg text-[var(--color-white)] leading-relaxed max-w-3xl mx-auto">
               {section.description}
             </p>
           </header>

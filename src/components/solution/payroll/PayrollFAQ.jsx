@@ -194,7 +194,7 @@ const PayrollFAQ = ({ faqData = {} }) => {
 
           <header className="text-center mb-12">
 
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-primary-dark)]">
+            <h2 className="payroll-faq-title text-3xl md:text-4xl font-bold text-[var(--color-primary-dark)]">
 
               {displayFaqData.title}
 

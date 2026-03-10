@@ -184,7 +184,7 @@ const ChallengesSection = (props) => {
           </h2>
 
           {finalSubtitle && (
-            <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-lg text-[var(--color-white)] leading-relaxed max-w-3xl mx-auto">
               {finalSubtitle}
             </p>
           )}

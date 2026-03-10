@@ -140,18 +140,21 @@ const HeroSection = ({
                 <span className="inline-block animate-text-glow">
                   {heroContent.title.split(" ")[0]}
                 </span>{" "}
-                <span className="inline-block bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400 bg-clip-text text-transparent animate-gradient-text">
+                <span
+                  className="inline-block bg-clip-text text-transparent animate-gradient-text"
+                  style={{ backgroundImage: "linear-gradient(to right, #60a5fa, #3b82f6, #60a5fa)" }}
+                >
                   {heroContent.title.split(" ")[1]}
                 </span>
                 <br />
-                <span className="inline-block bg-gradient-to-r from-white via-white to-white bg-clip-text text-transparent animate-gradient-text-reverse">
+                <span className="inline-block text-white animate-gradient-text-reverse">
                   {heroContent.title.split(" ").slice(2).join(" ")}
                 </span>
               </h1>
             </div>
 
             <div className="text-center mb-12">
-              <p className="text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-4xl mx-auto animate-fade-in">
+              <p className="text-lg md:text-xl lg:text-2xl text-[var(--color-white)] leading-relaxed max-w-4xl mx-auto animate-fade-in">
                 {heroContent.description}
               </p>
 

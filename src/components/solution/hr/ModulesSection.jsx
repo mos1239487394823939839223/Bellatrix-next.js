@@ -82,7 +82,7 @@ const ModulesSection = ({ data = {} }) => {
 
             {description && (
 
-              <p className="text-lg text-[var(--color-text-light)] max-w-2xl mx-auto">
+              <p className="text-lg text-[var(--color-white)] max-w-2xl mx-auto">
 
                 {description}
 

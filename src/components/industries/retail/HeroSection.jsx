@@ -95,7 +95,7 @@ const HeroSection = ({
       </div>
 
       <div className="relative z-10 container mx-auto px-6 max-w-6xl">
-        <div className="py-10 md:py-0">
+        <div className="py-10 md:py-0" style={{ marginTop: "30%" }}>
           {/* Title */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-4 text-white animate-slide-up tracking-tight">
             {data.title}

@@ -23,6 +23,25 @@
 .about-values-description {
   color: var(--color-white) !important;
 }
+
+/* Implementation Hero - Description Text */
+.implementation-hero-description {
+  color: var(--color-white) !important;
+}
+
+/* Implementation - "Why Choose Bellatrix for Implementation?" image
+   Inline styles on the container handle theming; no overrides needed here */
+
+/* Implementation - Why Choose subtitle: white in both light and dark mode */
+.implementation-whychoose-subtitle {
+  color: var(--color-white) !important;
+}
+
+/* Payroll FAQ - keep "Common Questions" white in dark mode */
+[data-theme="purple"] .payroll-faq-title,
+[data-theme="dark"] .payroll-faq-title {
+  color: var(--color-white) !important;
+}
 /* ==================================================
    GLOBAL CTA BUTTON STYLES - Primary Theme
    ================================================== */
@@ -253,6 +272,12 @@ body {
   -webkit-box-shadow: 0 0 0 1000px rgba(30, 41, 59, 1) inset !important;
   -webkit-text-fill-color: white !important;
   caret-color: white !important;
+}
+
+/* Ensure Slide Description label in Implementation/Landing hero arrays is white in dark admin mode */
+.admin-layout .hero-slide-description-label,
+[data-dashboard="true"] .hero-slide-description-label {
+  color: var(--color-white) !important;
 }
 
 /* Auth form exception - light inputs for auth pages */

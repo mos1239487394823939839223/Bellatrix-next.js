@@ -81,7 +81,7 @@ const footerStyles = `
   }
 
   [data-theme="purple"] .footer-contact-text {
-    color: #b0b8c1 !important;
+    color: #ffffff !important;
   }
 
   /* Mobile accordion chevron animation */
@@ -312,7 +312,7 @@ const Footer = ({ initialCategories = [] }) => {
 
             <p
               className="text-center lg:text-left max-w-xs text-sm leading-relaxed"
-              style={{ color: "var(--color-text-inverse)", opacity: 0.75 }}
+              style={{ color: "var(--color-white)" }}
             >
               {footerSettings.companyDescription}
             </p>
@@ -481,12 +481,12 @@ const Footer = ({ initialCategories = [] }) => {
                 <span className="break-all">{footerSettings.contactEmail}</span>
               </div>
 
-              <div className="leading-snug" style={{ opacity: 0.85 }}>
+              <div className="leading-snug" style={{ color: "var(--color-white)" }}>
                 {footerSettings.contactAddress}
               </div>
 
               <div className="flex flex-col gap-1">
-                <span className="font-medium" style={{ opacity: 0.7 }}>Phone</span>
+                <span className="font-medium" style={{ color: "var(--color-white)" }}>Phone</span>
                 {(() => {
                   let phones = [];
                   try {

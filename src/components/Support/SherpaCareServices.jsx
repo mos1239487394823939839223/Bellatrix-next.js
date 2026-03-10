@@ -80,7 +80,7 @@ const SherpaCareServices = ({
         </div>
 
         <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <article className="bg-gray-800 rounded-3xl shadow-2xl hover:shadow-blue-500/20 hover:shadow-2xl transition-all duration-500 p-8 md:p-12 border border-gray-600/50 backdrop-blur-sm relative overflow-hidden group">
+          <article className="rounded-3xl shadow-2xl transition-all duration-500 p-8 md:p-12 backdrop-blur-sm relative overflow-hidden group" style={{ backgroundColor: "#1f2937", border: "1px solid rgba(75,85,99,0.5)" }}>
             {/* Creative Background Elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 rounded-full opacity-20 transform translate-x-16 -translate-y-16 group-hover:opacity-40 transition-opacity duration-500"></div>
             <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-purple-500/30 to-blue-500/30 rounded-full opacity-20 transform -translate-x-10 translate-y-10 group-hover:opacity-40 transition-opacity duration-500"></div>
@@ -91,15 +91,15 @@ const SherpaCareServices = ({
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-6">
                 {sectionData.title}
               </h2>
-              <p className="text-lg text-gray-300 text-center mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg text-center mb-10 max-w-2xl mx-auto leading-relaxed" style={{ color: "#d1d5db" }}>
                 {sectionData.subtitle}
               </p>
 
               {/* Service Columns */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Column 1 */}
-                <div className="bg-gradient-to-br from-gray-700/90 via-gray-600/80 to-gray-700/90 rounded-xl shadow-lg p-6 border border-gray-500/50 hover:bg-gradient-to-br hover:from-gray-600/90 hover:via-gray-500/80 hover:to-gray-600/90 hover:border-blue-500/30 transition-all duration-300 group/card">
-                  <ul className="list-disc list-inside space-y-3 text-gray-200 text-base">
+                <div className="rounded-xl shadow-lg p-6 transition-all duration-300 group/card" style={{ background: "linear-gradient(135deg, rgba(55,65,81,0.9), rgba(75,85,99,0.8), rgba(55,65,81,0.9))", border: "1px solid rgba(107,114,128,0.5)" }}>
+                  <ul className="list-disc list-inside space-y-3 text-base" style={{ color: "#e5e7eb" }}>
                     {sectionData.column1.map((item, idx) => (
                       <li
                         key={idx}
@@ -114,8 +114,8 @@ const SherpaCareServices = ({
                 </div>
 
                 {/* Column 2 */}
-                <div className="bg-gradient-to-br from-gray-700/90 via-gray-600/80 to-gray-700/90 rounded-xl shadow-lg p-6 border border-gray-500/50 hover:bg-gradient-to-br hover:from-gray-600/90 hover:via-gray-500/80 hover:to-gray-600/90 hover:border-blue-500/30 transition-all duration-300 group/card">
-                  <ul className="list-disc list-inside space-y-3 text-gray-200 text-base">
+                <div className="rounded-xl shadow-lg p-6 transition-all duration-300 group/card" style={{ background: "linear-gradient(135deg, rgba(55,65,81,0.9), rgba(75,85,99,0.8), rgba(55,65,81,0.9))", border: "1px solid rgba(107,114,128,0.5)" }}>
+                  <ul className="list-disc list-inside space-y-3 text-base" style={{ color: "#e5e7eb" }}>
                     {sectionData.column2.map((item, idx) => (
                       <li
                         key={idx}
@@ -130,8 +130,8 @@ const SherpaCareServices = ({
                 </div>
 
                 {/* Column 3 */}
-                <div className="bg-gradient-to-br from-gray-700/90 via-gray-600/80 to-gray-700/90 rounded-xl shadow-lg p-6 border border-gray-500/50 hover:bg-gradient-to-br hover:from-gray-600/90 hover:via-gray-500/80 hover:to-gray-600/90 hover:border-blue-500/30 transition-all duration-300 group/card">
-                  <ul className="list-disc list-inside space-y-3 text-gray-200 text-base">
+                <div className="rounded-xl shadow-lg p-6 transition-all duration-300 group/card" style={{ background: "linear-gradient(135deg, rgba(55,65,81,0.9), rgba(75,85,99,0.8), rgba(55,65,81,0.9))", border: "1px solid rgba(107,114,128,0.5)" }}>
+                  <ul className="list-disc list-inside space-y-3 text-base" style={{ color: "#e5e7eb" }}>
                     {sectionData.column3.map((item, idx) => (
                       <li
                         key={idx}

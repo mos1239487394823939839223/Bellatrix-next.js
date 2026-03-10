@@ -89,7 +89,7 @@ const WhyChooseSection = (props) => {
               {displayData.title}
             </h2>
 
-            <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-lg leading-relaxed max-w-3xl mx-auto implementation-whychoose-subtitle">
               {displayData.subtitle}
             </p>
           </header>
@@ -159,23 +159,25 @@ const WhyChooseSection = (props) => {
             {/* Image - Right Side */}
 
             <div className="flex-1 flex justify-center">
-              <div className="relative group">
-                {/* Glowing background effect */}
+              <div className="relative group implementation-whychoose-image-wrapper">
+                {/* Glowing background effect - disabled for dark mode via global CSS */}
 
-                <div className="absolute -inset-4 bg-blue-300/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                <div className="absolute -inset-4 bg-blue-300/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500 implementation-whychoose-image-glow"></div>
 
-                {/* Image container with enhanced styling */}
+                {/* Image container with enhanced styling - inline style keeps it identical in all themes */}
 
-                <div className="relative bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 shadow-2xl">
+                <div
+                  className="relative rounded-2xl p-4 backdrop-blur-sm shadow-2xl implementation-whychoose-image-container"
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                  }}
+                >
                   <img
                     src={displayData.image}
                     alt="Why Choose Bellatrix - Digital Innovation & Technology"
                     className="w-full h-auto lg:max-w-md rounded-xl shadow-lg brightness-110 contrast-110 saturate-110 group-hover:scale-105 transition-all duration-500"
                   />
-
-                  {/* Overlay gradient for better contrast */}
-
-                  <div className="absolute inset-4 rounded-xl bg-white/5 pointer-events-none"></div>
 
                   {/* Floating elements for tech feel */}
 

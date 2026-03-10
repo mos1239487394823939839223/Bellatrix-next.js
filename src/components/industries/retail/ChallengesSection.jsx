@@ -134,9 +134,9 @@ const ChallengesSection = ({
             )}
           </h2>
           {finalSubtitle && (
-            <h3 className="text-xl text-gray-200 mb-4">{finalSubtitle}</h3>
+            <h3 className="text-xl text-white mb-4">{finalSubtitle}</h3>
           )}
-          <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-lg text-white leading-relaxed max-w-3xl mx-auto">
             {finalDescription}
           </p>
         </header>

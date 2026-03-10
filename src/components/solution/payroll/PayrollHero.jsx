@@ -150,7 +150,7 @@ const PayrollHero = ({
 
               <div className="max-w-4xl mx-auto space-y-4">
                 <p
-                  className="text-lg md:text-xl lg:text-2xl text-[var(--color-text-light)] leading-relaxed font-medium drop-shadow-md text-center"
+                  className="text-lg md:text-xl lg:text-2xl text-[var(--color-white)] leading-relaxed font-medium drop-shadow-md text-center"
                   style={{
                     textShadow:
                       "0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2)",
@@ -161,7 +161,7 @@ const PayrollHero = ({
 
                 {displayData.description && (
                   <p
-                    className="text-base md:text-lg text-[var(--color-text-light)] leading-relaxed drop-shadow-md text-center"
+                    className="text-base md:text-lg text-[var(--color-white)] leading-relaxed drop-shadow-md text-center"
                     style={{
                       textShadow:
                         "0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.1)",

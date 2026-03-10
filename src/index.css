@@ -256,6 +256,12 @@ body {
   caret-color: white !important;
 }
 
+/* Ensure Slide Description label in Implementation/Landing hero arrays is white in dark admin mode */
+.admin-layout .hero-slide-description-label,
+[data-dashboard="true"] .hero-slide-description-label {
+  color: var(--color-white) !important;
+}
+
 /* Auth form exception - light inputs for auth pages */
 .auth-form-input,
 .auth-form-input:focus,

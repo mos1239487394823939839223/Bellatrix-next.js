@@ -236,7 +236,7 @@ const HeroSection = (props) => {
             {/* Creative Description with Typewriter Effect */}
 
             <div className="text-center mb-12">
-              <p className="text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-4xl mx-auto animate-fade-in">
+              <p className="text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto animate-fade-in implementation-hero-description">
                 {displayData.description}
               </p>
             </div>

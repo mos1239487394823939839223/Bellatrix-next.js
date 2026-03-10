@@ -469,9 +469,11 @@ const DynamicFormGenerator = ({
   const renderArrayItemField = (fieldName, fieldSchema, value, onChange) => {
     const isRequired = fieldSchema.required;
 
+    const isSlideDescriptionField = fieldSchema.label === "Slide Description";
+
     const labelClasses = `block text-sm font-medium text-gray-300 mb-2 ${
       isRequired ? "text-white" : ""
-    }`;
+    } ${isSlideDescriptionField ? "hero-slide-description-label" : ""}`;
 
     const inputClasses = `w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all duration-200 ${
       isRequired ? "border-white/40" : ""

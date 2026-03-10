@@ -1,18 +1,8 @@
 import axios from "axios";
-
-// Get API base URL - use proxy in dev, direct URL in production
-const getBaseUrl = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return "/api"; // Use Next.js rewrites proxy in development
-  }
-  if (process.env.NEXT_PUBLIC_API_BASE_URL) {
-    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`;
-  }
-  return "https://bellatrixinc.com/api";
-};
+import { getApiBaseUrlWithApi } from "../config/api.js";
 
 const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: getApiBaseUrlWithApi(),
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
 });

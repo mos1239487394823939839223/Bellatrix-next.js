@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ContactModal from "./ContactModal";
@@ -101,12 +101,25 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredId, setHoveredId] = useState(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [imageOverrides, setImageOverrides] = useState({});
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("sg_image_overrides");
+      if (stored) setImageOverrides(JSON.parse(stored));
+    } catch {/* ignore */}
+  }, []);
 
   // Use page-builder-configured solutions if provided, otherwise fall back to defaults
-  const SOLUTIONS =
+  // Merge in any image overrides set via the admin Solutions Gallery page
+  const baseSolutions =
     Array.isArray(propSolutions) && propSolutions.length > 0
       ? propSolutions
       : DEFAULT_SOLUTIONS;
+
+  const SOLUTIONS = Object.keys(imageOverrides).length
+    ? baseSolutions.map((s) => imageOverrides[s.id] ? { ...s, image: imageOverrides[s.id] } : s)
+    : baseSolutions;
 
   // Derive filter categories dynamically from the active solution list
   const categories = ["All", ...Array.from(new Set(SOLUTIONS.map((s) => s.category).filter(Boolean)))];

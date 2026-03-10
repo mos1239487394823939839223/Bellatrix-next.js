@@ -1,14 +1,19 @@
 import axios from "axios";
 import { clearAuthData } from "../utils/tokenManager";
 
-// Create axios instance with base URL
-// In development, use empty string to leverage Next.js rewrites proxy
-// In production, use the actual API URL
+// Determine base URL by the browser's hostname:
+// - localhost → use absolute backend URL directly (Turbopack dev rewrites redirect
+//   instead of proxy, which converts POST→GET; going direct avoids that)
+// - production domain → use relative path (nginx routes /api/ to the .NET backend)
 const getBaseUrl = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return ""; // Use Next.js rewrites proxy in development
+  if (typeof window !== 'undefined') {
+    const { hostname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return process.env.NEXT_PUBLIC_API_BASE_URL || "https://bellatrixinc.com";
+    }
+    return ""; // Same-origin: root-relative paths route via nginx
   }
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.bellatrixinc.com";
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "https://bellatrixinc.com";
 };
 
 const authApi = axios.create({

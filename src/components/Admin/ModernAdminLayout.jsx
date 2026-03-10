@@ -17,6 +17,7 @@ import {
   PowerIcon,
   ChatBubbleLeftRightIcon,
   KeyIcon,
+  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import {
   HomeIcon as HomeIconSolid,
@@ -81,6 +82,14 @@ const ModernAdminLayout = ({ children }) => {
       icon: ChatBubbleLeftRightIcon,
       iconSolid: ChatBubbleLeftRightIconSolid,
       description: "Contact Messages",
+    },
+    {
+      id: "solutions-gallery",
+      name: "Solutions Gallery",
+      path: "/admin/solutions-gallery",
+      icon: PhotoIcon,
+      iconSolid: PhotoIcon,
+      description: "Gallery Card Images",
     },
     {
       id: "settings",

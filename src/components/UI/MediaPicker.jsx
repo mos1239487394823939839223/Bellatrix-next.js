@@ -23,8 +23,6 @@ import axios from "axios";
 
 import mediaAPI from "../../lib/mediaAPI";
 
-import api from "../../lib/api.js";
-
 import { getApiBaseUrlWithApi, getAbsoluteBaseUrl } from "../../config/api.js";
 
 // API Constants
@@ -33,21 +31,67 @@ const BASE_API = getApiBaseUrlWithApi();
 
 const BASE_HOST_ABSOLUTE = getAbsoluteBaseUrl();
 
-// Helper function to build full URLs
+// Helper to detect local development
+const isLocalhostEnv = () =>
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
 
+// The backend origin to use when on localhost dev (Next.js can't serve /uploads/)
+const getBackendOrigin = () => {
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "https://bellatrixinc.com";
+  try { return new URL(base).origin; } catch { return base.replace(/\/$/, ""); }
+};
+
+// Helper function to build full URLs
+//
+// Production (nginx):  strips backend IP:port → relative path → nginx proxies /uploads/ & /api/
+// Dev (localhost):     rewrites to NEXT_PUBLIC_API_BASE_URL origin so browser hits backend directly
+// External URLs:       kept absolute, HTTP→HTTPS upgraded when page is HTTPS
 function toFullUrl(fileUrl) {
   if (!fileUrl) return "";
 
-  // If the URL is already absolute, ensure it uses HTTPS in production
-  if (fileUrl.startsWith("http://")) {
-    if (typeof window !== "undefined" && window.location?.protocol === "https:") {
-      fileUrl = fileUrl.replace(/^http:\/\/68\.178\.169\.236:5000/, window.location.origin);
+  // Non-http strings (data:, blob:, already-relative) ─────────────────────────
+  if (!fileUrl.startsWith("http")) {
+    // Relative /uploads/ path in dev needs the backend host prepended
+    if (
+      isLocalhostEnv() &&
+      (fileUrl.startsWith("/uploads/") || fileUrl.startsWith("/api/"))
+    ) {
+      return getBackendOrigin() + fileUrl;
     }
+    return fileUrl;
   }
-  if (fileUrl.startsWith("http")) return fileUrl;
 
-  const host = BASE_HOST_ABSOLUTE.replace(/\/$/, "");
-  return host + (fileUrl.startsWith("/") ? fileUrl : "/" + fileUrl);
+  // Absolute http(s) URLs ──────────────────────────────────────────────────────
+  try {
+    const parsed = new URL(fileUrl);
+    const isBackendPath =
+      parsed.pathname.startsWith("/uploads/") ||
+      parsed.pathname.startsWith("/api/");
+
+    if (isBackendPath) {
+      if (isLocalhostEnv()) {
+        // Dev: rewrite host to the configured backend (could be remote IP or domain)
+        const backendOrigin = getBackendOrigin();
+        return backendOrigin + parsed.pathname + parsed.search + parsed.hash;
+      }
+      // Production: drop the host — nginx routes /uploads/ and /api/ to backend
+      return parsed.pathname + parsed.search + parsed.hash;
+    }
+
+    // External URL (CDN, etc.) — upgrade HTTP→HTTPS on HTTPS pages
+    if (
+      typeof window !== "undefined" &&
+      window.location?.protocol === "https:" &&
+      parsed.protocol === "http:"
+    ) {
+      parsed.protocol = "https:";
+      return parsed.toString();
+    }
+    return fileUrl;
+  } catch {
+    return fileUrl;
+  }
 }
 
 // NEW: Helper function to build public media URL using API endpoint
@@ -261,41 +305,9 @@ const MediaPicker = ({
 
   const [toast, setToast] = useState(null);
 
-  const [blobUrls, setBlobUrls] = useState({});
-
   const fileInputRef = useRef(null);
 
   const loadingRef = useRef(false);
-
-  // Fetch media file with auth and return a blob URL (needed because /uploads/* requires auth)
-  const fetchBlobUrl = useCallback(async (mediaId) => {
-    if (!mediaId || blobUrls[mediaId]) return;
-    try {
-      const res = await api.get(`/Media/public/${mediaId}`, { responseType: 'blob' });
-      const url = URL.createObjectURL(res.data);
-      setBlobUrls(prev => ({ ...prev, [mediaId]: url }));
-    } catch (err) {
-      console.error('[MediaPicker] Failed to fetch blob for', mediaId, err);
-    }
-  }, [blobUrls]);
-
-  // Fetch blob URLs for all media items when media list changes
-  useEffect(() => {
-    media.forEach((item) => {
-      if (item.id && !blobUrls[item.id]) {
-        fetchBlobUrl(item.id);
-      }
-    });
-  }, [media, fetchBlobUrl]);
-
-  // Cleanup blob URLs on unmount
-  useEffect(() => {
-    return () => {
-      Object.values(blobUrls).forEach((url) => {
-        if (url && url.startsWith('blob:')) URL.revokeObjectURL(url);
-      });
-    };
-  }, []);
 
   // Show toast notification
 
@@ -675,22 +687,13 @@ const MediaPicker = ({
   const renderMediaItem = (mediaItem) => {
     const isSelected = selectedItems.find((item) => item.id === mediaItem.id);
 
-    // Use authenticated blob URL if available, fall back to direct file link
-    const fullUrl = blobUrls[mediaItem.id] || toFullUrl(mediaItem.fileUrl);
+    // Build the display URL — /uploads/ paths are served directly through nginx
+    const fullUrl = toFullUrl(mediaItem.fileUrl);
 
     // Determine media type from contentType OR filename/URL
     const fileName = mediaItem.fileName || mediaItem.fileUrl || "";
     const fileExtension = fileName.split(".").pop()?.toLowerCase();
-    const imageExtensions = [
-      "jpg",
-      "jpeg",
-      "png",
-      "gif",
-      "webp",
-      "svg",
-      "bmp",
-      "ico",
-    ];
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "ico"];
     const videoExtensions = ["mp4", "webm", "ogg", "mov", "avi", "mkv"];
 
     const isImage =
@@ -702,17 +705,6 @@ const MediaPicker = ({
       mediaItem.contentType?.startsWith("video/") ||
       videoExtensions.includes(fileExtension) ||
       mediaItem.fileUrl?.includes("/video/");
-
-    // Debug logging
-    console.log("[MediaPicker] Rendering item:", {
-      id: mediaItem.id,
-      fileName: mediaItem.fileName,
-      fileUrl: mediaItem.fileUrl,
-      fullUrl,
-      contentType: mediaItem.contentType,
-      isImage,
-      isVideo,
-    });
 
     return (
       <motion.div

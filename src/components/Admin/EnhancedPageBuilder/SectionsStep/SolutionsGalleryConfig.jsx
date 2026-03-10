@@ -6,6 +6,7 @@ import {
   XMarkIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import MediaPicker from "../../../UI/MediaPicker";
 import { DEFAULT_SOLUTIONS } from "../../../SolutionsGallery";
@@ -44,8 +45,9 @@ const inputCls =
 const labelCls = "block text-xs font-medium text-gray-400 mb-1";
 
 const SolutionsGalleryConfig = ({ component, index, onUpdate }) => {
-  const [editingIndex, setEditingIndex]   = useState(null);
-  const [newFeatureText, setNewFeatureText] = useState("");
+  const [editingIndex, setEditingIndex]     = useState(null);
+  const [newFeatureText, setNewFeatureText]   = useState("");
+  const [imagePickerIndex, setImagePickerIndex] = useState(null);
 
   const rawData = safeParseContentJson(component.contentJson, {
     title: "",
@@ -329,16 +331,39 @@ const SolutionsGalleryConfig = ({ component, index, onUpdate }) => {
                           </button>
                         </div>
 
-                        {/* Image picker */}
+                        {/* Image field */}
                         <div>
                           <label className={labelCls}>Card Image</label>
-                          <MediaPicker
+                          {/* Preview */}
+                          {card.image && (
+                            <div className="mb-2 w-full h-28 rounded-lg overflow-hidden border border-white/10 bg-white/5">
+                              <img
+                                src={card.image}
+                                alt="preview"
+                                className="w-full h-full object-cover"
+                                onError={(e) => { e.target.style.display = "none"; }}
+                              />
+                            </div>
+                          )}
+                          {/* URL text input */}
+                          <input
+                            type="text"
                             value={card.image || ""}
-                            onChange={(val) =>
-                              updateCard(cardIndex, "image", val)
+                            onChange={(e) =>
+                              updateCard(cardIndex, "image", e.target.value)
                             }
-                            type="image"
+                            placeholder="/images/solution.jpg or https://…"
+                            className={`${inputCls} mb-2`}
                           />
+                          {/* Browse button */}
+                          <button
+                            type="button"
+                            onClick={() => setImagePickerIndex(cardIndex)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/15 text-gray-300 border border-white/20 transition-colors"
+                          >
+                            <PhotoIcon className="h-3.5 w-3.5" />
+                            Browse Media Library
+                          </button>
                         </div>
 
                         {/* Title + Subtitle */}
@@ -541,6 +566,19 @@ const SolutionsGalleryConfig = ({ component, index, onUpdate }) => {
           )}
         </div>
       </div>
+
+      {/* Media picker modal for card images */}
+      <MediaPicker
+        isOpen={imagePickerIndex !== null}
+        onClose={() => setImagePickerIndex(null)}
+        onSelect={(url) => {
+          if (imagePickerIndex !== null)
+            updateCard(imagePickerIndex, "image", url);
+          setImagePickerIndex(null);
+        }}
+        accept="image"
+        maxSelection={1}
+      />
     </div>
   );
 };

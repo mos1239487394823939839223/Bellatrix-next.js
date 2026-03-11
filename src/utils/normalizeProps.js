@@ -640,16 +640,33 @@ export const normalizeProps = (componentType, contentJson) => {
 
     // Retail Features Section
     RetailFeaturesSection: (data) => {
-      const features = data.features || data.items || [];
-      return {
-        title: data.title || "Features",
-        subtitle: data.subtitle || "",
-        features: features,
-        data: {
-          title: data.title || "Features",
-          subtitle: data.subtitle || "",
-          features: features
+      let rawFeatures = data.retailFeatures || data.features || data.items || [];
+      if (!Array.isArray(rawFeatures)) rawFeatures = [];
+
+      // Normalize each feature — ensure id, icon present and benefits is always an array
+      const retailFeatures = rawFeatures.map((f, idx) => {
+        let benefits = f.benefits;
+        if (typeof benefits === "string") {
+          benefits = benefits.split(",").map((b) => b.trim()).filter((b) => b);
         }
+        return {
+          id: f.id || `feature-${idx + 1}`,
+          title: f.title || "",
+          description: f.description || "",
+          icon: f.icon || "",
+          benefits: Array.isArray(benefits) ? benefits : [],
+        };
+      });
+
+      return {
+        title: data.title || "Retail Features",
+        subtitle: data.subtitle || "",
+        retailFeatures,
+        data: {
+          title: data.title || "Retail Features",
+          subtitle: data.subtitle || "",
+          retailFeatures,
+        },
       };
     },
 

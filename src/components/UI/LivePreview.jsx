@@ -1946,7 +1946,7 @@ const ComponentPreview = ({
 
           if (!Array.isArray(rawFeatures)) rawFeatures = [];
 
-          const features = rawFeatures.map((f) => {
+          const retailFeatures = rawFeatures.map((f, idx) => {
             let benefits = f.benefits;
             if (typeof benefits === "string") {
               benefits = benefits
@@ -1954,14 +1954,20 @@ const ComponentPreview = ({
                 .map((b) => b.trim())
                 .filter((b) => b);
             }
-            return { ...f, benefits: Array.isArray(benefits) ? benefits : [] };
+            return {
+              id: f.id || `feature-${idx + 1}`,
+              title: f.title || "",
+              description: f.description || "",
+              icon: f.icon || "",
+              benefits: Array.isArray(benefits) ? benefits : [],
+            };
           });
 
           const transformedData = {
             data: {
               title: componentData.title || "Retail Features",
               subtitle: componentData.subtitle || "Comprehensive features",
-              retailFeatures: features,
+              retailFeatures,
             },
           };
           return transformedData;

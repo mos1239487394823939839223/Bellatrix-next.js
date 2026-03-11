@@ -242,6 +242,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 50vw"
+                        unoptimized={featured.image.startsWith('/uploads/')}
                       />
                     ) : (
                       <div className="absolute inset-0" style={{ background: `${featured.accentColor}22` }} />
@@ -363,6 +364,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      unoptimized={solution.image.startsWith('/uploads/')}
                     />
                   ) : (
                     <div className="absolute inset-0" style={{ background: `${solution.accentColor}22` }} />

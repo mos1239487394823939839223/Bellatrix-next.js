@@ -34,6 +34,26 @@ const rewriteUploadsUrl = (url) => {
   return url;
 };
 
+/**
+ * Recursively walk any value and rewrite every string that contains the
+ * raw backend IP so it becomes a proper HTTPS domain URL.
+ * This sanitises the entire component data tree in one pass, regardless of
+ * how deeply the URL is nested.
+ */
+const deepRewriteUploadsUrls = (value) => {
+  if (!value) return value;
+  if (typeof value === "string") return rewriteUploadsUrl(value);
+  if (Array.isArray(value)) return value.map(deepRewriteUploadsUrls);
+  if (typeof value === "object") {
+    const result = {};
+    for (const key of Object.keys(value)) {
+      result[key] = deepRewriteUploadsUrls(value[key]);
+    }
+    return result;
+  }
+  return value;
+};
+
 // Basic check to confirm a URL is an image (file extension or data URI)
 const isLikelyImageUrl = (url) => {
   if (!url || typeof url !== "string") return false;
@@ -119,11 +139,15 @@ export const normalizeProps = (componentType, contentJson) => {
   // Clean corrupted data (numeric keys from spread strings)
   const cleanedData = cleanCorruptedData(contentJson);
 
+  // Recursively rewrite any raw backend IP URLs to the HTTPS domain so they
+  // never reach the browser as http://68.178.169.236:5000/... (mixed-content).
+  const sanitizedData = deepRewriteUploadsUrls(cleanedData);
+
   console.log(
 
     ` [normalizeProps] Processing ${componentType} with data:`,
 
-    cleanedData
+    sanitizedData
 
   );
 
@@ -2429,7 +2453,7 @@ export const normalizeProps = (componentType, contentJson) => {
 
   try {
 
-    const normalizedProps = mappingFunction(cleanedData);
+    const normalizedProps = mappingFunction(sanitizedData);
 
 
 
@@ -2441,7 +2465,7 @@ export const normalizeProps = (componentType, contentJson) => {
 
       ` [normalizeProps] Input data keys:`,
 
-      Object.keys(cleanedData)
+      Object.keys(sanitizedData)
 
     );
 
@@ -2457,7 +2481,7 @@ export const normalizeProps = (componentType, contentJson) => {
 
     // Check if form data was actually used (not just defaults)
 
-    const hasFormData = Object.keys(cleanedData).length > 0;
+    const hasFormData = Object.keys(sanitizedData).length > 0;
 
     if (hasFormData) {
 

@@ -10,6 +10,20 @@ import PageSection from "./PageSection";
 
 const EMPTY = [];
 
+const isSectionVisible = (section) => {
+  if (!section) return false;
+
+  if (section.isVisible === false || section.isVisible === 0) {
+    return false;
+  }
+
+  if (section.is_visible === false || section.is_visible === 0) {
+    return false;
+  }
+
+  return true;
+};
+
 const DynamicPageRenderer = ({ slug: slugProp }) => {
   const params = useParams();
   const slug = slugProp || params.slug;
@@ -26,7 +40,7 @@ const DynamicPageRenderer = ({ slug: slugProp }) => {
   const filteredSections = useMemo(() => {
     if (!components.length) return EMPTY;
     return components
-      .filter((s) => s.isVisible === true || s.isVisible === 1)
+      .filter(isSectionVisible)
       .map((section, index) => ({
         section,
         index,

@@ -1,6 +1,20 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { getComponentPathFromId, loadComponent } from "../components/componentMap";
 
+const isSectionVisible = (section) => {
+  if (!section) return false;
+
+  if (section.isVisible === false || section.isVisible === 0) {
+    return false;
+  }
+
+  if (section.is_visible === false || section.is_visible === 0) {
+    return false;
+  }
+
+  return true;
+};
+
 export const useComponentLoader = (components) => {
   const [loadedComponents, setLoadedComponents] = useState({});
   // Track how many components have settled (loaded or failed)
@@ -27,9 +41,7 @@ export const useComponentLoader = (components) => {
       return;
     }
 
-    const visibleComponents = components.filter(
-      (section) => section.isVisible === true || section.isVisible === 1
-    );
+    const visibleComponents = components.filter(isSectionVisible);
 
     if (visibleComponents.length === 0) {
       setAllSettled(true);

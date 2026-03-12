@@ -304,7 +304,10 @@ const ComponentPreview = ({
           );
 
           const transformedMilestonesData = {
-            milestones: componentData.items || [],
+            milestones:
+              componentData.milestones ||
+              componentData.items ||
+              [],
 
             data: {
               title: componentData.title || "Our Milestones",
@@ -658,7 +661,11 @@ const ComponentPreview = ({
               text: "Contact Us",
               link: "/contact",
             },
-            features: componentData.features || componentData.items || [],
+            features:
+              componentData.features ||
+              componentData.benefits ||
+              componentData.items ||
+              [],
           };
 
           console.log(
@@ -2245,22 +2252,30 @@ const ComponentPreview = ({
             componentData.workflow?.steps ||
             [];
 
-          // Process steps to ensure proper structure
-          const processedSteps = stepsArray.map((step, index) => ({
-            title: step.title || step.stepTitle || `Step ${index + 1}`,
-            stepTitle: step.stepTitle || step.title || `Step ${index + 1}`,
-            description: step.description || step.stepDescription || "",
-            stepDescription: step.stepDescription || step.description || "",
-            features: Array.isArray(step.features)
-              ? step.features
-              : typeof step.features === "string"
-                ? step.features.split(",").map((f) => f.trim())
-                : [],
-            automated: step.automated || "",
-            compliant: step.compliant || "",
-            automatedLabel: step.automatedLabel || "Automated",
-            compliantLabel: step.compliantLabel || "Compliant",
-          }));
+          // Process steps — support all field-name variants
+          const processedSteps = stepsArray.map((step, index) => {
+            const description = step.description || step.stepDescription || step.desc || "";
+            let features = step.features;
+            if (!features || (Array.isArray(features) && features.length === 0)) {
+              features = step.benefits;
+            }
+            if (typeof features === "string") {
+              features = features.split(",").map((f) => f.trim()).filter(Boolean);
+            }
+            if (!Array.isArray(features)) features = [];
+            return {
+              title:           step.title           || step.stepTitle || `Step ${index + 1}`,
+              stepTitle:       step.stepTitle       || step.title     || `Step ${index + 1}`,
+              description,
+              stepDescription: step.stepDescription || description,
+              details:         step.details         || "",
+              features,
+              automated:       step.automated       || "",
+              compliant:       step.compliant       || "",
+              automatedLabel:  step.automatedLabel  || "Automated",
+              compliantLabel:  step.compliantLabel  || "Compliant",
+            };
+          });
 
           // Build workflowData object that component expects
           const transformedData = {

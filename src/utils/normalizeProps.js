@@ -1290,20 +1290,32 @@ export const normalizeProps = (componentType, contentJson) => {
         data.workflow?.steps ||
         [];
 
-      // Process steps to ensure proper structure
-      const processedSteps = stepsArray.map((step, index) => ({
-        title: step.title || step.stepTitle || `Step ${index + 1}`,
-        stepTitle: step.stepTitle || step.title || `Step ${index + 1}`,
-        description: step.description || step.stepDescription || "",
-        stepDescription: step.stepDescription || step.description || "",
-        features: Array.isArray(step.features)
-          ? step.features
-          : (typeof step.features === 'string' ? step.features.split(',').map(f => f.trim()) : []),
-        automated: step.automated || "",
-        compliant: step.compliant || "",
-        automatedLabel: step.automatedLabel || "Automated",
-        compliantLabel: step.compliantLabel || "Compliant",
-      }));
+      // Process steps — support all field-name variants used across EB, schema, and DB
+      const processedSteps = stepsArray.map((step, index) => {
+        // description: step.description (schema) | step.stepDescription | step.desc (EnhancedPageBuilder)
+        const description = step.description || step.stepDescription || step.desc || "";
+        // features: step.features (schema/DB) | step.benefits[] (EnhancedPageBuilder) | step.details (free text)
+        let features = step.features;
+        if (!features || (Array.isArray(features) && features.length === 0)) {
+          features = step.benefits;
+        }
+        if (typeof features === "string") {
+          features = features.split(",").map((f) => f.trim()).filter(Boolean);
+        }
+        if (!Array.isArray(features)) features = [];
+        return {
+          title:             step.title             || step.stepTitle  || `Step ${index + 1}`,
+          stepTitle:         step.stepTitle         || step.title      || `Step ${index + 1}`,
+          description,
+          stepDescription:   step.stepDescription   || description,
+          details:           step.details           || "",
+          features,
+          automated:         step.automated         || "",
+          compliant:         step.compliant         || "",
+          automatedLabel:    step.automatedLabel    || "Automated",
+          compliantLabel:    step.compliantLabel    || "Compliant",
+        };
+      });
 
       // Build workflowData object that component expects
       const workflowData = {
@@ -1313,9 +1325,7 @@ export const normalizeProps = (componentType, contentJson) => {
       };
 
       return {
-        // Component expects a `workflowData` prop
-        workflowData: workflowData,
-        // Also spread at top level for compatibility
+        workflowData,
         title: workflowData.title,
         description: workflowData.description,
         steps: workflowData.steps,

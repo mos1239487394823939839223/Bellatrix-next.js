@@ -2051,12 +2051,17 @@ const EnhancedPageBuilder = () => {
       },
 
       ManufacturingChallengesSection: {
-        title: "Manufacturing Challenges",
+        title: "Manufacturing Challenges We Solve",
+
+        subtitle: "Common pain points facing manufacturers",
 
         description:
           "Modern manufacturing faces complex challenges that require integrated solutions to optimize operations and maintain quality standards.",
 
-        items: [
+        image:
+          "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+
+        challenges: [
           {
             title: "Complex Production Planning",
 
@@ -2076,23 +2081,41 @@ const EnhancedPageBuilder = () => {
 
             icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
 
-            impact: "25% excess inventory",
+            impact: "25% excess inventory costs",
+          },
+
+          {
+            title: "Quality Control",
+
+            description:
+              "Maintaining consistent quality standards and compliance across all production processes and locations",
+
+            icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
+
+            impact: "15% quality issues",
           },
         ],
       },
 
       ManufacturingSolutionsSection: {
-        title: "NetSuite Solutions",
+        title: "NetSuite Manufacturing Solutions",
+
+        subtitle: "Comprehensive ERP solutions designed for manufacturers",
 
         description:
           "Comprehensive manufacturing solutions that streamline your operations from production planning to quality control.",
 
-        items: [
+        image:
+          "https://i.pinimg.com/1200x/19/e6/91/19e6918482b92f0f7e31e68d376bf711.jpg",
+
+        solutions: [
           {
             title: "Advanced Manufacturing",
 
             description:
               "Complete production planning with work orders, routing, and capacity planning",
+
+            icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
 
             features: [
               "Multi-level BOMs",
@@ -2111,6 +2134,8 @@ const EnhancedPageBuilder = () => {
             title: "Inventory & Warehouse Management",
 
             description: "Real-time inventory visibility across all locations",
+
+            icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
 
             features: [
               "Multi-location inventory",

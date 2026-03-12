@@ -651,6 +651,13 @@ const EnhancedPageBuilder = () => {
       return;
     }
 
+    // Guard against accidental very-long slugs (e.g. page HTML leaking into slug field)
+    if (slug.length > 300) {
+      setSlugError("Slug is too long.");
+      setSlugAvailable(false);
+      return;
+    }
+
     // Validate slug format before making API call
 
     const slugRegex = /^[a-z0-9-]+$/;

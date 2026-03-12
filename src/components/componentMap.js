@@ -39,8 +39,8 @@ export const idToPathMap = {
   HeroSection: "Hero",
   // Services: "Services",
   // ServicesSection: "Services",
-  // Testimonials: "Testimonials",
-  // TestimonialsSection: "Testimonials",
+  Testimonials: "Testimonials",
+  TestimonialsSection: "Testimonials",
   // Industries: "Industries",
   // IndustriesSection: "Industries",
 

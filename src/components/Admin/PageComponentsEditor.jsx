@@ -98,10 +98,15 @@ const PageComponentsEditor = ({
 
   const [editingComponent, setEditingComponent] = useState(null);
 
+  const shouldDebug = false;
+  const debugLog = (...args) => {
+    if (shouldDebug) console.log(...args);
+  };
+
   // Load components and available components on mount
 
   useEffect(() => {
-    console.log("PageComponentsEditor mounted with pageId:", pageId);
+    debugLog("PageComponentsEditor mounted with pageId:", pageId);
 
     loadComponents();
 
@@ -111,7 +116,7 @@ const PageComponentsEditor = ({
   // Add validation for component IDs
 
   useEffect(() => {
-    console.log(" [COMPONENTS STATE UPDATE]", {
+    debugLog(" [COMPONENTS STATE UPDATE]", {
       componentsCount: components.length,
 
       componentIds: components.map((c) => c.id),
@@ -130,7 +135,7 @@ const PageComponentsEditor = ({
 
       const components = await loadAvailableComponents();
 
-      console.log(
+      debugLog(
         " [PAGE COMPONENTS EDITOR] Loaded unified component list:",
         components.length,
       );
@@ -358,7 +363,7 @@ const PageComponentsEditor = ({
     try {
       setLoading(true);
 
-      console.log(
+      debugLog(
         " [LOAD COMPONENTS] Loading components, forceRefresh:",
 
         forceRefresh,
@@ -370,12 +375,12 @@ const PageComponentsEditor = ({
 
       const comps = await pagesAPI.getPageComponents(pageId + cacheBuster);
 
-      console.log(" [LOAD COMPONENTS] Raw API response:", comps);
+      debugLog(" [LOAD COMPONENTS] Raw API response:", comps);
 
       if (comps && Array.isArray(comps)) {
-        console.log(" [LOAD COMPONENTS] Extracted components:", comps.length);
+        debugLog(" [LOAD COMPONENTS] Extracted components:", comps.length);
 
-        console.log(
+        debugLog(
           " [LOAD COMPONENTS] Component IDs:",
 
           comps.map((c) => c.id),
@@ -745,9 +750,9 @@ const PageComponentsEditor = ({
             : (currentComponent?.theme ?? 1),
       };
 
-      console.log("Updating component with data:", updateData);
+      debugLog("Updating component with data:", updateData);
 
-      console.log(
+      debugLog(
         " [ORDER CHECK] Current orderIndex:",
 
         currentComponent.orderIndex,
@@ -763,8 +768,16 @@ const PageComponentsEditor = ({
         updateData,
       );
 
+      // Merge API response with the data we sent to guarantee contentJson
+      // stays as a string (some backends return it parsed as an object).
+      const mergedComponent = {
+        ...currentComponent,
+        ...updatedComponent,
+        contentJson: updateData.contentJson,
+      };
+
       setComponents((prev) =>
-        prev.map((comp) => (comp.id === componentId ? updatedComponent : comp)),
+        prev.map((comp) => (comp.id === componentId ? mergedComponent : comp)),
       );
 
       setEditingComponent(null);
@@ -1179,7 +1192,7 @@ const PageComponentsEditor = ({
               strategy={verticalListSortingStrategy}
             >
               {components.map((component, index) => {
-                console.log(` [RENDER COMPONENT ${index}]`, {
+                debugLog(` [RENDER COMPONENT ${index}]`, {
                   id: component.id,
 
                   type: component.componentType,
@@ -1233,10 +1246,10 @@ const PageComponentsEditor = ({
         previewMode="desktop"
         showDebugInfo={false}
         className="mt-6"
-        key={`preview-${components
-          .map((c) => c.contentJson || "")
-          .join("|")
-          .slice(0, 200)}`}
+        key={`preview-${components.length}-${components.map((c) => {
+          const cj = typeof c.contentJson === 'string' ? c.contentJson : JSON.stringify(c.contentJson || {});
+          return cj.length;
+        }).join("-")}`}
       />
     </div>
   );

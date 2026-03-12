@@ -80,11 +80,7 @@ const ServiceGrid = ({ data = {} }) => {
     }
 
   ];
-
-
-
   // Enhanced dynamic data handling
-  console.log(" [ServiceGrid] Props update:", { hasData: !!(data && Object.keys(data).length), dataKeys: Object.keys(data || {}) });
   
   const hasData = data && Object.keys(data).length > 0;
   const services = (hasData && data.services) ? data.services : defaultServices;

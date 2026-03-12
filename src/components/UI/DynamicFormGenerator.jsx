@@ -149,6 +149,14 @@ const DynamicFormGenerator = ({
 
   const [mediaPickerCallback, setMediaPickerCallback] = useState(null);
 
+  const shouldDebug = false;
+  const debugLog = (...args) => {
+    if (shouldDebug) console.log(...args);
+  };
+  const debugWarn = (...args) => {
+    if (shouldDebug) console.warn(...args);
+  };
+
   // Open media picker for a specific field
 
   const openMediaPicker = (fieldPath, mediaType = "all", callback = null) => {
@@ -164,22 +172,22 @@ const DynamicFormGenerator = ({
   // Handle media selection from picker
 
   const handleMediaSelect = (url) => {
-    console.log(" [MEDIA SELECT] Selected URL:", url);
+    debugLog(" [MEDIA SELECT] Selected URL:", url);
 
-    console.log(" [MEDIA SELECT] mediaPickerField:", mediaPickerField);
+    debugLog(" [MEDIA SELECT] mediaPickerField:", mediaPickerField);
 
-    console.log(" [MEDIA SELECT] mediaPickerCallback:", !!mediaPickerCallback);
+    debugLog(" [MEDIA SELECT] mediaPickerCallback:", !!mediaPickerCallback);
 
     if (mediaPickerCallback) {
       // Use callback for array items
 
-      console.log(" [MEDIA SELECT] Using callback");
+      debugLog(" [MEDIA SELECT] Using callback");
 
       mediaPickerCallback(url);
     } else if (mediaPickerField) {
       // Use field path for regular fields
 
-      console.log(
+      debugLog(
         " [MEDIA SELECT] Using handleChange for field:",
         mediaPickerField
       );
@@ -195,7 +203,7 @@ const DynamicFormGenerator = ({
   };
 
   useEffect(() => {
-    console.log(" [DynamicFormGenerator] Data prop changed:", {
+    debugLog(" [DynamicFormGenerator] Data prop changed:", {
       componentType,
 
       dataKeys: Object.keys(data),
@@ -218,7 +226,7 @@ const DynamicFormGenerator = ({
       Object.keys(data).length > 0 &&
       JSON.stringify(data) !== JSON.stringify(formData)
     ) {
-      console.log(
+      debugLog(
         " [DynamicFormGenerator] Updating form data from:",
 
         formData,
@@ -230,7 +238,7 @@ const DynamicFormGenerator = ({
 
       setFormData(data);
     } else if (!data || Object.keys(data).length === 0) {
-      console.log(" [DynamicFormGenerator] Empty or no data received:", {
+      debugLog(" [DynamicFormGenerator] Empty or no data received:", {
         componentType,
 
         data,
@@ -238,7 +246,7 @@ const DynamicFormGenerator = ({
         formData,
       });
     } else {
-      console.log(" [DynamicFormGenerator] Data unchanged:", {
+      debugLog(" [DynamicFormGenerator] Data unchanged:", {
         componentType,
 
         dataKeys: Object.keys(data),
@@ -249,7 +257,7 @@ const DynamicFormGenerator = ({
   }, [data, componentType]);
 
   const handleChange = (path, value) => {
-    console.log(" [DynamicFormGenerator] handleChange:", {
+    debugLog(" [DynamicFormGenerator] handleChange:", {
       componentType,
       path,
       value,
@@ -289,7 +297,7 @@ const DynamicFormGenerator = ({
 
     const updatedData = setValueAtPath(formData, path, value);
 
-    console.log(" [DynamicFormGenerator] Updated data:", {
+    debugLog(" [DynamicFormGenerator] Updated data:", {
       path,
       updatedData,
       changedField: getValueByPath(updatedData, path), // Use getValueByPath to get the changed field
@@ -301,7 +309,7 @@ const DynamicFormGenerator = ({
     // Also trigger field-specific change for immediate preview updates
 
     if (onFieldChange) {
-      console.log(" [DynamicFormGenerator] Calling onFieldChange:", {
+      debugLog(" [DynamicFormGenerator] Calling onFieldChange:", {
         path,
 
         value,
@@ -829,7 +837,7 @@ const DynamicFormGenerator = ({
 
     const fieldType = fieldSchema.formField || fieldSchema.type || "text";
 
-    console.log(" [RENDER FIELD] Field details:", {
+    debugLog(" [RENDER FIELD] Field details:", {
       key,
 
       basePath,
@@ -867,7 +875,7 @@ const DynamicFormGenerator = ({
               type="text"
               value={value || ""}
               onChange={(e) => {
-                console.log(" [TEXT INPUT CHANGE]", {
+                debugLog(" [TEXT INPUT CHANGE]", {
                   fullPath,
 
                   oldValue: value,
@@ -897,7 +905,7 @@ const DynamicFormGenerator = ({
             <textarea
               value={value || ""}
               onChange={(e) => {
-                console.log(" [TEXTAREA CHANGE]", {
+                debugLog(" [TEXTAREA CHANGE]", {
                   fullPath,
 
                   oldValue: value,
@@ -1090,7 +1098,7 @@ const DynamicFormGenerator = ({
 
         const objectValue = value || {};
 
-        console.log(" [OBJECT FIELD] Rendering object:", {
+        debugLog(" [OBJECT FIELD] Rendering object:", {
           fullPath,
 
           fieldLabel: fieldSchema.label,
@@ -1127,7 +1135,7 @@ const DynamicFormGenerator = ({
               <div className="pl-4 space-y-4 border-l-2 border-white/10 bg-white/5 rounded-lg p-4">
                 {Object.entries(fieldSchema.properties).map(
                   ([propKey, propSchema]) => {
-                    console.log(" [OBJECT PROPERTY] Rendering property:", {
+                    debugLog(" [OBJECT PROPERTY] Rendering property:", {
                       propKey,
 
                       propSchema,
@@ -1187,7 +1195,7 @@ const DynamicFormGenerator = ({
                 onClick={() => {
                   const defaultItem = createDefaultItem(itemSchema);
 
-                  console.log(" [ARRAY ADD] Adding item with schema:", {
+                  debugLog(" [ARRAY ADD] Adding item with schema:", {
                     itemSchema,
 
                     defaultItem,
@@ -1280,7 +1288,7 @@ const DynamicFormGenerator = ({
                                 ? item[propKey]
                                 : undefined;
 
-                            console.log(
+                            debugLog(
                               " [ARRAY ITEM FIELD] Rendering field:",
 
                               {
@@ -1728,7 +1736,7 @@ const DynamicFormGenerator = ({
           {(() => {
             const fieldEntries = Object.entries(schema.properties);
 
-            console.log(" [DynamicFormGenerator] Rendering fields:", {
+            debugLog(" [DynamicFormGenerator] Rendering fields:", {
               componentType,
 
               fieldCount: fieldEntries.length,
@@ -1745,7 +1753,7 @@ const DynamicFormGenerator = ({
             });
 
             return fieldEntries.map(([key, fieldSchema]) => {
-              console.log(" [DynamicFormGenerator] Rendering field:", {
+              debugLog(" [DynamicFormGenerator] Rendering field:", {
                 componentType,
 
                 fieldKey: key,
@@ -1770,7 +1778,7 @@ const DynamicFormGenerator = ({
               // Log warning for unexpected items field
 
               if (key === "items" && fieldSchema.type !== "array") {
-                console.warn(
+                debugWarn(
                   " [DynamicFormGenerator] Unexpected items field found:",
 
                   {
@@ -1788,7 +1796,7 @@ const DynamicFormGenerator = ({
               // Only render fields that exist in the schema
 
               if (!(key in schema.properties)) {
-                console.warn(
+                debugWarn(
                   " [DynamicFormGenerator] Field not in schema, skipping:",
 
                   {
@@ -1806,7 +1814,7 @@ const DynamicFormGenerator = ({
               // Skip hidden fields
 
               if (fieldSchema.hidden === true) {
-                console.log(
+                debugLog(
                   " [DynamicFormGenerator] Field is hidden, skipping:",
 
                   {

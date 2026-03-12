@@ -345,7 +345,7 @@ const Footer = ({ initialCategories = [] }) => {
           </div>
 
           {/* Quick Links Column */}
-          <div className="footer-mobile-section md:flex md:flex-col md:items-start md:gap-3">
+          <div className="footer-mobile-section md:flex md:flex-col md:items-start md:gap-3 order-3 md:order-2">
             {/* Mobile: collapsible header */}
             <button
               className="md:hidden w-full flex items-center justify-between py-4"
@@ -393,7 +393,7 @@ const Footer = ({ initialCategories = [] }) => {
           </div>
 
           {/* Our Services Column */}
-          <div className="footer-mobile-section md:flex md:flex-col md:items-start md:gap-3">
+          <div className="footer-mobile-section md:flex md:flex-col md:items-start md:gap-3 order-4 md:order-3">
             {/* Mobile: collapsible header */}
             <button
               className="md:hidden w-full flex items-center justify-between py-4"
@@ -465,7 +465,7 @@ const Footer = ({ initialCategories = [] }) => {
 
           {/* Contact Column */}
           <div
-            className="footer-mobile-section flex flex-col items-start gap-3 text-sm footer-contact-text py-6 md:py-0"
+            className="footer-mobile-section flex flex-col items-start gap-3 text-sm footer-contact-text py-6 md:py-0 order-2 md:order-4"
             style={{ color: "var(--color-text-inverse)" }}
           >
             <h4

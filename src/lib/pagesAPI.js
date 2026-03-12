@@ -16,6 +16,11 @@ const debugAPIResponse = (response, endpoint) => {
   // Debug logging removed
 };
 
+const shouldDebug = false;
+const debugLog = (...args) => {
+  if (shouldDebug) console.log(...args);
+};
+
 /**
 
  * Pages API service for handling page-related operations
@@ -391,7 +396,7 @@ const pagesAPI = {
 
       const components = Array.isArray(response.data) ? response.data : [];
 
-      console.log(" [PAGES API] Fetched components from direct endpoint:", {
+      debugLog(" [PAGES API] Fetched components from direct endpoint:", {
         pageId,
 
         componentsCount: components.length,
@@ -452,7 +457,7 @@ const pagesAPI = {
         theme: componentData.theme !== undefined ? componentData.theme : 1,
       };
 
-      console.log(" [API CREATE] Creating component with data:", {
+      debugLog(" [API CREATE] Creating component with data:", {
         createData,
 
         isVisibleValue: createData.isVisible,
@@ -466,7 +471,7 @@ const pagesAPI = {
         createData,
       );
 
-      console.log(
+      debugLog(
         " [API CREATE] Component created successfully:",
 
         response.data,
@@ -527,7 +532,7 @@ const pagesAPI = {
         theme: componentData.theme !== undefined ? componentData.theme : 1, // ThemeMode enum: 1 = light, 2 = dark
       };
 
-      console.log(" [API UPDATE] Sending component update:", {
+      debugLog(" [API UPDATE] Sending component update:", {
         componentId,
 
         updateData,
@@ -545,7 +550,7 @@ const pagesAPI = {
         updateData,
       );
 
-      console.log(
+      debugLog(
         " [API UPDATE] Component update successful:",
 
         response.data,

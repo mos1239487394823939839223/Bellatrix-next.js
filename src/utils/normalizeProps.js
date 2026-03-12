@@ -2388,6 +2388,7 @@ export const normalizeProps = (componentType, contentJson) => {
         normalized.backgroundImage = rewriteUploadsUrl(data.backgroundImage);
       if (data.image) normalized.image = rewriteUploadsUrl(data.image);
       if (data.imageUrl) normalized.imageUrl = rewriteUploadsUrl(data.imageUrl);
+      if (data.sideImage) normalized.sideImage = rewriteUploadsUrl(data.sideImage);
       // Also try to extract image from nested section objects
       if (!normalized.image && data.programsSection?.image) normalized.image = data.programsSection.image;
       if (!normalized.image && data.heroSection?.image) normalized.image = data.heroSection.image;

@@ -5900,7 +5900,7 @@ export const generalComponentSchemas = {
     displayName: "Client Testimonials",
 
     description:
-      "Customer testimonials and success stories with video background",
+      "Customer testimonials and success stories",
 
     schema: {
       type: "object",
@@ -6026,18 +6026,6 @@ export const generalComponentSchemas = {
           maxItems: 10,
         },
 
-        backgroundVideo: {
-          type: "string",
-
-          label: "Background Video URL",
-
-          placeholder: "/Videos/aesthetic.mp4",
-
-          formField: "media",
-
-          mediaType: "video",
-        },
-
         sideImage: {
           type: "string",
 
@@ -6106,8 +6094,6 @@ export const generalComponentSchemas = {
           rating: 5,
         },
       ],
-
-      backgroundVideo: "/Videos/aesthetic.mp4",
 
       sideImage: "/images/indleaders.jpg",
     },

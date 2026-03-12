@@ -20,8 +20,8 @@ export const parseJsonToFormFields = (jsonString) => {
 // Helper function to detect if a field should use MediaPicker
 const isMediaField = (key) => {
   const mediaKeywords = [
-    'image', 'video', 'media', 'url', 'src', 'photo', 'picture', 
-    'background', 'thumbnail', 'poster', 'avatar', 'icon', 'logo',
+    'image', 'video', 'media', 'url', 'src', 'photo', 'picture',
+    'background', 'thumbnail', 'poster', 'icon', 'logo',
     'banner', 'cover', 'file', 'asset'
   ];
   const lowerKey = key.toLowerCase();
@@ -34,7 +34,7 @@ const getMediaType = (key) => {
   if (lowerKey.includes('video')) return 'video';
   if (lowerKey.includes('image') || lowerKey.includes('photo') || 
       lowerKey.includes('picture') || lowerKey.includes('thumbnail') ||
-      lowerKey.includes('avatar') || lowerKey.includes('icon') ||
+      lowerKey.includes('icon') ||
       lowerKey.includes('logo') || lowerKey.includes('banner') ||
       lowerKey.includes('cover') || lowerKey.includes('background') ||
       lowerKey.includes('poster')) return 'image';

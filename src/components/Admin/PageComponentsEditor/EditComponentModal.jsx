@@ -76,6 +76,16 @@ const EditComponentModal = ({
             ? displayFields
             : parsedJson;
 
+          // Merge back any schema-defined fields that normalizeProps dropped
+          // (e.g. sideImage, custom fields not in the default normalizer)
+          if (schema.schema?.properties) {
+            for (const key of Object.keys(schema.schema.properties)) {
+              if (normalizedJson[key] === undefined && parsedJson[key] !== undefined) {
+                normalizedJson[key] = parsedJson[key];
+              }
+            }
+          }
+
           // PayrollPainPointsSection: normalizeProps wraps painPoints into a nested
           // object { title, description, painPoints: [...], image }. Flatten it back
           // to a plain array so DynamicFormGenerator renders the array correctly.

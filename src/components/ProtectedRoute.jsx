@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
 import LoadingSpinner from "./UI/LoadingSpinner";
@@ -7,6 +7,12 @@ import LoadingSpinner from "./UI/LoadingSpinner";
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.replace('/auth/login');
+    }
+  }, [isAuthenticated, loading, router]);
 
   // Show loading spinner while checking authentication
   if (loading) {
@@ -22,7 +28,6 @@ const ProtectedRoute = ({ children }) => {
 
   // If not authenticated, redirect to login page
   if (!isAuthenticated) {
-    router.replace('/auth/login');
     return null;
   }
 

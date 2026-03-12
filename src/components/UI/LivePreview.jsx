@@ -101,7 +101,8 @@ const ComponentPreview = ({
 
         case "Hero":
         case "HeroSection": {
-          console.log(" [Hero/HeroSection TRANSFORM] Input:", componentData);
+          if (showDebugInfo)
+            console.log(" [Hero/HeroSection TRANSFORM] Input:", componentData);
           const baseData = componentData.data || componentData;
 
           // If slides exist, use them. Otherwise create one slide from flat props.
@@ -126,7 +127,8 @@ const ComponentPreview = ({
             data: baseData,
           };
 
-          console.log(" [Hero/HeroSection TRANSFORM] Output:", transformedData);
+          if (showDebugInfo)
+            console.log(" [Hero/HeroSection TRANSFORM] Output:", transformedData);
           return transformedData;
         }
 
@@ -944,26 +946,14 @@ const ComponentPreview = ({
           return transformedServicesData;
         }
 
+        case "Testimonials":
         case "TestimonialsSection": {
-          console.log(
-            " [TestimonialsSection TRANSFORM] Input data:",
-
-            componentData,
-          );
-
           const transformedTestimonialsData = {
             testimonials: componentData.testimonials || [],
-
             sectionHeader: componentData.sectionHeader || {},
-
+            sideImage: componentData.sideImage || "",
             data: componentData,
           };
-
-          console.log(
-            " [TestimonialsSection TRANSFORM] Output data:",
-
-            transformedTestimonialsData,
-          );
 
           return transformedTestimonialsData;
         }
@@ -1527,7 +1517,8 @@ const ComponentPreview = ({
 
         case "ServiceGrid":
         case "ServiceGridSection": {
-          console.log(" [ServiceGrid TRANSFORM] Input data:", componentData);
+          if (showDebugInfo)
+            console.log(" [ServiceGrid TRANSFORM] Input data:", componentData);
 
           // Normalize to { data: { services: [...] , title, subtitle } }
 
@@ -1581,11 +1572,8 @@ const ComponentPreview = ({
             },
           };
 
-          console.log(
-            " [ServiceGrid TRANSFORM] Output data:",
-
-            transformedData,
-          );
+          if (showDebugInfo)
+            console.log(" [ServiceGrid TRANSFORM] Output data:", transformedData);
 
           return transformedData;
         }
@@ -2477,23 +2465,19 @@ const LivePreview = ({
     (component) => component.isVisible === true || component.isVisible === 1,
   );
 
-  console.log(" [LIVE PREVIEW] Received components:", {
-    total: components.length,
-
-    visible: visibleComponents.length,
-
-    hidden: components.length - visibleComponents.length,
-
-    components: components.map((c) => ({
-      type: c.componentType,
-
-      hasContentJson: !!c.contentJson,
-
-      contentJsonLength: c.contentJson?.length || 0,
-
-      isVisible: c.isVisible,
-    })),
-  });
+  if (showDebugInfo) {
+    console.log(" [LIVE PREVIEW] Received components:", {
+      total: components.length,
+      visible: visibleComponents.length,
+      hidden: components.length - visibleComponents.length,
+      components: components.map((c) => ({
+        type: c.componentType,
+        hasContentJson: !!c.contentJson,
+        contentJsonLength: c.contentJson?.length || 0,
+        isVisible: c.isVisible,
+      })),
+    });
+  }
 
   // Only reload preview when contentJson (inputs data) changes
 
@@ -2564,17 +2548,15 @@ const LivePreview = ({
                 // Enhanced real-time data extraction
 
                 const extractComponentData = (component) => {
-                  console.log(" [REALTIME EXTRACTION] Component data:", {
-                    componentType: component.componentType,
-
-                    contentJson: component.contentJson,
-
-                    hasContentJson: !!component.contentJson,
-
-                    contentJsonType: typeof component.contentJson,
-
-                    contentJsonLength: component.contentJson?.length || 0,
-                  });
+                  if (showDebugInfo) {
+                    console.log(" [REALTIME EXTRACTION] Component data:", {
+                      componentType: component.componentType,
+                      contentJson: component.contentJson,
+                      hasContentJson: !!component.contentJson,
+                      contentJsonType: typeof component.contentJson,
+                      contentJsonLength: component.contentJson?.length || 0,
+                    });
+                  }
 
                   let rawData = {};
 
@@ -2589,15 +2571,14 @@ const LivePreview = ({
                       try {
                         rawData = JSON.parse(component.contentJson);
 
-                        console.log(
-                          " [REALTIME EXTRACTION] Parsed contentJson string for",
-
-                          component.componentType,
-
-                          ":",
-
-                          rawData,
-                        );
+                        if (showDebugInfo) {
+                          console.log(
+                            " [REALTIME EXTRACTION] Parsed contentJson string for",
+                            component.componentType,
+                            ":",
+                            rawData,
+                          );
+                        }
                       } catch (err) {
                         console.error(
                           " [REALTIME EXTRACTION] JSON parse error for contentJson:",

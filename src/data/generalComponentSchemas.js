@@ -7991,34 +7991,6 @@ generalComponentSchemas.AboutValues = {
   },
 };
 
-// Log processed components for verification
-
-[
-  "Hero",
-
-  "Services",
-
-  "Testimonials",
-
-  "Industries",
-
-  "AboutHero",
-
-  "AboutMission",
-
-  "AboutJourney",
-
-  "AboutTeam",
-
-  "AboutValues",
-
-  "SupportDedicatedTeamSection",
-
-  "SupportPayPerUseSection",
-
-  "SupportBellatrixSection",
-].forEach((name) => console.log(`Schema & live mapping updated for ${name} `));
-
 generalComponentSchemas.SupportDedicatedTeamSection = {
   componentName: "SupportDedicatedTeamSection",
 

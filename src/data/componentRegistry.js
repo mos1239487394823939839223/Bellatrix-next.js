@@ -91,14 +91,14 @@ export const componentRegistry = {
 
       filePath: "src/components/Testimonials.jsx",
 
-      description: "Customer testimonials for Home page with section header and CTA",
+      description: "Customer testimonials for Home page with section header and side image",
 
       dataStructure: {
         testimonials: "array",
 
         sectionHeader: "object",
 
-        ctaButton: "object",
+        sideImage: "string",
       },
     },
 

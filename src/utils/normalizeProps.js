@@ -33,7 +33,6 @@ const rewriteUploadsUrl = (url) => {
   }
   return url;
 };
-
 /**
  * Recursively walk any value and rewrite every string that contains the
  * raw backend IP so it becomes a proper HTTPS domain URL.
@@ -274,21 +273,28 @@ export const normalizeProps = (componentType, contentJson) => {
 
     // Retail Challenges Section
     RetailChallengesSection: (data) => {
-      const challenges = data.retailChallenges || data.challenges || data.items || [];
+      const rawChallenges = data.retailChallenges || data.challenges || data.items || [];
+
+      const retailChallenges = (Array.isArray(rawChallenges) ? rawChallenges : []).map((c) => ({
+        title:       c.title       || "",
+        description: c.description || "",
+        icon:        c.icon        || "",
+        impact:      c.impact      || "High",
+      }));
+
       return {
-        title: data.title || "Retail Challenges",
-        subtitle: data.subtitle || "",
-        description: data.description || "",
-        challenges: challenges,
-        retailChallenges: challenges,
-        image: data.image || "",
+        title:            data.title       || "Retail Challenges",
+        subtitle:         data.subtitle    || "Understanding Modern Retail Obstacles",
+        description:      data.description || "",
+        image:            data.image       || "",
+        retailChallenges,
         data: {
-          title: data.title || "Retail Challenges",
-          subtitle: data.subtitle || "",
-          description: data.description || "",
-          challenges: challenges,
-          image: data.image || ""
-        }
+          title:            data.title       || "Retail Challenges",
+          subtitle:         data.subtitle    || "Understanding Modern Retail Obstacles",
+          description:      data.description || "",
+          image:            data.image       || "",
+          retailChallenges,
+        },
       };
     },
 

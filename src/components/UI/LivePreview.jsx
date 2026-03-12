@@ -2038,34 +2038,34 @@ const ComponentPreview = ({
         case "RetailChallengesSection": {
           console.log(
             " [RetailChallengesSection TRANSFORM] Input data:",
-
             componentData,
           );
 
+          const rawChallenges =
+            componentData.retailChallenges ||
+            componentData.challenges ||
+            componentData.items ||
+            componentData.data?.retailChallenges ||
+            componentData.data?.challenges ||
+            [];
+
+          const retailChallenges = (Array.isArray(rawChallenges) ? rawChallenges : []).map((c) => ({
+            title:       c.title       || "",
+            description: c.description || "",
+            icon:        c.icon        || "",
+            impact:      c.impact      || "High",
+          }));
+
           const transformedData = {
-            title: componentData.title || "Retail Challenges",
-
-            subtitle:
-              componentData.subtitle || "Understanding Modern Retail Obstacles",
-
-            description:
-              componentData.description ||
-              "Modern retail faces complex challenges that require integrated solutions.",
-
-            retailChallenges:
-              componentData.retailChallenges ||
-              componentData.challenges ||
-              componentData.items ||
-              [],
-
-            image:
-              componentData.image ||
-              "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            title:       componentData.title       || "Retail Challenges",
+            subtitle:    componentData.subtitle    || "Understanding Modern Retail Obstacles",
+            description: componentData.description || "Modern retail faces complex challenges that require integrated solutions.",
+            image:       componentData.image       || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            retailChallenges,
           };
 
           console.log(
             " [RetailChallengesSection TRANSFORM] Output data:",
-
             transformedData,
           );
 

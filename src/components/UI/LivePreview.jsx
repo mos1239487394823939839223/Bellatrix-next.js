@@ -32,6 +32,8 @@ const ComponentPreview = ({
 
   isVisible = true,
 
+  showDebugInfo = false,
+
   className = "",
 }) => {
   const [error, setError] = useState(null);
@@ -2885,6 +2887,7 @@ const LivePreview = ({
                       componentData={componentData}
                       theme={component.theme}
                       isVisible={component.isVisible}
+                      showDebugInfo={showDebugInfo}
                       key={`preview-${
                         component.id || index
                       }-${refreshKey}-${JSON.stringify(componentData).slice(

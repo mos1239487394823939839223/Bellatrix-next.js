@@ -1976,60 +1976,54 @@ const ComponentPreview = ({
         case "RetailSolutionsSection": {
           console.log(
             " [RetailSolutionsSection TRANSFORM] Input data:",
-
             componentData,
           );
 
+          const rawSolutions =
+            componentData.netSuiteSolutions ||
+            componentData.solutions ||
+            componentData.items ||
+            componentData.data?.netSuiteSolutions ||
+            componentData.data?.solutions ||
+            [];
+
+          const netSuiteSolutions = Array.isArray(rawSolutions)
+            ? rawSolutions.map((sol) => {
+                let features = sol.features;
+                if (typeof features === "string") {
+                  features = features.split(",").map((f) => f.trim()).filter((f) => f);
+                }
+                return {
+                  title:       sol.title       || "",
+                  description: sol.description || "",
+                  icon:        sol.icon        || "",
+                  features:    Array.isArray(features) ? features : [],
+                  benefits:    sol.benefits    || "",
+                };
+              })
+            : [];
+
           const transformedData = {
-            title: componentData.title || "NetSuite Solutions",
-
-            subtitle:
-              componentData.subtitle || "Comprehensive Retail Solutions",
-
-            description:
-              componentData.description ||
-              "Comprehensive retail solutions that unify your commerce operations.",
-
-            image:
-              componentData.image ||
-              "https://i.pinimg.com/736x/5d/33/74/5d33743cd85ff60ff425a2614a87503f.jpg",
-
-            netSuiteSolutions: componentData.netSuiteSolutions ||
-              componentData.solutions ||
-              componentData.items || [
-                {
-                  title: "E-commerce Platform",
-
-                  description:
-                    "Complete e-commerce solution with NetSuite integration",
-
-                  features: [
-                    "Online store",
-
-                    "Payment processing",
-
-                    "Order management",
-                  ],
-
-                  benefits: "50% increase in online sales",
-                },
-
-                {
-                  title: "Inventory Management",
-
-                  description: "Advanced inventory control and tracking",
-
-                  features: [
-                    "Real-time tracking",
-
-                    "Multi-location",
-
-                    "Automated reordering",
-                  ],
-
-                  benefits: "30% reduction in stockouts",
-                },
-              ],
+            title:       componentData.title       || "NetSuite Solutions",
+            subtitle:    componentData.subtitle    || "Comprehensive Retail Solutions",
+            description: componentData.description || "Comprehensive retail solutions that unify your commerce operations.",
+            image:       componentData.image       || "https://i.pinimg.com/736x/5d/33/74/5d33743cd85ff60ff425a2614a87503f.jpg",
+            netSuiteSolutions: netSuiteSolutions.length > 0 ? netSuiteSolutions : [
+              {
+                title: "E-commerce Platform",
+                description: "Complete e-commerce solution with NetSuite integration",
+                icon: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z",
+                features: ["Online store", "Payment processing", "Order management"],
+                benefits: "50% increase in online sales",
+              },
+              {
+                title: "Inventory Management",
+                description: "Advanced inventory control and tracking",
+                icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
+                features: ["Real-time tracking", "Multi-location", "Automated reordering"],
+                benefits: "30% reduction in stockouts",
+              },
+            ],
           };
 
           console.log(

@@ -683,33 +683,39 @@ export const normalizeProps = (componentType, contentJson) => {
     RetailSolutionsSection: (data) => {
       console.log(" [RetailSolutionsSection] Raw form data:", data);
 
-      const solutions = Array.isArray(data.solutions) ? data.solutions : (Array.isArray(data.items) ? data.items : []);
+      const rawSolutions =
+        Array.isArray(data.netSuiteSolutions) ? data.netSuiteSolutions :
+        Array.isArray(data.solutions)         ? data.solutions :
+        Array.isArray(data.items)             ? data.items : [];
 
-      // Normalize features in each solution
-      const normalizedSolutions = solutions.map(sol => {
+      // Normalize each solution — ensure features is always an array
+      const netSuiteSolutions = rawSolutions.map((sol) => {
         let features = sol.features;
-        if (typeof features === 'string') {
-          features = features.split(',').map(f => f.trim()).filter(f => f);
+        if (typeof features === "string") {
+          features = features.split(",").map((f) => f.trim()).filter((f) => f);
         }
         return {
-          ...sol,
-          features: Array.isArray(features) ? features : []
+          title:       sol.title       || "",
+          description: sol.description || "",
+          icon:        sol.icon        || "",
+          features:    Array.isArray(features) ? features : [],
+          benefits:    sol.benefits    || "",
         };
       });
 
       return {
-        title: data.title || "NetSuite Solutions",
-        subtitle: data.subtitle || "Comprehensive Retail Solutions",
-        description: data.description || "",
-        solutions: normalizedSolutions,
-        image: data.image || "",
+        title:            data.title       || "NetSuite Solutions",
+        subtitle:         data.subtitle    || "Comprehensive Retail Solutions",
+        description:      data.description || "",
+        image:            data.image       || "",
+        netSuiteSolutions,
         data: {
-          title: data.title || "NetSuite Solutions",
-          subtitle: data.subtitle || "Comprehensive Retail Solutions",
-          description: data.description || "",
-          solutions: normalizedSolutions,
-          image: data.image || "",
-        }
+          title:            data.title       || "NetSuite Solutions",
+          subtitle:         data.subtitle    || "Comprehensive Retail Solutions",
+          description:      data.description || "",
+          image:            data.image       || "",
+          netSuiteSolutions,
+        },
       };
     },
 

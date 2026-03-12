@@ -3755,25 +3755,33 @@ const EnhancedPageBuilder = () => {
       },
 
       RetailSolutionsSection: {
-        title: "Retail Solutions",
+        title: "NetSuite Solutions",
 
-        subtitle: "Comprehensive retail management",
+        subtitle: "Comprehensive Retail Solutions",
 
-        description: "Complete solutions for modern retail businesses",
+        description: "Comprehensive retail solutions that unify your commerce operations, from inventory management to customer experience optimization.",
 
-        solutions: [
+        image: "https://i.pinimg.com/736x/5d/33/74/5d33743cd85ff60ff425a2614a87503f.jpg",
+
+        netSuiteSolutions: [
           {
             title: "Omnichannel Commerce",
 
             description: "Unified commerce across all channels",
 
+            icon: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z",
+
             features: ["POS integration", "E-commerce", "Mobile commerce"],
+
+            benefits: "50% increase in online sales",
           },
 
           {
             title: "Inventory Management",
 
             description: "Advanced inventory optimization",
+
+            icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
 
             features: [
               "Real-time tracking",
@@ -3782,12 +3790,16 @@ const EnhancedPageBuilder = () => {
 
               "Automated reordering",
             ],
+
+            benefits: "30% reduction in stockouts",
           },
 
           {
             title: "Customer Management",
 
             description: "360-degree customer view",
+
+            icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
 
             features: [
               "Customer profiles",
@@ -3796,6 +3808,8 @@ const EnhancedPageBuilder = () => {
 
               "Loyalty programs",
             ],
+
+            benefits: "40% improvement in satisfaction",
           },
         ],
       },

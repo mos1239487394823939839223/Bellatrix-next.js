@@ -223,6 +223,68 @@ export const normalizeProps = (componentType, contentJson) => {
       };
     },
 
+    Testimonials: (data) => {
+      const sourceTestimonials = Array.isArray(data.testimonials)
+        ? data.testimonials
+        : [];
+
+      const sectionHeader = {
+        ...(data.sectionHeader || {}),
+        gradientText:
+          data.sectionHeader?.gradientText ||
+          data.sectionHeader?.title ||
+          data.title ||
+          "Trusted by Industry Leaders",
+        subtitle:
+          data.sectionHeader?.subtitle ||
+          data.description ||
+          data.subtitle ||
+          "Don't just take our word for it—here's what our clients say.",
+      };
+
+      const testimonials = sourceTestimonials.map((item, index) => ({
+        ...item,
+        id: item.id || `${index + 1}`,
+        quote: item.quote || item.content || item.description || "",
+        name: item.name || item.clientName || "",
+        title: item.title || item.position || "",
+        position: item.position || item.title || "",
+        company: item.company || "",
+        avatar:
+          item.avatar ||
+          (item.name || item.clientName || "")
+            .split(" ")
+            .map((part) => part[0])
+            .filter(Boolean)
+            .slice(0, 2)
+            .join("")
+            .toUpperCase(),
+        image: item.image ? rewriteUploadsUrl(item.image) : "",
+        rating:
+          typeof item.rating === "number" && !Number.isNaN(item.rating)
+            ? item.rating
+            : 5,
+      }));
+
+      const sideImage = rewriteUploadsUrl(data.sideImage || data.image || "");
+
+      return {
+        sectionHeader,
+        testimonials,
+        sideImage,
+        title: sectionHeader.gradientText,
+        description: sectionHeader.subtitle,
+        data: {
+          ...data,
+          sectionHeader,
+          testimonials,
+          sideImage,
+        },
+      };
+    },
+
+    TestimonialsSection: (data) => componentMappings.Testimonials(data),
+
     // Manufacturing Case Studies Section
     ManufacturingCaseStudiesSection: (data) => {
       const items = data.items || data.caseStudies || [];
@@ -2473,7 +2535,11 @@ export const normalizeProps = (componentType, contentJson) => {
 
   const mappingFunction =
 
-    componentMappings[componentType] || componentMappings["default"];
+    componentMappings[componentType] ||
+    (componentType?.endsWith("Section")
+      ? componentMappings[componentType.replace(/Section$/, "")]
+      : null) ||
+    componentMappings["default"];
 
 
 

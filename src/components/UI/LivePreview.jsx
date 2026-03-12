@@ -948,11 +948,52 @@ const ComponentPreview = ({
 
         case "Testimonials":
         case "TestimonialsSection": {
+          const sourceTestimonials = Array.isArray(componentData.testimonials)
+            ? componentData.testimonials
+            : [];
+
           const transformedTestimonialsData = {
-            testimonials: componentData.testimonials || [],
-            sectionHeader: componentData.sectionHeader || {},
-            sideImage: componentData.sideImage || "",
-            data: componentData,
+            testimonials: sourceTestimonials.map((item, index) => ({
+              ...item,
+              id: item.id || `${index + 1}`,
+              quote: item.quote || item.content || item.description || "",
+              name: item.name || item.clientName || "",
+              title: item.title || item.position || "",
+              position: item.position || item.title || "",
+              company: item.company || "",
+              avatar:
+                item.avatar ||
+                (item.name || item.clientName || "")
+                  .split(" ")
+                  .map((part) => part[0])
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .join("")
+                  .toUpperCase(),
+              image: item.image || "",
+              rating:
+                typeof item.rating === "number" && !Number.isNaN(item.rating)
+                  ? item.rating
+                  : 5,
+            })),
+            sectionHeader: {
+              ...(componentData.sectionHeader || {}),
+              gradientText:
+                componentData.sectionHeader?.gradientText ||
+                componentData.sectionHeader?.title ||
+                componentData.title ||
+                "Trusted by Industry Leaders",
+              subtitle:
+                componentData.sectionHeader?.subtitle ||
+                componentData.description ||
+                componentData.subtitle ||
+                "Don't just take our word for it—here's what our clients say.",
+            },
+            sideImage: componentData.sideImage || componentData.image || "",
+            data: {
+              ...componentData,
+              sideImage: componentData.sideImage || componentData.image || "",
+            },
           };
 
           return transformedTestimonialsData;

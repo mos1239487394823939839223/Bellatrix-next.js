@@ -52,7 +52,13 @@ const EditComponentModal = ({
   // Get schema for current component type
   const currentSchema = useMemo(() => {
     const componentType = formData.componentType;
-    return allComponentSchemas[componentType] || null;
+    return (
+      allComponentSchemas[componentType] ||
+      (componentType?.endsWith("Section")
+        ? allComponentSchemas[componentType.replace(/Section$/, "")]
+        : null) ||
+      null
+    );
   }, [formData.componentType]);
 
   useEffect(() => {
@@ -63,7 +69,11 @@ const EditComponentModal = ({
       // For components with a known schema, normalize the DB data so the form
       // shows the correct fields (e.g. extracts members[0].image → image,
       // maps bulletPoints/members → items, fills in missing defaults).
-      const schema = allComponentSchemas[componentType];
+      const schema =
+        allComponentSchemas[componentType] ||
+        (componentType?.endsWith("Section")
+          ? allComponentSchemas[componentType.replace(/Section$/, "")]
+          : null);
       let normalizedJson = parsedJson;
       if (schema) {
         try {

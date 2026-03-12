@@ -19,14 +19,44 @@ const Testimonials = ({
 
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const getInitials = (name = "") =>
+    name
+      .split(" ")
+      .map((part) => part[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+
+  const normalizedTestimonials = testimonials.map((item, index) => ({
+    ...item,
+    id: item.id || `${index + 1}`,
+    quote: item.quote || item.content || item.description || "",
+    name: item.name || item.clientName || "",
+    title: item.title || item.position || "",
+    company: item.company || "",
+    avatar: item.avatar || getInitials(item.name || item.clientName || ""),
+    image: item.image || "",
+    rating:
+      typeof item.rating === "number" && !Number.isNaN(item.rating)
+        ? item.rating
+        : 5,
+  }));
+
   // Auto-rotate testimonials when there are multiple
   useEffect(() => {
-    if (testimonials.length <= 1) return;
+    if (normalizedTestimonials.length <= 1) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % testimonials.length);
+      setActiveIndex((prev) => (prev + 1) % normalizedTestimonials.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [testimonials.length]);
+  }, [normalizedTestimonials.length]);
+
+  useEffect(() => {
+    if (activeIndex >= normalizedTestimonials.length) {
+      setActiveIndex(0);
+    }
+  }, [activeIndex, normalizedTestimonials.length]);
 
   const renderStars = (rating) =>
     [...Array(5)].map((_, i) => (
@@ -41,7 +71,7 @@ const Testimonials = ({
       </svg>
     ));
 
-  const activeTestimonial = testimonials[activeIndex];
+  const activeTestimonial = normalizedTestimonials[activeIndex];
 
   return (
     <section className="py-20 md:py-28 relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
@@ -98,9 +128,17 @@ const Testimonials = ({
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                        {activeTestimonial.avatar}
-                      </div>
+                      {activeTestimonial.image ? (
+                        <img
+                          src={activeTestimonial.image}
+                          alt={activeTestimonial.name}
+                          className="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-md"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                          {activeTestimonial.avatar}
+                        </div>
+                      )}
                       <div>
                         <div className="font-semibold text-gray-900 text-base">
                           {activeTestimonial.name}
@@ -108,6 +146,11 @@ const Testimonials = ({
                         <div className="text-gray-400 text-sm">
                           {activeTestimonial.title}
                         </div>
+                        {activeTestimonial.company && (
+                          <div className="text-gray-500 text-xs">
+                            {activeTestimonial.company}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="flex gap-0.5">
@@ -117,9 +160,9 @@ const Testimonials = ({
                 </div>
 
                 {/* Dots navigation — only show when multiple testimonials */}
-                {testimonials.length > 1 && (
+                {normalizedTestimonials.length > 1 && (
                   <div className="flex items-center justify-center gap-2 mt-6">
-                    {testimonials.map((_, i) => (
+                    {normalizedTestimonials.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setActiveIndex(i)}

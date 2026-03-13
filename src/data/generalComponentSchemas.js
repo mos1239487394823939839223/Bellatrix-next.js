@@ -5997,15 +5997,6 @@ export const generalComponentSchemas = {
                 formField: "text",
               },
 
-              avatar: {
-                type: "string",
-
-                label: "Avatar (Initial)",
-
-                placeholder: "SJ",
-
-                formField: "text",
-              },
 
               rating: {
                 type: "number",
@@ -6059,7 +6050,6 @@ export const generalComponentSchemas = {
 
           title: "CEO, TechCorp Inc.",
 
-          avatar: "SJ",
 
           rating: 5,
         },
@@ -6074,7 +6064,6 @@ export const generalComponentSchemas = {
 
           title: "COO, Global Manufacturing",
 
-          avatar: "MC",
 
           rating: 5,
         },
@@ -6089,7 +6078,6 @@ export const generalComponentSchemas = {
 
           title: "CFO, Retail Solutions",
 
-          avatar: "ER",
 
           rating: 5,
         },

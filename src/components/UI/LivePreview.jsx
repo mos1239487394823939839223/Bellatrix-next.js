@@ -963,15 +963,6 @@ const ComponentPreview = ({
               title: item.title || item.position || "",
               position: item.position || item.title || "",
               company: item.company || "",
-              avatar:
-                item.avatar ||
-                (item.name || item.clientName || "")
-                  .split(" ")
-                  .map((part) => part[0])
-                  .filter(Boolean)
-                  .slice(0, 2)
-                  .join("")
-                  .toUpperCase(),
               image: (() => {
                 const raw = item.image || "";
                 if (!raw || raw.trim().length < 4) return "";
@@ -997,10 +988,10 @@ const ComponentPreview = ({
                 componentData.subtitle ||
                 "Don't just take our word for it—here's what our clients say.",
             },
-            sideImage: componentData.sideImage || componentData.image || "",
+            sideImage: componentData.sideImage || componentData.image || "/images/indleaders.jpg",
             data: {
               ...componentData,
-              sideImage: componentData.sideImage || componentData.image || "",
+              sideImage: componentData.sideImage || componentData.image || "/images/indleaders.jpg",
             },
           };
 

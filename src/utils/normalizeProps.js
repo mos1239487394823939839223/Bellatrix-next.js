@@ -250,15 +250,6 @@ export const normalizeProps = (componentType, contentJson) => {
         title: item.title || item.position || "",
         position: item.position || item.title || "",
         company: item.company || "",
-        avatar:
-          item.avatar ||
-          (item.name || item.clientName || "")
-            .split(" ")
-            .map((part) => part[0])
-            .filter(Boolean)
-            .slice(0, 2)
-            .join("")
-            .toUpperCase(),
         image: (() => {
           const raw = item.image || "";
           if (!raw || raw.trim().length < 4) return "";
@@ -272,7 +263,7 @@ export const normalizeProps = (componentType, contentJson) => {
             : 5,
       }));
 
-      const sideImage = rewriteUploadsUrl(data.sideImage || data.image || "");
+      const sideImage = rewriteUploadsUrl(data.sideImage || data.image || "/images/indleaders.jpg");
 
       return {
         sectionHeader,

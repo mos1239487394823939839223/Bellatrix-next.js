@@ -259,7 +259,13 @@ export const normalizeProps = (componentType, contentJson) => {
             .slice(0, 2)
             .join("")
             .toUpperCase(),
-        image: item.image ? rewriteUploadsUrl(item.image) : "",
+        image: (() => {
+          const raw = item.image || "";
+          if (!raw || raw.trim().length < 4) return "";
+          const lower = raw.toLowerCase().trim();
+          if (!lower.startsWith("/") && !lower.startsWith("http://") && !lower.startsWith("https://") && !lower.startsWith("data:image")) return "";
+          return rewriteUploadsUrl(raw);
+        })(),
         rating:
           typeof item.rating === "number" && !Number.isNaN(item.rating)
             ? item.rating
@@ -338,23 +344,23 @@ export const normalizeProps = (componentType, contentJson) => {
       const rawChallenges = data.retailChallenges || data.challenges || data.items || [];
 
       const retailChallenges = (Array.isArray(rawChallenges) ? rawChallenges : []).map((c) => ({
-        title:       c.title       || "",
+        title: c.title || "",
         description: c.description || "",
-        icon:        c.icon        || "",
-        impact:      c.impact      || "High",
+        icon: c.icon || "",
+        impact: c.impact || "High",
       }));
 
       return {
-        title:            data.title       || "Retail Challenges",
-        subtitle:         data.subtitle    || "Understanding Modern Retail Obstacles",
-        description:      data.description || "",
-        image:            data.image       || "",
+        title: data.title || "Retail Challenges",
+        subtitle: data.subtitle || "Understanding Modern Retail Obstacles",
+        description: data.description || "",
+        image: data.image || "",
         retailChallenges,
         data: {
-          title:            data.title       || "Retail Challenges",
-          subtitle:         data.subtitle    || "Understanding Modern Retail Obstacles",
-          description:      data.description || "",
-          image:            data.image       || "",
+          title: data.title || "Retail Challenges",
+          subtitle: data.subtitle || "Understanding Modern Retail Obstacles",
+          description: data.description || "",
+          image: data.image || "",
           retailChallenges,
         },
       };
@@ -753,8 +759,8 @@ export const normalizeProps = (componentType, contentJson) => {
 
       const rawSolutions =
         Array.isArray(data.netSuiteSolutions) ? data.netSuiteSolutions :
-        Array.isArray(data.solutions)         ? data.solutions :
-        Array.isArray(data.items)             ? data.items : [];
+          Array.isArray(data.solutions) ? data.solutions :
+            Array.isArray(data.items) ? data.items : [];
 
       // Normalize each solution — ensure features is always an array
       const netSuiteSolutions = rawSolutions.map((sol) => {
@@ -763,25 +769,25 @@ export const normalizeProps = (componentType, contentJson) => {
           features = features.split(",").map((f) => f.trim()).filter((f) => f);
         }
         return {
-          title:       sol.title       || "",
+          title: sol.title || "",
           description: sol.description || "",
-          icon:        sol.icon        || "",
-          features:    Array.isArray(features) ? features : [],
-          benefits:    sol.benefits    || "",
+          icon: sol.icon || "",
+          features: Array.isArray(features) ? features : [],
+          benefits: sol.benefits || "",
         };
       });
 
       return {
-        title:            data.title       || "NetSuite Solutions",
-        subtitle:         data.subtitle    || "Comprehensive Retail Solutions",
-        description:      data.description || "",
-        image:            data.image       || "",
+        title: data.title || "NetSuite Solutions",
+        subtitle: data.subtitle || "Comprehensive Retail Solutions",
+        description: data.description || "",
+        image: data.image || "",
         netSuiteSolutions,
         data: {
-          title:            data.title       || "NetSuite Solutions",
-          subtitle:         data.subtitle    || "Comprehensive Retail Solutions",
-          description:      data.description || "",
-          image:            data.image       || "",
+          title: data.title || "NetSuite Solutions",
+          subtitle: data.subtitle || "Comprehensive Retail Solutions",
+          description: data.description || "",
+          image: data.image || "",
           netSuiteSolutions,
         },
       };
@@ -1366,16 +1372,16 @@ export const normalizeProps = (componentType, contentJson) => {
         }
         if (!Array.isArray(features)) features = [];
         return {
-          title:             step.title             || step.stepTitle  || `Step ${index + 1}`,
-          stepTitle:         step.stepTitle         || step.title      || `Step ${index + 1}`,
+          title: step.title || step.stepTitle || `Step ${index + 1}`,
+          stepTitle: step.stepTitle || step.title || `Step ${index + 1}`,
           description,
-          stepDescription:   step.stepDescription   || description,
-          details:           step.details           || "",
+          stepDescription: step.stepDescription || description,
+          details: step.details || "",
           features,
-          automated:         step.automated         || "",
-          compliant:         step.compliant         || "",
-          automatedLabel:    step.automatedLabel    || "Automated",
-          compliantLabel:    step.compliantLabel    || "Compliant",
+          automated: step.automated || "",
+          compliant: step.compliant || "",
+          automatedLabel: step.automatedLabel || "Automated",
+          compliantLabel: step.compliantLabel || "Compliant",
         };
       });
 

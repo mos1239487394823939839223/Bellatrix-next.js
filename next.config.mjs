@@ -4,10 +4,6 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/Videos/aesthetic.mp4',
-        destination: '/Videos/HomeHeroSectionV.mp4',
-      },
-      {
         source: '/api/:path*',
         destination: 'https://www.bellatrixinc.com/api/:path*',
       },

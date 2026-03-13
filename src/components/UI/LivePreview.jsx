@@ -504,17 +504,17 @@ const ComponentPreview = ({
 
             const items = Array.isArray(rawItems)
               ? rawItems.map((it) => ({
-                  question:
-                    it.question || it.q || it.title || it.questionText || "",
+                question:
+                  it.question || it.q || it.title || it.questionText || "",
 
-                  answer:
-                    it.answer ||
-                    it.a ||
-                    it.aText ||
-                    it.answerText ||
-                    it.description ||
-                    "",
-                }))
+                answer:
+                  it.answer ||
+                  it.a ||
+                  it.aText ||
+                  it.answerText ||
+                  it.description ||
+                  "",
+              }))
               : [];
 
             const transformedPayrollFAQData = {
@@ -557,22 +557,22 @@ const ComponentPreview = ({
 
             const features = Array.isArray(rawFeatures)
               ? rawFeatures.map((f) => {
-                  if (typeof f === "string") return f;
+                if (typeof f === "string") return f;
 
-                  if (!f) return "";
+                if (!f) return "";
 
-                  // common object shapes: { title }, { text }, { description }
+                // common object shapes: { title }, { text }, { description }
 
-                  return f.title || f.text || f.description || String(f);
-                })
+                return f.title || f.text || f.description || String(f);
+              })
               : typeof rawFeatures === "string"
                 ? rawFeatures
 
-                    .split(/[;\n,]+/)
+                  .split(/[;\n,]+/)
 
-                    .map((s) => s.trim())
+                  .map((s) => s.trim())
 
-                    .filter(Boolean)
+                  .filter(Boolean)
                 : [];
 
             const transformedPayrollCTAData = {
@@ -587,12 +587,12 @@ const ComponentPreview = ({
                 features.length > 0
                   ? features
                   : [
-                      "No setup fees",
+                    "No setup fees",
 
-                      "30-day money back guarantee",
+                    "30-day money back guarantee",
 
-                      "24/7 customer support",
-                    ],
+                    "24/7 customer support",
+                  ],
 
               trustedBy: componentData.trustedBy || [],
 
@@ -632,11 +632,11 @@ const ComponentPreview = ({
 
               modules: Array.isArray(componentData.modules)
                 ? componentData.modules.map((mod) => ({
-                    ...mod,
+                  ...mod,
 
-                    description:
-                      mod.description || mod.desc || "Module description",
-                  }))
+                  description:
+                    mod.description || mod.desc || "Module description",
+                }))
                 : [],
             },
           };
@@ -700,22 +700,22 @@ const ComponentPreview = ({
 
               useCases: Array.isArray(rawData.useCases)
                 ? rawData.useCases.map((uc) => ({
+                  ...uc,
+                  description:
+                    uc.description || uc.desc || "Use case description",
+                }))
+                : Array.isArray(componentData.useCases)
+                  ? componentData.useCases.map((uc) => ({
                     ...uc,
                     description:
                       uc.description || uc.desc || "Use case description",
                   }))
-                : Array.isArray(componentData.useCases)
-                  ? componentData.useCases.map((uc) => ({
+                  : Array.isArray(rawData.items)
+                    ? rawData.items.map((uc) => ({
                       ...uc,
                       description:
                         uc.description || uc.desc || "Use case description",
                     }))
-                  : Array.isArray(rawData.items)
-                    ? rawData.items.map((uc) => ({
-                        ...uc,
-                        description:
-                          uc.description || uc.desc || "Use case description",
-                      }))
                     : [],
             },
           };
@@ -972,7 +972,13 @@ const ComponentPreview = ({
                   .slice(0, 2)
                   .join("")
                   .toUpperCase(),
-              image: item.image || "",
+              image: (() => {
+                const raw = item.image || "";
+                if (!raw || raw.trim().length < 4) return "";
+                const lower = raw.toLowerCase().trim();
+                if (!lower.startsWith("/") && !lower.startsWith("http://") && !lower.startsWith("https://") && !lower.startsWith("data:image")) return "";
+                return raw;
+              })(),
               rating:
                 typeof item.rating === "number" && !Number.isNaN(item.rating)
                   ? item.rating
@@ -1136,11 +1142,11 @@ const ComponentPreview = ({
             : typeof rawPrograms === "string"
               ? rawPrograms
 
-                  .split(/[;\n,]+/)
+                .split(/[;\n,]+/)
 
-                  .map((s, i) => ({ id: i, title: s.trim() }))
+                .map((s, i) => ({ id: i, title: s.trim() }))
 
-                  .filter(Boolean)
+                .filter(Boolean)
               : [];
 
           const transformedProgramsData = {
@@ -1203,12 +1209,12 @@ const ComponentPreview = ({
 
           const section = componentData.keyModulesSection ||
             componentData.section || {
-              title: componentData.title || "Key Training Modules",
-              description:
-                componentData.description ||
-                componentData.content ||
-                "Comprehensive curriculum designed to master NetSuite from foundation to advanced implementation",
-            };
+            title: componentData.title || "Key Training Modules",
+            description:
+              componentData.description ||
+              componentData.content ||
+              "Comprehensive curriculum designed to master NetSuite from foundation to advanced implementation",
+          };
 
           const rawModules =
             componentData.keyModules ||
@@ -1221,15 +1227,15 @@ const ComponentPreview = ({
             : typeof rawModules === "string"
               ? rawModules
 
-                  .split(/[;\n,]+/)
+                .split(/[;\n,]+/)
 
-                  .map((s, i) => ({
-                    id: i,
-                    title: s.trim(),
-                    description: "",
-                  }))
+                .map((s, i) => ({
+                  id: i,
+                  title: s.trim(),
+                  description: "",
+                }))
 
-                  .filter((m) => m.title)
+                .filter((m) => m.title)
               : [];
 
           const transformedKeyModulesData = {
@@ -1291,21 +1297,21 @@ const ComponentPreview = ({
 
           const trainingFeatures = Array.isArray(rawFeatures)
             ? rawFeatures.map((f, i) => ({
-                ...f,
-                id: f.id || f.featureId || `feature-${i}`,
-              }))
+              ...f,
+              id: f.id || f.featureId || `feature-${i}`,
+            }))
             : typeof rawFeatures === "string"
               ? rawFeatures
 
-                  .split(/[;\n,]+/)
+                .split(/[;\n,]+/)
 
-                  .map((s, i) => ({
-                    id: `feature-${i}`,
-                    title: s.trim(),
-                    description: "",
-                  }))
+                .map((s, i) => ({
+                  id: `feature-${i}`,
+                  title: s.trim(),
+                  description: "",
+                }))
 
-                  .filter((f) => f.title)
+                .filter((f) => f.title)
               : [];
 
           const transformedWhyChooseData = {
@@ -1524,21 +1530,21 @@ const ComponentPreview = ({
           const rawPlans = componentData.plans || [];
           const normalizedPlans = Array.isArray(rawPlans)
             ? rawPlans.map((p) => {
-                const plan = { ...(p || {}) };
-                let features = plan.features;
-                // If features is a comma/semicolon/newline separated string, split it
-                if (typeof features === "string") {
-                  features = features
-                    .split(/[;,\n]+/)
-                    .map((s) => s.trim())
-                    .filter(Boolean);
-                }
-                // Ensure features is an array
-                if (!Array.isArray(features)) {
-                  features = [];
-                }
-                return { ...plan, features };
-              })
+              const plan = { ...(p || {}) };
+              let features = plan.features;
+              // If features is a comma/semicolon/newline separated string, split it
+              if (typeof features === "string") {
+                features = features
+                  .split(/[;,\n]+/)
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+              }
+              // Ensure features is an array
+              if (!Array.isArray(features)) {
+                features = [];
+              }
+              return { ...plan, features };
+            })
             : [];
 
           const transformedData = {
@@ -1567,7 +1573,7 @@ const ComponentPreview = ({
 
           const services =
             Array.isArray(componentData.services) &&
-            componentData.services.length
+              componentData.services.length
               ? componentData.services
               : componentData.data?.services || componentData.items || [];
 
@@ -2027,25 +2033,25 @@ const ComponentPreview = ({
 
           const netSuiteSolutions = Array.isArray(rawSolutions)
             ? rawSolutions.map((sol) => {
-                let features = sol.features;
-                if (typeof features === "string") {
-                  features = features.split(",").map((f) => f.trim()).filter((f) => f);
-                }
-                return {
-                  title:       sol.title       || "",
-                  description: sol.description || "",
-                  icon:        sol.icon        || "",
-                  features:    Array.isArray(features) ? features : [],
-                  benefits:    sol.benefits    || "",
-                };
-              })
+              let features = sol.features;
+              if (typeof features === "string") {
+                features = features.split(",").map((f) => f.trim()).filter((f) => f);
+              }
+              return {
+                title: sol.title || "",
+                description: sol.description || "",
+                icon: sol.icon || "",
+                features: Array.isArray(features) ? features : [],
+                benefits: sol.benefits || "",
+              };
+            })
             : [];
 
           const transformedData = {
-            title:       componentData.title       || "NetSuite Solutions",
-            subtitle:    componentData.subtitle    || "Comprehensive Retail Solutions",
+            title: componentData.title || "NetSuite Solutions",
+            subtitle: componentData.subtitle || "Comprehensive Retail Solutions",
             description: componentData.description || "Comprehensive retail solutions that unify your commerce operations.",
-            image:       componentData.image       || "https://i.pinimg.com/736x/5d/33/74/5d33743cd85ff60ff425a2614a87503f.jpg",
+            image: componentData.image || "https://i.pinimg.com/736x/5d/33/74/5d33743cd85ff60ff425a2614a87503f.jpg",
             netSuiteSolutions: netSuiteSolutions.length > 0 ? netSuiteSolutions : [
               {
                 title: "E-commerce Platform",
@@ -2088,17 +2094,17 @@ const ComponentPreview = ({
             [];
 
           const retailChallenges = (Array.isArray(rawChallenges) ? rawChallenges : []).map((c) => ({
-            title:       c.title       || "",
+            title: c.title || "",
             description: c.description || "",
-            icon:        c.icon        || "",
-            impact:      c.impact      || "High",
+            icon: c.icon || "",
+            impact: c.impact || "High",
           }));
 
           const transformedData = {
-            title:       componentData.title       || "Retail Challenges",
-            subtitle:    componentData.subtitle    || "Understanding Modern Retail Obstacles",
+            title: componentData.title || "Retail Challenges",
+            subtitle: componentData.subtitle || "Understanding Modern Retail Obstacles",
             description: componentData.description || "Modern retail faces complex challenges that require integrated solutions.",
-            image:       componentData.image       || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            image: componentData.image || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             retailChallenges,
           };
 
@@ -2262,7 +2268,7 @@ const ComponentPreview = ({
 
             icon: componentData.icon || "",
 
-            onClick: componentData.onClick || (() => {}),
+            onClick: componentData.onClick || (() => { }),
           };
 
           console.log(" [CTAButton TRANSFORM] Output data:", transformedData);
@@ -2295,16 +2301,16 @@ const ComponentPreview = ({
             }
             if (!Array.isArray(features)) features = [];
             return {
-              title:           step.title           || step.stepTitle || `Step ${index + 1}`,
-              stepTitle:       step.stepTitle       || step.title     || `Step ${index + 1}`,
+              title: step.title || step.stepTitle || `Step ${index + 1}`,
+              stepTitle: step.stepTitle || step.title || `Step ${index + 1}`,
               description,
               stepDescription: step.stepDescription || description,
-              details:         step.details         || "",
+              details: step.details || "",
               features,
-              automated:       step.automated       || "",
-              compliant:       step.compliant       || "",
-              automatedLabel:  step.automatedLabel  || "Automated",
-              compliantLabel:  step.compliantLabel  || "Compliant",
+              automated: step.automated || "",
+              compliant: step.compliant || "",
+              automatedLabel: step.automatedLabel || "Automated",
+              compliantLabel: step.compliantLabel || "Compliant",
             };
           });
 
@@ -2849,9 +2855,8 @@ const LivePreview = ({
 
                 return (
                   <div
-                    key={`${component.id || index}-${
-                      component.componentType
-                    }-${refreshKey}-${component.contentJson?.slice(0, 50)}`}
+                    key={`${component.id || index}-${component.componentType
+                      }-${refreshKey}-${component.contentJson?.slice(0, 50)}`}
                     className="relative"
                   >
                     {showDebugInfo && (
@@ -2888,13 +2893,12 @@ const LivePreview = ({
                       theme={component.theme}
                       isVisible={component.isVisible}
                       showDebugInfo={showDebugInfo}
-                      key={`preview-${
-                        component.id || index
-                      }-${refreshKey}-${JSON.stringify(componentData).slice(
-                        0,
+                      key={`preview-${component.id || index
+                        }-${refreshKey}-${JSON.stringify(componentData).slice(
+                          0,
 
-                        100,
-                      )}`}
+                          100,
+                        )}`}
                     />
                   </div>
                 );

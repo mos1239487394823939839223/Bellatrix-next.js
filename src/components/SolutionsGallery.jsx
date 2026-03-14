@@ -130,7 +130,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
       : SOLUTIONS.filter((s) => s.category === activeCategory);
 
   const featured = filtered.length > 1 ? filtered.find((s) => s.featured) : null;
-  const rest = featured ? filtered.filter((s) => !s.featured) : filtered;
+  const rest = featured ? filtered.filter((s) => s !== featured) : filtered;
 
   return (
     <section

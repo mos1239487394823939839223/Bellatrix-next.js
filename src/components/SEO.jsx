@@ -11,8 +11,14 @@ const SEO = ({
   canonicalUrl,
 }) => {
   useEffect(() => {
+    const currentPath =
+      typeof window !== "undefined" ? window.location.pathname : "";
+    const isHomePath = currentPath === "/" || currentPath === "/home";
+
     // Update document title
-    document.title = title;
+    if (!isHomePath) {
+      document.title = title;
+    }
 
     // Update meta tags
     const updateMetaTag = (property, content, isProperty = false) => {

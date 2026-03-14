@@ -58,7 +58,7 @@ const HeroSection = ({
       {/* Dark overlay for better text contrast over background image */}
       <div
         className="absolute inset-0 z-0"
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }}
       />
 
       {/* Decorative Background Elements */}

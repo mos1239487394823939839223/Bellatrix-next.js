@@ -160,7 +160,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
   return (
 
-    <main className="min-h-[100dvh] relative overflow-hidden">
+    <section className="min-h-[100dvh] relative overflow-hidden" aria-label="Homepage hero">
 
       <SEO
 
@@ -194,8 +194,9 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
         playsInline
 
-        preload="auto"
+        preload="metadata"
         fetchPriority="high"
+        aria-hidden="true"
 
         className="absolute inset-0 w-full h-full object-cover"
 
@@ -206,12 +207,12 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       />
 
       {/* Content */}
-      <section
+      <div
         className="relative z-10 min-h-[100dvh] flex items-center justify-center cursor-pointer"
         onClick={handleUserInteraction}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && handleUserInteraction()}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleUserInteraction()}
       >
 
         <div className="w-full max-w-6xl mx-auto px-6">
@@ -262,9 +263,9 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
         </div>
 
-      </section>
+      </div>
 
-    </main>
+    </section>
 
   );
 

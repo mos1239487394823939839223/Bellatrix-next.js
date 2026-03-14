@@ -15,10 +15,12 @@ const SEO = ({
       typeof window !== "undefined" ? window.location.pathname : "";
     const isHomePath = currentPath === "/" || currentPath === "/home";
 
-    // Update document title
-    if (!isHomePath) {
-      document.title = title;
+    if (isHomePath) {
+      return;
     }
+
+    // Update document title
+    document.title = title;
 
     // Update meta tags
     const updateMetaTag = (property, content, isProperty = false) => {

@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
-
-import SEO from "./SEO";
+import Image from "next/image";
 
 // Lazy-loaded — only needed on first Contact button click
 const LazyModal = lazy(() => import("./Modal"));
@@ -243,16 +242,6 @@ const Navbar = ({ initialCategories = [] }) => {
 
   return (
     <>
-      <SEO
-        title="Bellatrix Navigation | Bellatrix Consulting Services"
-        description="Navigate Bellatrix's comprehensive Bellatrix services including implementation, training, support, and industry-specific solutions."
-        keywords="NetSuite navigation, Oracle consulting menu, implementation services, training programs, technical support, industry solutions"
-        ogTitle="Bellatrix Services Navigation | Bellatrix Solutions"
-        ogDescription="Explore Bellatrix's full range of Bellatrix consulting services, training programs, and industry-specific solutions."
-        ogImage="/images/bellatrix-services-navigation.jpg"
-        twitterCard="summary_large_image"
-      />
-
       <nav
         className={`fixed w-full top-0 left-0 z-50 transition-all duration-500 ${scrolled
           ? "bg-gray-900/10 shadow-2xl backdrop-blur-md"
@@ -272,12 +261,15 @@ const Navbar = ({ initialCategories = [] }) => {
             <a href="/" className="flex items-center group">
               <div className="flex items-center justify-center h-16 w-16 md:h-24 md:w-24 mr-2 relative transition-all duration-500">
                 <div className="absolute top-0 left-0 h-full w-full">
-                  <img
+                  <Image
                     src={
                       navbarTheme === "light"
                         ? "/images/logoThree.png"
                         : "/images/logoTwo.png"
                     }
+                    width={96}
+                    height={96}
+                    sizes="(max-width: 768px) 32px, 96px"
                     alt="Bellatrix Logo"
                     title="Bellatrix - Expert ERP Solutions & Consultancy"
                     className={`absolute top-1/2 left-1/2 object-contain -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out ${navbarTheme === "light"

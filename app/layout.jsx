@@ -1,5 +1,11 @@
 import './globals.css'
 import Providers from './providers'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 // metadataBase resolves all relative OG/Twitter image URLs
 export const metadata = {
@@ -80,6 +86,18 @@ const jsonLd = {
   },
 };
 
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Bellatrix',
+  url: 'https://bellatrixinc.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://bellatrixinc.com/?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -93,8 +111,12 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
       </head>
-      <body>
+      <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

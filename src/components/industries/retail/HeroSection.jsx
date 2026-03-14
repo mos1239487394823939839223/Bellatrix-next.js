@@ -55,6 +55,12 @@ const HeroSection = ({
         ogDescription="Comprehensive Bellatrix retail platform for modern e-commerce and omnichannel retail operations."
         ogImage="/images/retail-hero.jpg"
       />
+      {/* Dark overlay for better text contrast over background image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+      />
+
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient overlays */}

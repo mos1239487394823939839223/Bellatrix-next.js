@@ -36,7 +36,7 @@ export const metadata = {
     description: "Certified ERP consultants for NetSuite, Odoo, and Oracle. We deliver end-to-end ERP implementation, customization, and support for businesses across the UAE and globally.",
     images: [
       {
-        url: "https://bellatrixinc.com/images/logoOne.png",
+        url: "https://bellatrixinc.com/images/logoTwo.png",
         width: 1200,
         height: 630,
         alt: "Bellatrix ERP Consulting",
@@ -48,7 +48,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Bellatrix | ERP Consulting — NetSuite, Odoo & Oracle Solutions",
     description: "Certified ERP consultants for NetSuite, Odoo, and Oracle. End-to-end implementation, customization, and support.",
-    images: ["https://bellatrixinc.com/images/logoOne.png"],
+    images: ["https://bellatrixinc.com/images/logoTwo.png"],
   },
 }
 

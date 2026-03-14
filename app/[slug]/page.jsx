@@ -67,7 +67,7 @@ const PAGE_META = {
 };
 
 const BASE_URL = 'https://bellatrixinc.com';
-const OG_IMAGE  = '/images/logoOne.png'; // served from /public
+const OG_IMAGE  = '/images/logoTwo.png'; // served from /public
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

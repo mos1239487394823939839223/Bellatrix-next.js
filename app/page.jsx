@@ -13,13 +13,13 @@ export const metadata = {
     siteName: "Bellatrix",
     title: "Bellatrix | ERP Consulting — NetSuite, Odoo & Oracle Solutions",
     description: "Certified ERP consultants for NetSuite, Odoo, and Oracle. End-to-end ERP implementation, customization, and support.",
-    images: [{ url: "https://bellatrixinc.com/images/logoOne.png", width: 1200, height: 630 }],
+    images: [{ url: "https://bellatrixinc.com/images/logoTwo.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Bellatrix | ERP Consulting — NetSuite, Odoo & Oracle Solutions",
     description: "Certified ERP consultants for NetSuite, Odoo, and Oracle.",
-    images: ["https://bellatrixinc.com/images/logoOne.png"],
+    images: ["https://bellatrixinc.com/images/logoTwo.png"],
   },
 }
 

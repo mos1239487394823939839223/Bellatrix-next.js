@@ -270,25 +270,19 @@ const Navbar = ({ initialCategories = [] }) => {
           <div className="flex items-center justify-between h-20">
             {/* Premium Logo */}
             <a href="/" className="flex items-center group">
-              <div className="flex items-center justify-center h-32 w-32 md:h-56 md:w-56 mr-2 relative">
+              <div className="flex items-center justify-center h-16 w-16 md:h-24 md:w-24 mr-2 relative transition-all duration-500">
                 <div className="absolute top-0 left-0 h-full w-full">
                   <img
                     src={
                       navbarTheme === "light"
                         ? "/images/logoThree.png"
-                        : scrolled
-                          ? "/images/logoTwo.png"
-                          : "/images/logoOne.png"
+                        : "/images/logoTwo.png"
                     }
                     alt="Bellatrix Logo"
                     title="Bellatrix - Expert ERP Solutions & Consultancy"
                     className={`absolute top-1/2 left-1/2 object-contain -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out ${navbarTheme === "light"
-                      ? scrolled
-                        ? "h-8 w-8 md:h-14 md:w-14"
-                        : "h-14 w-14 md:h-20 md:w-20"
-                      : scrolled
-                        ? "h-16 w-16 md:h-24 md:w-24"
-                        : "h-28 w-28 md:h-36 md:w-36"
+                      ? "h-8 w-8 md:h-14 md:w-14"
+                      : "h-16 w-16 md:h-24 md:w-24"
                       }`}
                   />
                 </div>

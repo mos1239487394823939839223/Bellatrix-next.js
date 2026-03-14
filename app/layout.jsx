@@ -38,7 +38,7 @@ export const metadata = {
     locale:      'en_US',
     images: [
       {
-        url:    '/images/logoOne.png',
+        url:    '/images/logoTwo.png',
         width:  1200,
         height: 630,
         alt:    'Bellatrix ERP Consulting',
@@ -51,7 +51,7 @@ export const metadata = {
     creator:     '@BellatrixERP',
     title:       'Bellatrix | Expert ERP Solutions & Consultancy',
     description: 'Certified Oracle NetSuite partner — ERP consulting, implementation, HR, payroll, retail & manufacturing solutions.',
-    images:      ['/images/logoOne.png'],
+    images:      ['/images/logoTwo.png'],
   },
   icons: {
     icon:      '/favicon.png',
@@ -66,7 +66,7 @@ const jsonLd = {
   '@type':    'Organization',
   name:       'Bellatrix',
   url:        'https://bellatrixinc.com',
-  logo:       'https://bellatrixinc.com/images/logoOne.png',
+  logo:       'https://bellatrixinc.com/images/logoTwo.png',
   description:
     'Certified Oracle NetSuite partner providing ERP consulting, implementation, HR, payroll, retail, and manufacturing solutions.',
   sameAs: [

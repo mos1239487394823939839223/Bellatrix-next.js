@@ -76,7 +76,7 @@ const Login = () => {
             className="mb-8"
           >
             <img 
-              src="/images/logoOne.png" 
+              src="/images/logoTwo.png" 
               alt="Bellatrix Logo" 
               className="w-72 h-72 object-contain drop-shadow-2xl brightness-0 invert"
             />
@@ -140,7 +140,7 @@ const Login = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-6">
             <img 
-              src="/images/logoOne.png" 
+              src="/images/logoTwo.png" 
               alt="Bellatrix Logo" 
               className="w-40 h-40 object-contain mx-auto mb-4 brightness-0 invert"
             />

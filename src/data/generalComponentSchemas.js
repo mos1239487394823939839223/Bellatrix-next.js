@@ -175,7 +175,6 @@ export const generalComponentSchemas = {
             properties: {
               title: { type: "string", label: "Title", formField: "text" },
               description: { type: "string", label: "Description", formField: "textarea" },
-              stats: { type: "string", label: "Stats Badge", formField: "text" },
               icon: { type: "string", label: "Icon (Emoji)", formField: "text" },
             },
           },

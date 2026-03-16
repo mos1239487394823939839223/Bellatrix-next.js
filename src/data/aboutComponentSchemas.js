@@ -159,12 +159,6 @@ export const aboutComponentSchemas = {
                 placeholder: "Deep knowledge across multiple industries",
                 formField: "textarea"
               },
-              stats: {
-                type: "string",
-                label: "Stats Badge",
-                placeholder: "15+ Years",
-                formField: "text"
-              },
               icon: {
                 type: "string",
                 label: "Icon (Emoji)",
@@ -183,25 +177,21 @@ export const aboutComponentSchemas = {
         {
           title: "Industry Expertise",
           description: "Deep knowledge across multiple industries and business models",
-          stats: "15+ Years",
           icon: ""
         },
         {
           title: "Certified Team",
           description: "Oracle certified professionals with proven track records",
-          stats: "50+ Experts",
           icon: ""
         },
         {
           title: "Global Reach",
           description: "Serving clients across the globe with local expertise",
-          stats: "20+ Countries",
           icon: ""
         },
         {
           title: "Success Rate",
           description: "Consistently delivering successful implementations",
-          stats: "98%",
           icon: ""
         }
       ]

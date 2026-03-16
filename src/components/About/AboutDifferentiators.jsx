@@ -52,15 +52,10 @@ const AboutDifferentiators = ({ differentiators = [], data = {} }) => {
                   {item.title}
                 </h3>
                 <p
-                  className="leading-relaxed mb-4 text-[var(--color-text-secondary)] transition-colors duration-600 ease-in-out"
+                  className="leading-relaxed text-[var(--color-text-secondary)] transition-colors duration-600 ease-in-out"
                 >
                   {item.description}
                 </p>
-                <div
-                  className="font-bold py-2 px-4 rounded-full text-sm bg-[var(--color-primary-bg)] text-[var(--color-primary)] transition-all duration-600 ease-in-out"
-                >
-                  {item.stats}
-                </div>
               </motion.div>
             ))}
         </div>

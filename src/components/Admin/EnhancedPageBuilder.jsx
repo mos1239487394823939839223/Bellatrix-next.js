@@ -1540,8 +1540,6 @@ const EnhancedPageBuilder = () => {
             description:
               "Deep understanding of various industries and their unique challenges.",
 
-            stats: "15+ Industries",
-
             icon: "",
           },
 
@@ -1551,8 +1549,6 @@ const EnhancedPageBuilder = () => {
             description:
               "Time-tested implementation methodology ensuring project success.",
 
-            stats: "98% Success Rate",
-
             icon: "",
           },
 
@@ -1561,8 +1557,6 @@ const EnhancedPageBuilder = () => {
 
             description:
               "24/7 support and maintenance services for continuous optimization.",
-
-            stats: "24/7 Support",
 
             icon: "",
           },

@@ -97,10 +97,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Explicit <link> tags for browsers that ignore Next.js metadata icons */}
-        <link rel="icon"             href="/favicon.png" type="image/png" />
-        <link rel="shortcut icon"    href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
         {/* JSON-LD structured data */}
         <script
           type="application/ld+json"

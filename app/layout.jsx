@@ -59,11 +59,6 @@ export const metadata = {
     description: 'Certified Oracle NetSuite partner — ERP consulting, implementation, HR, payroll, retail & manufacturing solutions.',
     images:      ['/images/logoTwo.png'],
   },
-  icons: {
-    icon:      '/favicon.png',
-    shortcut:  '/favicon.png',
-    apple:     '/favicon.png',
-  },
 };
 
 // JSON-LD Organisation schema — helps Google show sitelinks, knowledge panel & rich results

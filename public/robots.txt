@@ -4,6 +4,13 @@
 User-agent: *
 Allow: /
 
+# Explicit access to favicon and icon assets
+Allow: /favicon.ico
+Allow: /favicon.png
+Allow: /icon.png
+Allow: /apple-icon.png
+Allow: /images/
+
 # Disallow admin & auth routes
 Disallow: /admin
 Disallow: /admin/

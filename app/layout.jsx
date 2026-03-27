@@ -67,7 +67,12 @@ const jsonLd = {
   '@type':    'Organization',
   name:       'Bellatrix',
   url:        'https://bellatrixinc.com',
-  logo:       'https://bellatrixinc.com/images/logoTwo.png',
+  logo: {
+    '@type':  'ImageObject',
+    url:      'https://bellatrixinc.com/icon.png',
+    width:    192,
+    height:   192,
+  },
   description:
     'Certified Oracle NetSuite partner providing ERP consulting, implementation, HR, payroll, retail, and manufacturing solutions.',
   sameAs: [

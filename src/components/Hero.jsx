@@ -165,6 +165,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       <video
 
         ref={videoRef}
+        src={slides[currentSlide]?.video || "/Videos/implementation/homepage_hero.mp4"}
 
         autoPlay
 
@@ -176,7 +177,6 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
         preload="metadata"
         fetchPriority="high"
-        poster="/images/ourProServices.png"
         aria-hidden="true"
 
         className="absolute inset-0 w-full h-full object-cover"

@@ -9,6 +9,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [fadeClass, setFadeClass] = useState("hero-text-enter");
+  const [isVideoReady, setIsVideoReady] = useState(false);
 
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
 
@@ -160,6 +161,31 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
     <section className="min-h-[100dvh] relative overflow-hidden" aria-label="Homepage hero">
 
+      {/* Initial loading skeleton until the first video frame is ready */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 z-20 pointer-events-none transition-opacity duration-700 ${
+          isVideoReady ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, var(--color-brand-dark) 0%, var(--color-brand-midnight) 55%, var(--color-blue-900) 100%)",
+          }}
+        />
+        <div className="absolute inset-0 animate-pulse bg-[linear-gradient(110deg,rgba(255,255,255,0.03),rgba(255,255,255,0.1),rgba(255,255,255,0.03))]" />
+
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6">
+          <div className="mx-auto max-w-6xl space-y-5">
+            <div className="h-8 w-48 rounded-full bg-[var(--tw-gray-300)]/40" />
+            <div className="h-14 w-full max-w-3xl rounded-xl bg-[var(--tw-gray-200)]/35" />
+            <div className="h-6 w-full max-w-2xl rounded-lg bg-[var(--tw-gray-300)]/25" />
+          </div>
+        </div>
+      </div>
+
       {/* Background Video */}
 
       <video
@@ -182,8 +208,11 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
         className="absolute inset-0 w-full h-full object-cover"
 
         onLoadedData={() => {
+          setIsVideoReady(true);
           tryPlayVideo(videoRef.current);
         }}
+        onCanPlay={() => setIsVideoReady(true)}
+        onError={() => setIsVideoReady(true)}
 
       />
 

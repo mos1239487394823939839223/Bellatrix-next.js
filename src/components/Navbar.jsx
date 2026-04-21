@@ -95,6 +95,16 @@ const Navbar = ({ initialCategories = [] }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []); // empty deps: register once, never re-register on scroll
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
   useEffect(() => {
     // Set up section theme detection with improved logic
     const cleanup = setupSectionThemeDetection((newTheme) => {
@@ -472,7 +482,9 @@ const Navbar = ({ initialCategories = [] }) => {
             <div className="lg:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`inline-flex items-center justify-center p-3 rounded-xl hover:bg-white/10 focus:outline-none border border-white/10 backdrop-blur-sm transition-colors duration-300 ${navbarTheme === "light"
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileMenuOpen}
+                className={`inline-flex items-center justify-center p-3 rounded-xl hover:bg-white/10 focus:outline-none border border-white/10 backdrop-blur-sm transition-colors duration-300 touch-target ${navbarTheme === "light"
                   ? "text-[var(--color-text-dark)]/90 hover:text-[var(--color-primary)]"
                   : "text-[var(--color-text-light)]/90 hover:text-[var(--color-text-light)]"
                   }`}
@@ -483,10 +495,16 @@ const Navbar = ({ initialCategories = [] }) => {
           </div>
         </div>
 
-        {/* Premium Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-gray-900/40 backdrop-blur-2xl border-t border-white/10 animate-fade-slide">
-            <div className="px-4 pt-4 pb-6 space-y-2">
+        {/* Premium Mobile menu — always rendered, animated via max-height */}
+        <div
+          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            mobileMenuOpen
+              ? 'max-h-[80vh] opacity-100'
+              : 'max-h-0 opacity-0 pointer-events-none'
+          } bg-gray-900/40 backdrop-blur-2xl border-t border-white/10`}
+          aria-hidden={!mobileMenuOpen}
+        >
+            <div className="px-4 pt-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] space-y-2">
               {/* Dynamic Mobile Categories Dropdowns */}
               {loadingCategories ? (
                 <span className="block px-4 py-3 text-base text-gray-400">
@@ -515,7 +533,7 @@ const Navbar = ({ initialCategories = [] }) => {
                         key={cat.id}
                         href={mainPageUrl}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`w-full flex justify-between items-center px-4 py-3 text-base font-medium rounded-xl hover:bg-white/10 transition-colors duration-300 border border-white/10 text-white`}
+                        className="w-full flex justify-between items-center px-4 py-3 text-base font-medium rounded-xl hover:bg-white/10 transition-colors duration-300 border border-white/10 text-white touch-target"
                       >
                         <span>{cat.name}</span>
                       </Link>
@@ -526,7 +544,7 @@ const Navbar = ({ initialCategories = [] }) => {
                     <div className="relative" key={cat.id}>
                       <button
                         onClick={() => toggleDropdown(cat.id)}
-                        className={`w-full flex justify-between items-center px-4 py-3 text-base font-medium rounded-xl hover:bg-white/10 transition-colors duration-300 border border-white/10 text-white`}
+                        className="w-full flex justify-between items-center px-4 py-3 text-base font-medium rounded-xl hover:bg-white/10 transition-colors duration-300 border border-white/10 text-white touch-target"
                       >
                         <span>{cat.name}</span>
                         {cat.pages && cat.pages.length > 0 && (
@@ -545,7 +563,7 @@ const Navbar = ({ initialCategories = [] }) => {
                                   setMobileMenuOpen(false);
                                   setOpenDropdown(null);
                                 }}
-                                className="block px-4 py-3 text-sm text-white/70 rounded-lg hover:bg-white/5 hover:text-white border border-white/5 backdrop-blur-sm transition-all duration-300"
+                                className="block px-4 py-3 text-sm text-white/70 rounded-lg hover:bg-white/5 hover:text-white border border-white/5 backdrop-blur-sm transition-all duration-300 touch-target"
                               >
                                 {page.title}
                               </Link>
@@ -575,7 +593,7 @@ const Navbar = ({ initialCategories = [] }) => {
                 onClick={() =>
                   toggleTheme(theme === "default" ? "purple" : "default")
                 }
-                className="block w-full px-4 py-3 mt-4 text-center bg-[var(--color-white)]/10 hover:bg-[var(--color-white)]/20 text-[var(--color-white)] font-medium rounded-xl border border-[var(--color-white)]/10 transition-all duration-300"
+                className="block w-full px-4 py-3 mt-4 text-center bg-[var(--color-white)]/10 hover:bg-[var(--color-white)]/20 text-[var(--color-white)] font-medium rounded-xl border border-[var(--color-white)]/10 transition-all duration-300 touch-target"
               >
                 {theme === "default" ? " Switch to Dark Mode" : " Switch to Light Mode"}
               </button>
@@ -584,13 +602,12 @@ const Navbar = ({ initialCategories = [] }) => {
 
               <button
                 onClick={openContactModal}
-                className="block w-full px-4 py-3 mt-4 text-center bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary-light)] to-[var(--color-primary-dark)] text-[var(--color-white)] font-medium rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/25 transition-all duration-300 cursor-pointer"
+                className="block w-full px-4 py-3 mt-4 text-center bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary-light)] to-[var(--color-primary-dark)] text-[var(--color-white)] font-medium rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/25 transition-all duration-300 cursor-pointer touch-target"
               >
                 Contact
               </button>
             </div>
           </div>
-        )}
       </nav>
 
       {/* Contact Modal — lazy loaded; chunks only fetched on first Contact click */}

@@ -12,6 +12,14 @@ const inter = Inter({
   preload: true,
 })
 
+// Viewport — viewportFit:'cover' enables env(safe-area-inset-*) for iPhone notch/home indicator
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+}
+
 // metadataBase resolves all relative OG/Twitter image URLs
 export const metadata = {
   metadataBase: new URL('https://bellatrixinc.com'),

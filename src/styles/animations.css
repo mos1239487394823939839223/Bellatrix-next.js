@@ -193,3 +193,25 @@
   );
   transition: opacity 0.3s ease;
 }
+
+/* ==================================================
+   REDUCED MOTION — disable all infinite animations
+   for users who prefer accessibility/battery savings
+   ================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob,
+  .animate-pulse-glow,
+  .animate-background-glow,
+  .animate-pulse,
+  .animate-bounce,
+  .skeleton,
+  .skeleton-light,
+  .skeleton-dark,
+  .skeleton-image {
+    animation: none !important;
+  }
+
+  .hero-text-transition {
+    transition: none !important;
+  }
+}

@@ -1,53 +1,21 @@
-import { useState, useEffect } from "react";
-import { getPublicDictionary } from "../services/settingsApi";
-import { getApiBaseUrlWithApi } from "../config/api.js";
+import {
+  Facebook,
+  Twitter,
+  LinkedIn,
+  Email,
+  ArrowUpward,
+  Instagram,
+  YouTube,
+  KeyboardArrowDown,
+} from "@mui/icons-material";
 
-// Inline SVGs — replaces @mui/icons-material (removes Emotion/MUI from footer chunk)
-const IconTwitter = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-);
-const IconLinkedIn = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-    <circle cx="4" cy="4" r="2" />
-  </svg>
-);
-const IconFacebook = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-  </svg>
-);
-const IconInstagram = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-    <circle cx="12" cy="12" r="4" />
-    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-  </svg>
-);
-const IconYouTube = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z" />
-  </svg>
-);
-const IconEmail = () => (
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-    <polyline points="22,6 12,13 2,6" />
-  </svg>
-);
-const IconArrowUp = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <line x1="12" y1="19" x2="12" y2="5" />
-    <polyline points="5 12 12 5 19 12" />
-  </svg>
-);
-const IconChevronDown = () => (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <polyline points="6 9 12 15 18 9" />
-  </svg>
-);
+import { useState, useEffect } from "react";
+
+import SEO from "./SEO";
+
+import { getPublicDictionary } from "../services/settingsApi";
+
+import { getApiBaseUrlWithApi } from "../config/api.js";
 
 // Add inline styles for hover effects
 
@@ -182,46 +150,97 @@ const Footer = ({ initialCategories = [] }) => {
     copyrightText: "",
   });
 
-  // Show scroll-to-top button on scroll — passive listener with proper cleanup
+  // Scroll to top handler
+
+  const handleScrollTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Show scroll-to-top button on scroll
+
+  if (typeof window !== "undefined") {
+    window.onscroll = () => {
+      setShowTop(window.scrollY > 200);
+    };
+  }
+
+  // Fetch footer settings from API
+
   useEffect(() => {
-    const handleScroll = () => setShowTop(window.scrollY > 200);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const fetchFooterSettings = async () => {
+      try {
+        console.log(" [Footer] Fetching settings from /api/Settings/public");
+
+        const response = await getPublicDictionary();
+
+        if (response.success && response.data) {
+          console.log(" [Footer] Settings loaded:", response.data);
+
+          // Map API keys to footer settings
+
+          const apiData = response.data;
+
+          const newSettings = {
+            companyName:
+              apiData.company_name || apiData.siteTitle || "Bellatrix",
+
+            companyDescription:
+              apiData.company_tagline ||
+              "Empowering your business with next-gen enterprise software solutions.",
+
+            contactEmail: apiData.company_email || "info@bellatrix.com",
+
+            contactPhone: apiData.company_phone || "(555) 123-4567",
+
+            contactAddress:
+              apiData.company_address || "123 Business Avenue, Suite 500",
+
+            facebook: apiData.facebook_link || "#",
+
+            linkedin: apiData.social_linkedin || "#",
+
+            instagram: apiData.social_instagram || "#",
+
+            youtube: apiData.social_youtube || "#",
+
+            twitter: apiData.twitter_link || "#",
+
+            copyrightText: apiData.copyright_text || "",
+          };
+
+          setFooterSettings(newSettings);
+
+          console.log(" [Footer] Settings applied:", newSettings);
+        } else {
+          console.warn(" [Footer] Failed to load settings, using defaults");
+        }
+      } catch (err) {
+        console.error(" [Footer] Error loading settings:", err);
+
+        // Keep default values on error
+      }
+    };
+
+    fetchFooterSettings();
   }, []);
 
-  // Fetch footer settings and quick links in a single parallel call
+  // Fetch quick links from settings API
   useEffect(() => {
-    const loadFooterData = async () => {
+    const fetchQuickLinks = async () => {
+      setQuickLinksLoading(true);
       try {
         const res = await getPublicDictionary();
-        if (!res.success || !res.data) return;
-        const apiData = res.data;
-
-        setFooterSettings({
-          companyName: apiData.company_name || apiData.siteTitle || "Bellatrix",
-          companyDescription: apiData.company_tagline || "Empowering your business with next-gen enterprise software solutions.",
-          contactEmail: apiData.company_email || "info@bellatrix.com",
-          contactPhone: apiData.company_phone || "(555) 123-4567",
-          contactAddress: apiData.company_address || "123 Business Avenue, Suite 500",
-          facebook: apiData.facebook_link || "#",
-          linkedin: apiData.social_linkedin || "#",
-          instagram: apiData.social_instagram || "#",
-          youtube: apiData.social_youtube || "#",
-          twitter: apiData.twitter_link || "#",
-          copyrightText: apiData.copyright_text || "",
-        });
-
-        if (apiData.footer_quick_links) {
-          try {
-            const parsed = JSON.parse(apiData.footer_quick_links);
-            setQuickLinks(Array.isArray(parsed) ? parsed : []);
-          } catch { /* malformed JSON — keep empty */ }
+        if (res.success && res.data && res.data.footer_quick_links) {
+          const parsed = JSON.parse(res.data.footer_quick_links);
+          setQuickLinks(Array.isArray(parsed) ? parsed : []);
         }
-      } catch { /* keep defaults */ } finally {
+      } catch {
+        // keep empty
+      } finally {
         setQuickLinksLoading(false);
       }
     };
-    loadFooterData();
+    fetchQuickLinks();
   }, []);
 
   // Fetch categories for Services column — skip if SSR data already provided
@@ -259,6 +278,16 @@ const Footer = ({ initialCategories = [] }) => {
     >
       <style>{footerStyles}</style>
 
+      <SEO
+        title="Contact Bellatrix | Bellatrix Consulting & Support Information"
+        description="Get in touch with Bellatrix for Bellatrix consulting, implementation, and support services. Contact information and company details."
+        keywords="contact Bellatrix, NetSuite support contact, Oracle consulting contact, business hours, company information, get in touch"
+        ogTitle="Contact Bellatrix | Bellatrix Consulting Company"
+        ogDescription="Contact Bellatrix for expert Bellatrix consulting and implementation services. Get in touch with our team of specialists."
+        ogImage="/images/bellatrix-contact-footer.jpg"
+        twitterCard="summary_large_image"
+      />
+
       {/* Top border glow */}
 
       <div
@@ -290,11 +319,11 @@ const Footer = ({ initialCategories = [] }) => {
 
             <div className="flex flex-wrap justify-center lg:justify-start gap-3 mt-1">
               {[
-                              { icon: <IconTwitter />, href: footerSettings.twitter, label: "Twitter" },
-                { icon: <IconLinkedIn />, href: footerSettings.linkedin, label: "LinkedIn" },
-                { icon: <IconFacebook />, href: footerSettings.facebook, label: "Facebook" },
-                { icon: <IconInstagram />, href: footerSettings.instagram, label: "Instagram" },
-                { icon: <IconYouTube />, href: footerSettings.youtube, label: "YouTube" },
+                { icon: <Twitter />, href: footerSettings.twitter, label: "Twitter" },
+                { icon: <LinkedIn />, href: footerSettings.linkedin, label: "LinkedIn" },
+                { icon: <Facebook />, href: footerSettings.facebook, label: "Facebook" },
+                { icon: <Instagram />, href: footerSettings.instagram, label: "Instagram" },
+                { icon: <YouTube />, href: footerSettings.youtube, label: "YouTube" },
               ]
                 .filter((item) => item.href && item.href.trim() !== "" && item.href !== "#")
                 .map((item, idx) => (
@@ -326,7 +355,7 @@ const Footer = ({ initialCategories = [] }) => {
               <h4 className="text-lg font-semibold" style={{ color: "var(--color-text-inverse)" }}>
                 Quick Links
               </h4>
-              <IconChevronDown
+              <KeyboardArrowDown
                 className={`footer-chevron ${openSections.quickLinks ? "open" : ""}`}
                 style={{ color: "var(--color-text-inverse)", opacity: 0.7 }}
               />
@@ -374,7 +403,7 @@ const Footer = ({ initialCategories = [] }) => {
               <h4 className="text-lg font-semibold" style={{ color: "var(--color-text-inverse)" }}>
                 Our Services
               </h4>
-              <IconChevronDown
+              <KeyboardArrowDown
                 className={`footer-chevron ${openSections.services ? "open" : ""}`}
                 style={{ color: "var(--color-text-inverse)", opacity: 0.7 }}
               />
@@ -448,7 +477,7 @@ const Footer = ({ initialCategories = [] }) => {
 
             <div className="flex flex-col gap-3 footer-contact-text w-full">
               <div className="flex items-start gap-2">
-                <IconEmail fontSize="small" style={{ marginTop: 2, flexShrink: 0 }} />
+                <Email fontSize="small" style={{ marginTop: 2, flexShrink: 0 }} />
                 <span className="break-all">{footerSettings.contactEmail}</span>
               </div>
 
@@ -510,12 +539,14 @@ const Footer = ({ initialCategories = [] }) => {
 
         {showTop && (
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={handleScrollTop}
             className="footer-scroll-btn fixed bottom-8 right-8 z-50 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform animate-bounce"
-            style={{ backgroundColor: "var(--color-primary)" }}
+            style={{
+              backgroundColor: "var(--color-primary)",
+            }}
             aria-label="Scroll to top"
           >
-            <IconArrowUp />
+            <ArrowUpward />
           </button>
         )}
       </div>

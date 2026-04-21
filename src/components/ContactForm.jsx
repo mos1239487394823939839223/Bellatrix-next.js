@@ -116,7 +116,7 @@ const ContactForm = ({
                 Full Name <span className="text-cyan-400">*</span>
               </span>
             </label>
-            <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className={inputClasses} placeholder="John Doe" required />
+            <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className={inputClasses} placeholder="John Doe" required autoComplete="name" />
           </div>
           <div className="group">
             <label className={labelClasses}>
@@ -125,7 +125,7 @@ const ContactForm = ({
                 Email <span className="text-cyan-400">*</span>
               </span>
             </label>
-            <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={inputClasses} placeholder="john@company.com" required />
+            <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={inputClasses} placeholder="john@company.com" required inputMode="email" autoComplete="email" />
           </div>
         </div>
 
@@ -138,7 +138,7 @@ const ContactForm = ({
                 Phone
               </span>
             </label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={inputClasses} placeholder="+1 (555) 123-4567" />
+            <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={inputClasses} placeholder="+1 (555) 123-4567" inputMode="tel" autoComplete="tel" />
           </div>
           <div className="group">
             <label className={labelClasses}>
@@ -147,7 +147,7 @@ const ContactForm = ({
                 Company
               </span>
             </label>
-            <input type="text" name="companyName" value={formData.companyName} onChange={handleInputChange} className={inputClasses} placeholder="Your Company" />
+            <input type="text" name="companyName" value={formData.companyName} onChange={handleInputChange} className={inputClasses} placeholder="Your Company" autoComplete="organization" />
           </div>
         </div>
 
@@ -239,6 +239,7 @@ const ContactForm = ({
                 ? "bg-white/10 text-white/30 cursor-not-allowed"
                 : "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 transform hover:scale-[1.02] active:scale-[0.98]"
               }`}
+              style={{ minHeight: 48 }}
           >
             {submitting ? (
               <>

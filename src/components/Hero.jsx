@@ -176,6 +176,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
         preload="metadata"
         fetchPriority="high"
+        poster="/images/ourProServices.png"
         aria-hidden="true"
 
         className="absolute inset-0 w-full h-full object-cover"
@@ -203,7 +204,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
               <header className="text-center mb-4">
 
-                <span className="inline-block text-[var(--color-white)]/90 text-sm md:text-base font-semibold letter-spacing-wider mb-2 px-4 py-2 bg-[var(--color-white)]/10 rounded-full backdrop-blur-sm border border-[var(--color-white)]/20">
+                <span className="inline-block text-[var(--color-white)]/90 text-sm sm:text-base font-semibold letter-spacing-wider mb-2 px-4 py-2 bg-[var(--color-white)]/10 rounded-full backdrop-blur-sm border border-[var(--color-white)]/20">
 
                   {slides[currentSlide].subtitle}
 
@@ -217,7 +218,13 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
               <div className="text-center mb-8">
 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-[var(--color-white)]">
+                <h1
+                  className="font-bold leading-tight text-[var(--color-white)]"
+                  style={{
+                    fontSize: 'clamp(1.75rem, 5vw + 0.5rem, 4.5rem)',
+                    textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+                  }}
+                >
 
                   {slides[currentSlide].title}
 
@@ -231,7 +238,13 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
               <div className="text-center mb-12">
 
-                <p className="text-lg md:text-xl lg:text-2xl text-[var(--color-text-light)] leading-relaxed max-w-4xl mx-auto">
+                <p
+                  className="text-[var(--color-text-light)] leading-relaxed max-w-4xl mx-auto"
+                  style={{
+                    fontSize: 'clamp(1rem, 1.5vw + 0.5rem, 1.5rem)',
+                    textShadow: '0 1px 8px rgba(0,0,0,0.4)',
+                  }}
+                >
 
                   {slides[currentSlide].description}
 

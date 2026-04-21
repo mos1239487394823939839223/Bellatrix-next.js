@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useCallback, memo } from "react";
 const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
   const videoRef = useRef(null);
-  const prevVideoRef = useRef(null);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -65,6 +64,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
   const slides = propsSlides.length > 0 ? propsSlides : (data?.slides?.length > 0 ? data.slides : defaultSlides);
   const stats = propsStats.length > 0 ? propsStats : (data?.stats || []);
+  const currentVideoSrc = slides[currentSlide]?.video || "/Videos/implementation/homepage_hero.mp4";
 
   // Play the current video with autoplay-restriction handling
   const tryPlayVideo = useCallback(async (videoEl) => {
@@ -89,26 +89,14 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
     }
   }, [isPlaying, tryPlayVideo]);
 
-  // When slide changes, load new video source and trigger text fade
+  // Trigger text fade and reset skeleton when slide media changes
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // CSS fade transition for text
+    setIsVideoReady(false);
     setFadeClass("hero-text-exit");
     const fadeTimer = setTimeout(() => setFadeClass("hero-text-enter"), 50);
 
-    // Only reload video if the src actually changed
-    const newSrc = slides[currentSlide]?.video;
-    if (prevVideoRef.current !== newSrc) {
-      prevVideoRef.current = newSrc;
-      video.src = newSrc;
-      video.load();
-      tryPlayVideo(video);
-    }
-
     return () => clearTimeout(fadeTimer);
-  }, [currentSlide, slides, tryPlayVideo]);
+  }, [currentSlide, currentVideoSrc]);
 
 
 
@@ -141,6 +129,21 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       return () => { try { document.head.removeChild(link); } catch {} };
     }
   }, [currentSlide, slides]);
+
+  // Preload current video to reduce initial startup delay
+  useEffect(() => {
+    if (!currentVideoSrc) return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "video";
+    link.href = currentVideoSrc;
+    document.head.appendChild(link);
+    return () => {
+      try {
+        document.head.removeChild(link);
+      } catch {}
+    };
+  }, [currentVideoSrc]);
 
   // Handle user interaction to enable video playback
 
@@ -191,7 +194,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       <video
 
         ref={videoRef}
-        src={slides[currentSlide]?.video || "/Videos/implementation/homepage_hero.mp4"}
+        src={currentVideoSrc}
 
         autoPlay
 
@@ -201,7 +204,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
         playsInline
 
-        preload="metadata"
+        preload="auto"
         fetchPriority="high"
         aria-hidden="true"
 

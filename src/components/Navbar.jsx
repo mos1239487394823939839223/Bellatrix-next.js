@@ -69,7 +69,7 @@ const Navbar = ({ initialCategories = [] }) => {
       }
     };
     fetchCategories();
-  }, [initialCategories]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps — intentionally run once; initialCategories is stable
   const { theme, toggleTheme } = useTheme();
   const [navbarTheme, setNavbarTheme] = useState("dark");
 
@@ -84,15 +84,16 @@ const Navbar = ({ initialCategories = [] }) => {
   const timeoutRef = useRef(null);
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
+      // Use functional update — no stale closure, no need for scrolled in deps
+      setScrolled((prev) => {
+        const isScrolled = window.scrollY > 10;
+        return isScrolled !== prev ? isScrolled : prev;
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrolled]);
+  }, []); // empty deps: register once, never re-register on scroll
 
   useEffect(() => {
     // Set up section theme detection with improved logic

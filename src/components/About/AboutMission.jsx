@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const AboutMission = ({ data }) => {
   // Static fallback data (CMS data comes via props)
@@ -37,8 +38,7 @@ const AboutMission = ({ data }) => {
     missionPoints: Array.isArray(rawData.missionPoints) ? rawData.missionPoints : (defaultData?.missionPoints || []),
   };
 
-  // Debug logging for real-time updates
-  console.log(" [AboutMission] Data received:", { props: data, rawData, missionData });
+  // Debug disabled in production — data shape is stable
 
 
   return (
@@ -55,9 +55,11 @@ const AboutMission = ({ data }) => {
           {/* Image - Left Side */}
           <div className="flex-1 flex justify-center">
             <div className="relative max-w-md w-full bg-blue-50 rounded-2xl shadow-md p-6 flex flex-col items-center border border-blue-100">
-              <img
+              <Image
                 src={missionData.image || "/images/ourProServices.png"}
                 alt={missionData.imageAlt || "About Bellatrix - Professional Services"}
+                width={400}
+                height={320}
                 className="w-full h-auto rounded-xl shadow-sm mb-3 object-cover"
                 style={{ maxHeight: 320 }}
               />

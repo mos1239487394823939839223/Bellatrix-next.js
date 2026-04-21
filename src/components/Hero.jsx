@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useCallback, memo } from "react";
 
-import SEO from "./SEO";
-
 const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
   const videoRef = useRef(null);
@@ -161,24 +159,6 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   return (
 
     <section className="min-h-[100dvh] relative overflow-hidden" aria-label="Homepage hero">
-
-      <SEO
-
-        title="Strategic Business Transformation | Bellatrix Bellatrix Solutions"
-
-        description="Drive business growth with Bellatrix's strategic Bellatrix transformation services. Expert implementation, optimization, and data-driven solutions."
-
-        keywords="business transformation, Bellatrix implementation, digital optimization, cloud solutions, business intelligence, ERP consulting"
-
-        ogTitle="Strategic Business Transformation | Bellatrix NetSuite Solutions"
-
-        ogDescription="Transform your business operations with our comprehensive Bellatrix solutions and expert consulting services."
-
-        ogImage="/images/business-transformation-hero.jpg"
-
-        twitterCard="summary_large_image"
-
-      />
 
       {/* Background Video */}
 

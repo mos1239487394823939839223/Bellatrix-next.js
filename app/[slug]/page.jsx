@@ -1,4 +1,4 @@
-// Server Component — enables generateMetadata for Google indexing
+// Server Component — enables generateMetadata + SSR data pre-fetch
 import Layout from '../../src/components/Layout'
 import DynamicPageRenderer from '../../src/components/DynamicPageRenderer/index'
 
@@ -125,10 +125,27 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function SlugPage() {
+// Pre-fetch page sections on the server (ISR - 60s) to eliminate client waterfall
+async function fetchPageData(slug) {
+  try {
+    const res = await fetch(`https://bellatrixinc.com/api/Pages/public/${slug}`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.data ?? data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function SlugPage({ params }) {
+  const { slug } = await params;
+  const initialData = await fetchPageData(slug);
+
   return (
     <Layout>
-      <DynamicPageRenderer />
+      <DynamicPageRenderer slug={slug} initialData={initialData} />
     </Layout>
   );
 }

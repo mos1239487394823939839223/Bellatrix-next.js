@@ -1,7 +1,6 @@
 'use client'
 import { Provider } from 'react-redux'
 import store from '../src/store'
-import { AdminProvider } from '../src/contexts/AdminContext'
 import DataProvider from '../src/providers/DataProvider'
 import { ThemeProvider } from '../src/context/ThemeContext'
 import { AuthProvider } from '../src/hooks/useAuth.jsx'
@@ -13,16 +12,14 @@ export default function Providers({ children }) {
   return (
     <Provider store={store}>
       <DataProvider>
-        <AdminProvider>
-          <ThemeProvider>
-            <AuthProvider>
-              <CTAModalProvider>
-                {children}
-                <Toaster {...toastConfig} />
-              </CTAModalProvider>
-            </AuthProvider>
-          </ThemeProvider>
-        </AdminProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <CTAModalProvider>
+              {children}
+              <Toaster {...toastConfig} />
+            </CTAModalProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </DataProvider>
     </Provider>
   )

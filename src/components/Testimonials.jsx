@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SEO from "./SEO";
+import Image from "next/image";
 
 // Only treat a value as an image URL if it looks like a real path/URL
 const isValidImageSrc = (src) => {
@@ -79,16 +79,6 @@ const Testimonials = ({
 
   return (
     <section className="py-20 md:py-28 relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-      <SEO
-        title="Client Testimonials & Success Stories | Bellatrix NetSuite Solutions"
-        description="Read testimonials from industry leaders who trust Bellatrix for NetSuite implementation and consulting. Real client success stories and reviews."
-        keywords="client testimonials, NetSuite reviews, success stories, industry leaders, customer feedback, ERP implementation reviews, consulting testimonials"
-        ogTitle="Trusted by Industry Leaders | Bellatrix Client Testimonials"
-        ogDescription="See why industry leaders choose Bellatrix for NetSuite solutions. Real testimonials and success stories from satisfied clients."
-        ogImage="/images/client-testimonials.jpg"
-        twitterCard="summary_large_image"
-      />
-
       {/* Subtle decorative elements */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-blue-100/40 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-100/30 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl" />
@@ -180,9 +170,11 @@ const Testimonials = ({
           <div className="flex-1 flex justify-center w-full">
             <div className="relative group">
               <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                <img
+                <Image
                   src={sideImage}
                   alt="Industry Leaders - Digital Innovation & Technology"
+                  width={480}
+                  height={360}
                   className="w-full h-auto lg:max-w-md object-cover group-hover:scale-[1.03] transition-transform duration-500"
                 />
               </div>

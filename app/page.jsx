@@ -39,7 +39,24 @@ async function fetchCategories() {
   }
 }
 
+async function fetchHomePageData() {
+  try {
+    const res = await fetch('https://bellatrixinc.com/api/Pages/public/home', {
+      next: { revalidate: 60 },
+    })
+    if (!res.ok) return null
+    const data = await res.json()
+    return data?.data ?? data ?? null
+  } catch {
+    return null
+  }
+}
+
 export default async function HomePage() {
-  const initialCategories = await fetchCategories()
-  return <HomePageClient initialCategories={initialCategories} />
+  // Fetch navbar categories and home page sections in parallel — eliminates client waterfall
+  const [initialCategories, initialData] = await Promise.all([
+    fetchCategories(),
+    fetchHomePageData(),
+  ])
+  return <HomePageClient initialCategories={initialCategories} initialData={initialData} />
 }

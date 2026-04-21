@@ -1,5 +1,5 @@
+'use client'
 import React, { useState } from "react";
-import SEO from "./SEO";
 import { postJson } from "../lib/api";
 
 const ContactForm = ({
@@ -88,11 +88,6 @@ const ContactForm = ({
 
   return (
     <>
-      <SEO
-        title="Contact Bellatrix | Bellatrix Consultation"
-        description="Contact Bellatrix for Bellatrix consulting services."
-      />
-
       <form className="space-y-4" onSubmit={handleSubmit}>
         {/* Messages */}
         {success && (

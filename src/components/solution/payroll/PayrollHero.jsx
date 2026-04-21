@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-
-import SEO from "../../SEO";
+import React from "react";
+import Image from "next/image";
 import CTAButton from "../../CTAButton";
 
 const PayrollHero = ({
@@ -22,116 +21,32 @@ const PayrollHero = ({
 
   data,
 }) => {
-  const [defaultData, setDefaultData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/data/payroll.json");
-
-        const data = await response.json();
-
-        setDefaultData(data.hero);
-      } catch (error) {
-        console.error("Failed to load payroll data:", error);
-
-        // Fallback data
-
-        setDefaultData({
-          title: "Transform Your Payroll Process",
-
-          subtitle:
-            "Streamline operations with our intelligent, automated payroll system",
-        });
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // PRIORITIZE props data over default data for real-time preview
-
   const displayData = {
-    title:
-      title ||
-      data?.title ||
-      defaultData?.title ||
-      "Transform Your Payroll Process",
-
-    subtitle:
-      subtitle ||
-      data?.subtitle ||
-      defaultData?.subtitle ||
-      "Streamline operations with our intelligent, automated payroll system",
-
-    description: description || data?.description || defaultData?.description,
-
-    ctaButton: ctaButton || data?.ctaButton || defaultData?.ctaButton,
-
-    backgroundImage:
-      backgroundImage ||
-      data?.backgroundImage ||
-      defaultData?.backgroundImage ||
-      "/images/payrollFinal.jpeg",
-
-    bgColor: bgColor || data?.bgColor || defaultData?.bgColor,
-
-    bgVideo: bgVideo || data?.bgVideo || defaultData?.bgVideo,
+    title: title || data?.title || "Transform Your Payroll Process",
+    subtitle: subtitle || data?.subtitle || "Streamline operations with our intelligent, automated payroll system",
+    description: description || data?.description,
+    ctaButton: ctaButton || data?.ctaButton,
+    backgroundImage: backgroundImage || data?.backgroundImage || "/images/payrollFinal.jpeg",
+    bgColor: bgColor || data?.bgColor,
+    bgVideo: bgVideo || data?.bgVideo,
   };
-
-  console.log(" [PayrollHero] Component received data:", {
-    hasPropsData: !!(data && Object.keys(data).length > 0),
-
-    propsData: data,
-
-    hasDefaultData: !!defaultData,
-
-    finalData: displayData,
-
-    timestamp: new Date().toISOString(),
-  });
 
   return (
     <>
-      <SEO
-        title={`Bellatrix Payroll Solutions | ${
-          title || "Transform Your Payroll Process"
-        }`}
-        description={`${
-          subtitle ||
-          "Streamline payroll operations with Bellatrix automated payroll system"
-        } - Professional ERP payroll management with expert implementation and compliance assurance.`}
-        keywords="Bellatrix payroll automation, ERP payroll management, automated payroll processing, NetSuite HR solutions, payroll system implementation"
-        ogTitle={`NetSuite Payroll Management - ${
-          title || "Transform Your Payroll Process"
-        }`}
-        ogDescription={`${(
-          subtitle || "Professional Bellatrix payroll automation"
-        ).substring(
-          0,
-
-          120
-        )}... Expert ERP payroll solutions and implementation.`}
-        ogImage="/images/netsuite-payroll-hero.jpg"
-      />
-
       <header className="py-24 lg:py-32 flex items-center justify-center relative min-h-screen">
         {/* Background Image */}
 
         <div className="absolute inset-0">
-          <img
+          {/* Priority:true — this is the LCP image on the payroll page */}
+          <Image
             src={displayData.backgroundImage}
             alt="Payroll Dashboard Interface"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error("Background image failed to load:", e.target.src);
-
-              e.target.style.backgroundColor = "#1e40af";
-            }}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
-
           {/* Simple Light Overlay */}
-
           <div className="absolute inset-0 bg-black/20"></div>
         </div>
 

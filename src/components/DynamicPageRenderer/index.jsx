@@ -24,10 +24,12 @@ const isSectionVisible = (section) => {
   return true;
 };
 
-const DynamicPageRenderer = ({ slug: slugProp }) => {
+const DynamicPageRenderer = ({ slug: slugProp, initialData = null }) => {
   const params = useParams();
   const slug = slugProp || params.slug;
-  const { pageData, loading, error } = usePageData(slug);
+  // Pass initialData so usePageData can skip the client fetch when SSR data is available
+  const { pageData, loading, error } = usePageData(slug, initialData);
+
 
   // Stable reference: avoids new [] on every render when pageData is null/undefined
   const components = pageData?.components || pageData?.sections || EMPTY;

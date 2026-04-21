@@ -4,7 +4,12 @@ import { Inter } from 'next/font/google'
 
 const inter = Inter({
   subsets: ['latin'],
+  // Only load the weights actually used (reduces font payload ~50%)
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
+  // Expose as a CSS variable so global styles and design tokens can reference it
+  variable: '--font-inter',
+  preload: true,
 })
 
 // metadataBase resolves all relative OG/Twitter image URLs
@@ -112,7 +117,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${inter.className}`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import SEO from "./SEO";
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -128,29 +128,7 @@ const Services = ({
 
 
   return (
-
     <section className="bg-gray-50 py-12 light-section">
-
-      <SEO
-
-        title="Bellatrix Services | Implementation, Training & Support | Bellatrix"
-
-        description="Comprehensive Bellatrix services including implementation, customization, training, and technical support. Expert consulting for digital transformation."
-
-        keywords="NetSuite services, Oracle implementation, ERP training, NetSuite customization, technical support, business consulting, integration services"
-
-        ogTitle="Bellatrix Services | Implementation & Consulting | Bellatrix"
-
-        ogDescription="Expert Bellatrix services: implementation, training, support, and customization. Transform your business with our comprehensive consulting solutions."
-
-        ogImage="/images/netsuite-services.jpg"
-
-        twitterCard="summary_large_image"
-
-      />
-
-
-
       <div className="container mx-auto px-6">
 
         {/* Section Header */}
@@ -245,12 +223,13 @@ const Services = ({
 
                 <div className="relative bg-gradient-to-br from-white/5 via-transparent to-blue-500/5 rounded-2xl p-4 border border-white/20">
 
-                  <img
+                  <Image
 
                     src="/images/ourProServices.png"
 
                     alt="Professional Services - Advanced NetSuite Solutions"
-
+                    width={600}
+                    height={450}
                     className="w-full h-auto rounded-xl shadow-2xl brightness-105 contrast-110 saturate-105 group-hover:brightness-110 group-hover:contrast-115 group-hover:saturate-110 transition-all duration-500 filter drop-shadow-xl"
 
                   />
@@ -421,10 +400,12 @@ const Services = ({
                       {/* Show image if available, otherwise show icon */}
                       {service.image ? (
                         <div className="w-full h-32 mb-3 rounded-lg overflow-hidden">
-                          <img 
+                                                    <Image 
                             src={service.image} 
                             alt={service.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover group-hover:scale-110 transition-transform duration-300"
                           />
                         </div>
                       ) : (
@@ -471,10 +452,12 @@ const Services = ({
                       {/* Show image if available, otherwise show icon */}
                       {service.image ? (
                         <div className="w-full h-32 mb-3 rounded-lg overflow-hidden">
-                          <img 
+                                                    <Image 
                             src={service.image} 
                             alt={service.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover group-hover:scale-110 transition-transform duration-300"
                           />
                         </div>
                       ) : (

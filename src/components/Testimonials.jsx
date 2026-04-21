@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 
 // Only treat a value as an image URL if it looks like a real path/URL
 const isValidImageSrc = (src) => {
   if (!src || typeof src !== "string" || src.trim().length < 4) return false;
   const lower = src.toLowerCase().trim();
+  const isImageLikePath =
+    /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)(\?.*)?(#.*)?$/.test(lower) ||
+    lower.includes("/uploads/");
   return (
-    lower.startsWith("/") ||
-    lower.startsWith("http://") ||
-    lower.startsWith("https://") ||
+    ((lower.startsWith("/") ||
+      lower.startsWith("http://") ||
+      lower.startsWith("https://")) &&
+      isImageLikePath) ||
     lower.startsWith("data:image")
   );
 };
@@ -170,12 +173,14 @@ const Testimonials = ({
           <div className="flex-1 flex justify-center w-full">
             <div className="relative group">
               <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                <Image
+                <img
                   src={sideImage}
                   alt="Industry Leaders - Digital Innovation & Technology"
-                  width={480}
-                  height={360}
                   className="w-full h-auto lg:max-w-md object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/images/indleaders.jpg";
+                  }}
                 />
               </div>
 

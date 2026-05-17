@@ -142,24 +142,12 @@ export const normalizeProps = (componentType, contentJson) => {
   // never reach the browser as http://68.178.169.236:5000/... (mixed-content).
   const sanitizedData = deepRewriteUploadsUrls(cleanedData);
 
-  console.log(
-
-    ` [normalizeProps] Processing ${componentType} with data:`,
-
-    sanitizedData
-
-  );
-
-
-
   // Component-specific normalization mappings
 
   const componentMappings = {
 
     // Home Hero Section
     HeroSection: (data) => {
-      console.log(" [HeroSection] Raw form data:", data);
-
       let slides = data.slides;
       if (!slides || !Array.isArray(slides) || slides.length === 0) {
         slides = [{
@@ -2420,6 +2408,27 @@ export const normalizeProps = (componentType, contentJson) => {
 
 
 
+    // Certification marquee
+    CertificationSection: (data) => {
+      const certs =
+        data.certifications ||
+        data.items ||
+        data.logos ||
+        [];
+      return {
+        sectionTitle: data.sectionTitle || data.title || "Our Certifications",
+        certifications: Array.isArray(certs)
+          ? certs.map((c, i) => ({
+              id: c.id || `cert-${i}`,
+              logoUrl: rewriteUploadsUrl(c.logoUrl || c.logo || c.image || ""),
+              title: c.title || c.name || `Certification ${i + 1}`,
+            }))
+          : [],
+      };
+    },
+
+
+
     // Generic fallback for unknown components
 
     default: (data) => {
@@ -2557,52 +2566,6 @@ export const normalizeProps = (componentType, contentJson) => {
   try {
 
     const normalizedProps = mappingFunction(sanitizedData);
-
-
-
-    // Enhanced logging to verify form data is being used
-
-    console.log(` [normalizeProps] Successfully normalized ${componentType}`);
-
-    console.log(
-
-      ` [normalizeProps] Input data keys:`,
-
-      Object.keys(sanitizedData)
-
-    );
-
-    console.log(
-
-      ` [normalizeProps] Output props keys:`,
-
-      Object.keys(normalizedProps)
-
-    );
-
-
-
-    // Check if form data was actually used (not just defaults)
-
-    const hasFormData = Object.keys(sanitizedData).length > 0;
-
-    if (hasFormData) {
-
-      console.log(
-
-        ` [normalizeProps] Form data detected and processed for ${componentType}`
-
-      );
-
-    } else {
-
-      console.log(
-
-        ` [normalizeProps] No form data found for ${componentType}, using defaults`
-
-      );
-
-    }
 
 
 

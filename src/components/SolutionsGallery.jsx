@@ -4,6 +4,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ContactModal from "./ContactModal";
 
+const isValidImageSrc = (src) => {
+  if (!src || typeof src !== "string") return false;
+  const value = src.trim().toLowerCase();
+  if (!value) return false;
+  if (value.startsWith("data:image")) return true;
+
+  const allowedBase =
+    value.startsWith("/") ||
+    value.startsWith("http://") ||
+    value.startsWith("https://");
+  const imageLikePath =
+    /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)(\?.*)?(#.*)?$/.test(value) ||
+    value.includes("/uploads/");
+
+  return allowedBase && imageLikePath;
+};
+
+const getSafeImageSrc = (src) => (isValidImageSrc(src) ? src.trim() : "");
+
+const shouldBypassOptimization = (src) =>
+  typeof src === "string" &&
+  (src.startsWith("/uploads/") || src.startsWith("http://") || src.startsWith("https://"));
+
 export const DEFAULT_SOLUTIONS = [
   {
     id: "netsuite",
@@ -235,14 +258,14 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
 
                   {/* Image pane */}
                   <div className="relative md:w-1/2 h-56 md:h-auto overflow-hidden flex-shrink-0">
-                    {featured.image ? (
+                    {getSafeImageSrc(featured.image) ? (
                       <Image
-                        src={featured.image}
+                        src={getSafeImageSrc(featured.image)}
                         alt={featured.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        unoptimized={featured.image.startsWith('/uploads/')}
+                        unoptimized={shouldBypassOptimization(getSafeImageSrc(featured.image))}
                       />
                     ) : (
                       <div className="absolute inset-0" style={{ background: `${featured.accentColor}22` }} />
@@ -357,14 +380,14 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
               >
                 {/* Image */}
                 <div className="relative h-48 overflow-hidden flex-shrink-0">
-                  {solution.image ? (
+                  {getSafeImageSrc(solution.image) ? (
                     <Image
-                      src={solution.image}
+                      src={getSafeImageSrc(solution.image)}
                       alt={solution.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      unoptimized={solution.image.startsWith('/uploads/')}
+                      unoptimized={shouldBypassOptimization(getSafeImageSrc(solution.image))}
                     />
                   ) : (
                     <div className="absolute inset-0" style={{ background: `${solution.accentColor}22` }} />

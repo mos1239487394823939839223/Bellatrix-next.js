@@ -169,13 +169,9 @@ const Footer = ({ initialCategories = [] }) => {
   useEffect(() => {
     const fetchFooterSettings = async () => {
       try {
-        console.log(" [Footer] Fetching settings from /api/Settings/public");
-
         const response = await getPublicDictionary();
 
         if (response.success && response.data) {
-          console.log(" [Footer] Settings loaded:", response.data);
-
           // Map API keys to footer settings
 
           const apiData = response.data;
@@ -209,8 +205,6 @@ const Footer = ({ initialCategories = [] }) => {
           };
 
           setFooterSettings(newSettings);
-
-          console.log(" [Footer] Settings applied:", newSettings);
         } else {
           console.warn(" [Footer] Failed to load settings, using defaults");
         }

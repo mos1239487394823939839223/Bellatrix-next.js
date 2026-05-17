@@ -105,6 +105,7 @@ export const idToPathMap = {
   // COMMON/SHARED COMPONENTS
   // ===========================================
   SolutionsGallery: "SolutionsGallery",
+  CertificationSection: "CertificationSection",
   // CTAButton removed from builder component map
 };
 
@@ -266,6 +267,7 @@ export const loadComponent = async (componentPath) => {
       // COMMON/SHARED COMPONENTS
       // ===========================================
       SolutionsGallery: () => import("./SolutionsGallery"),
+      CertificationSection: () => import("./CertificationSection"),
       // CTAButton loader removed so CTAButton is not available in the builder
     };
 

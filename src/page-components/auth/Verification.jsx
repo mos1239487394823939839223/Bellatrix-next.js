@@ -89,6 +89,8 @@ const Verification = () => {
             <img 
               src="/images/logoTwo.png" 
               alt="Bellatrix Logo" 
+              loading="eager"
+              fetchPriority="high"
               className="w-72 h-72 object-contain drop-shadow-2xl brightness-0 invert"
             />
           </motion.div>
@@ -149,6 +151,8 @@ const Verification = () => {
             <img 
               src="/images/logoTwo.png" 
               alt="Bellatrix Logo" 
+              loading="eager"
+              fetchPriority="high"
               className="w-40 h-40 object-contain mx-auto mb-4 brightness-0 invert"
             />
             <h1 className="text-xl font-bold text-white">Verify Email</h1>

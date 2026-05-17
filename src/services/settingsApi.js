@@ -30,8 +30,6 @@ export const getPublicSettings = async () => {
 
     const response = await api.get("/Settings/public");
 
-    console.log(" [Settings API] Public settings response:", response);
-
 
 
     // The interceptor already unwraps response.data.data to response.data
@@ -83,8 +81,6 @@ export const getPublicDictionary = async () => {
   try {
 
     const response = await api.get("/Settings/public/dictionary");
-
-    console.log(" [Settings API] Public dictionary response:", response);
 
 
 

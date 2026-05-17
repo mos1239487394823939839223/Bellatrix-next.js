@@ -47,6 +47,29 @@ const iconMap = {
 
 };
 
+const isValidImageSrc = (src) => {
+  if (!src || typeof src !== "string") return false;
+  const value = src.trim().toLowerCase();
+  if (!value) return false;
+  if (value.startsWith("data:image")) return true;
+
+  const allowedBase =
+    value.startsWith("/") ||
+    value.startsWith("http://") ||
+    value.startsWith("https://");
+  const imageLikePath =
+    /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)(\?.*)?(#.*)?$/.test(value) ||
+    value.includes("/uploads/");
+
+  return allowedBase && imageLikePath;
+};
+
+const getSafeImageSrc = (src) => (isValidImageSrc(src) ? src.trim() : "");
+
+const shouldBypassOptimization = (src) =>
+  typeof src === "string" &&
+  (src.startsWith("/uploads/") || src.startsWith("http://") || src.startsWith("https://"));
+
 
 
 const Services = ({
@@ -398,14 +421,15 @@ const Services = ({
 
                     <article>
                       {/* Show image if available, otherwise show icon */}
-                      {service.image ? (
-                        <div className="w-full h-32 mb-3 rounded-lg overflow-hidden">
+                      {getSafeImageSrc(service.image) ? (
+                        <div className="relative w-full h-32 mb-3 rounded-lg overflow-hidden">
                                                     <Image 
-                            src={service.image} 
+                            src={getSafeImageSrc(service.image)} 
                             alt={service.title}
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover group-hover:scale-110 transition-transform duration-300"
+                            unoptimized={shouldBypassOptimization(getSafeImageSrc(service.image))}
                           />
                         </div>
                       ) : (
@@ -450,14 +474,15 @@ const Services = ({
                   >
                     <article>
                       {/* Show image if available, otherwise show icon */}
-                      {service.image ? (
-                        <div className="w-full h-32 mb-3 rounded-lg overflow-hidden">
+                      {getSafeImageSrc(service.image) ? (
+                        <div className="relative w-full h-32 mb-3 rounded-lg overflow-hidden">
                                                     <Image 
-                            src={service.image} 
+                            src={getSafeImageSrc(service.image)} 
                             alt={service.title}
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover group-hover:scale-110 transition-transform duration-300"
+                            unoptimized={shouldBypassOptimization(getSafeImageSrc(service.image))}
                           />
                         </div>
                       ) : (

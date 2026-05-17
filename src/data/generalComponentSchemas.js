@@ -8351,6 +8351,64 @@ generalComponentSchemas.SupportBellatrixSection = {
       ],
     },
   },
+
+};
+
+generalComponentSchemas.CertificationSection = {
+  componentName: "CertificationSection",
+  category: "general",
+  icon: "🏅",
+  displayName: "Certification Section",
+  description: "Responsive grid of certification logos with staggered scroll animations",
+  schema: {
+    type: "object",
+    properties: {
+      sectionTitle: {
+        type: "string",
+        label: "Section Title",
+        placeholder: "Our Certifications",
+        formField: "text",
+      },
+      certifications: {
+        type: "array",
+        label: "Certifications",
+        formField: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              label: "ID (unique)",
+              placeholder: "cert-1",
+              formField: "text",
+            },
+            logoUrl: {
+              type: "string",
+              label: "Logo Image",
+              placeholder: "/images/certifications/cert-1.png",
+              formField: "media",
+              mediaType: "image",
+            },
+            title: {
+              type: "string",
+              label: "Alt Text / Title",
+              placeholder: "ISO 9001 Certification",
+              formField: "text",
+            },
+          },
+        },
+      },
+    },
+  },
+  defaultData: {
+    sectionTitle: "Our Certifications",
+    certifications: [
+      { id: "cert-1", logoUrl: "/images/certifications/cert-1.png", title: "ISO 9001 Certification" },
+      { id: "cert-2", logoUrl: "/images/certifications/cert-2.png", title: "ISO 27001 Certification" },
+      { id: "cert-3", logoUrl: "/images/certifications/cert-3.png", title: "SOC 2 Type II" },
+      { id: "cert-4", logoUrl: "/images/certifications/cert-4.png", title: "GDPR Compliant" },
+    ],
+  },
 };
 
 /**

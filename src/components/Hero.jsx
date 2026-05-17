@@ -116,34 +116,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
 
 
-  // Prefetch next slide video after current one is playing
-  useEffect(() => {
-    const nextIndex = (currentSlide + 1) % slides.length;
-    const nextVideoUrl = slides[nextIndex]?.video;
-    if (nextVideoUrl && nextVideoUrl !== slides[currentSlide]?.video) {
-      const link = document.createElement("link");
-      link.rel = "prefetch";
-      link.as = "video";
-      link.href = nextVideoUrl;
-      document.head.appendChild(link);
-      return () => { try { document.head.removeChild(link); } catch {} };
-    }
-  }, [currentSlide, slides]);
-
-  // Preload current video to reduce initial startup delay
-  useEffect(() => {
-    if (!currentVideoSrc) return;
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "video";
-    link.href = currentVideoSrc;
-    document.head.appendChild(link);
-    return () => {
-      try {
-        document.head.removeChild(link);
-      } catch {}
-    };
-  }, [currentVideoSrc]);
+  // Native video preload is used to avoid browser warnings from manual preload links.
 
   // Handle user interaction to enable video playback
 

@@ -126,10 +126,10 @@ export default function CertificationSection({
                     group relative flex-shrink-0
                     w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]
                     aspect-video
-                    bg-white dark:bg-zinc-900
+                    bg-white
                     rounded-2xl
-                    border border-zinc-100 dark:border-zinc-800
-                    shadow-sm hover:shadow-lg dark:shadow-zinc-950/40
+                    border border-zinc-100
+                    shadow-sm hover:shadow-lg
                     overflow-hidden
                     transition-shadow duration-300
                   "
@@ -146,7 +146,7 @@ export default function CertificationSection({
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center p-4">
-                      <span className="text-center text-sm font-semibold text-zinc-600 dark:text-zinc-300 leading-snug">
+                      <span className="text-center text-sm font-semibold text-zinc-600 leading-snug">
                         {cert.title}
                       </span>
                     </div>

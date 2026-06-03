@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface Certification {
   id: string;
@@ -65,7 +65,28 @@ export default function CertificationSection({
   certifications = defaultCertifications,
 }: CertificationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    const syncTheme = () => {
+      const theme = root.getAttribute("data-theme");
+      setIsDarkTheme(theme === "purple" || theme === "dark");
+    };
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const marqueeItems = useMemo(() => {
     if (!certifications.length) {
       return [];
@@ -89,7 +110,9 @@ export default function CertificationSection({
           variants={titleVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="text-3xl font-bold tracking-tight text-center text-zinc-900 dark:text-zinc-50 mb-10"
+          className={`text-3xl font-bold tracking-tight text-center mb-10 ${
+            isDarkTheme ? "text-white" : "text-black"
+          }`}
         >
           {sectionTitle}
         </motion.h2>

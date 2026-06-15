@@ -74,6 +74,16 @@ export const FOOTER_SETTINGS_MAP = [
     validation: { maxLength: 200 },
   },
   {
+    key: "company_locations",
+    label: "Locations",
+    placeholder: "Enter location address",
+    dataType: "location_array",
+    category: "footer",
+    isPublicDefault: true,
+    description: "Office locations displayed in the footer (you can add multiple)",
+    validation: { maxLength: 300 },
+  },
+  {
     key: "facebook_link",
     label: "Facebook URL",
     placeholder: "https://facebook.com/yourpage",
@@ -204,6 +214,22 @@ export const validateField = (key, value) => {
 
   const { validation, dataType } = field;
   if (!validation) {
+    return { isValid: true, error: null };
+  }
+
+  // Handle location_array type
+  if (dataType === "location_array") {
+    if (!Array.isArray(value)) return { isValid: true, error: null };
+    const nonEmpty = value.filter((item) => item.address && item.address.trim() !== "");
+    if (validation.required && nonEmpty.length === 0) {
+      return { isValid: false, error: `${field.label} is required` };
+    }
+    for (let i = 0; i < nonEmpty.length; i++) {
+      const addr = nonEmpty[i].address.trim();
+      if (validation.maxLength && addr.length > validation.maxLength) {
+        return { isValid: false, error: `Location ${i + 1} must not exceed ${validation.maxLength} characters` };
+      }
+    }
     return { isValid: true, error: null };
   }
 

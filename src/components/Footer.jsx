@@ -7,7 +7,30 @@ import {
   Instagram,
   YouTube,
   KeyboardArrowDown,
+  LocationOn,
+  Place,
+  PinDrop,
+  Room,
+  MyLocation,
+  Home,
+  Business,
+  Store,
+  Factory,
+  Map,
 } from "@mui/icons-material";
+
+const LOCATION_ICON_MAP = {
+  LocationOn,
+  Place,
+  PinDrop,
+  Room,
+  MyLocation,
+  Home,
+  Business,
+  Store,
+  Factory,
+  Map,
+};
 
 import { useState, useEffect } from "react";
 
@@ -137,6 +160,8 @@ const Footer = ({ initialCategories = [] }) => {
 
     contactAddress: "123 Business Avenue, Suite 500",
 
+    contactLocations: [],
+
     facebook: "#",
 
     linkedin: "#",
@@ -190,6 +215,16 @@ const Footer = ({ initialCategories = [] }) => {
 
             contactAddress:
               apiData.company_address || "123 Business Avenue, Suite 500",
+
+            contactLocations: (() => {
+              if (!apiData.company_locations) return [];
+              try {
+                const parsed = JSON.parse(apiData.company_locations);
+                return Array.isArray(parsed) ? parsed : [];
+              } catch {
+                return [];
+              }
+            })(),
 
             facebook: apiData.facebook_link || "#",
 
@@ -475,42 +510,42 @@ const Footer = ({ initialCategories = [] }) => {
                 <span className="break-all">{footerSettings.contactEmail}</span>
               </div>
 
-              <div className="leading-snug" style={{ color: "var(--color-white)" }}>
-                {footerSettings.contactAddress}
-              </div>
+              {(() => {
+                let phones = [];
+                try {
+                  const parsed = JSON.parse(footerSettings.contactPhone);
+                  phones = Array.isArray(parsed) ? parsed : [footerSettings.contactPhone];
+                } catch {
+                  phones = [footerSettings.contactPhone];
+                }
 
-              <div className="flex flex-col gap-1">
-                <span className="font-medium" style={{ color: "var(--color-white)" }}>Phone</span>
-                {(() => {
-                  let phones = [];
-                  try {
-                    const parsed = JSON.parse(footerSettings.contactPhone);
-                    phones = Array.isArray(parsed) ? parsed : [footerSettings.contactPhone];
-                  } catch {
-                    phones = [footerSettings.contactPhone];
-                  }
+                const normalised = phones
+                  .map((p) =>
+                    typeof p === "string"
+                      ? { flag: "", country: "", number: p }
+                      : { flag: p.flag || "", country: p.country || "", number: p.number || "" }
+                  )
+                  .filter((p) => p.number && p.number.trim());
 
-                  const normalised = phones
-                    .map((p) =>
-                      typeof p === "string"
-                        ? { flag: "", number: p }
-                        : { flag: p.flag || "", number: p.number || "" }
-                    )
-                    .filter((p) => p.number && p.number.trim());
+                if (normalised.length === 0) return null;
 
-                  if (normalised.length === 0) return null;
-
-                  return (
-                    <div className="flex flex-col gap-1">
-                      {normalised.map((p, index) => (
-                        <span key={index}>
-                          {p.flag ? `${p.flag} ` : ""}{p.number}
-                        </span>
-                      ))}
-                    </div>
-                  );
-                })()}
-              </div>
+                return (
+                  <div className="flex flex-col gap-2">
+                    {normalised.map((p, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <LocationOn fontSize="small" style={{ flexShrink: 0, opacity: 0.85 }} />
+                        {p.country && (
+                          <span style={{ color: "var(--color-white)", opacity: 0.85 }}>
+                            {p.country}
+                          </span>
+                        )}
+                        {p.flag && <span>{p.flag}</span>}
+                        <span style={{ color: "var(--color-white)" }}>{p.number}</span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>

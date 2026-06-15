@@ -6,6 +6,39 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
+import {
+  LocationOn,
+  Place,
+  PinDrop,
+  Room,
+  MyLocation,
+  Home,
+  Business,
+  Store,
+  Factory,
+  Map,
+} from "@mui/icons-material";
+import toast from "react-hot-toast";
+import { validateField } from "../constants/settingsMap";
+import {
+  updateSetting,
+  createSetting,
+  getSettingByKey,
+} from "../services/settingsApi";
+
+const LOCATION_ICONS = [
+  { value: "LocationOn", label: "Google Maps Pin", Icon: LocationOn },
+  { value: "Place", label: "Place", Icon: Place },
+  { value: "PinDrop", label: "Pin Drop", Icon: PinDrop },
+  { value: "Room", label: "Room", Icon: Room },
+  { value: "MyLocation", label: "My Location", Icon: MyLocation },
+  { value: "Home", label: "Home", Icon: Home },
+  { value: "Business", label: "Business", Icon: Business },
+  { value: "Store", label: "Store", Icon: Store },
+  { value: "Factory", label: "Factory", Icon: Factory },
+  { value: "Map", label: "Map", Icon: Map },
+];
 
 const PHONE_FLAGS = [
   { flag: "", label: "No flag" },
@@ -58,14 +91,12 @@ const PHONE_FLAGS = [
   { flag: "🇱🇾", label: "🇱🇾 Libya" },
   { flag: "🇸🇩", label: "🇸🇩 Sudan" },
 ];
-import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
-import toast from "react-hot-toast";
-import { validateField } from "../constants/settingsMap";
-import {
-  updateSetting,
-  createSetting,
-  getSettingByKey,
-} from "../services/settingsApi";
+
+const getCountryName = (flagEmoji) => {
+  const found = PHONE_FLAGS.find((f) => f.flag === flagEmoji);
+  if (!found || !found.flag) return "";
+  return found.label.replace(found.flag, "").trim();
+};
 
 /**
  * SettingField Component
@@ -77,25 +108,43 @@ const SettingField = ({
   existingId,
   onSaveSuccess,
 }) => {
-  // For phone_array, parse JSON array into [{flag, number}] objects
+  // For phone_array / location_array, parse JSON array into objects
   const parseInitialValue = (val, type) => {
     if (type === "phone_array") {
-      if (!val) return [{ flag: "", number: "" }];
+      if (!val) return [{ flag: "", country: "", number: "" }];
       try {
         const parsed = JSON.parse(val);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Normalise: plain strings → {flag:"", number:string}
           return parsed.map((item) =>
             typeof item === "string"
-              ? { flag: "", number: item }
-              : { flag: item.flag || "", number: item.number || "" }
+              ? { flag: "", country: "", number: item }
+              : {
+                  flag: item.flag || "",
+                  country: item.country || getCountryName(item.flag || ""),
+                  number: item.number || "",
+                }
           );
         }
       } catch {
-        // Not JSON — treat as single plain-string phone
-        return [{ flag: "", number: val }];
+        return [{ flag: "", country: "", number: val }];
       }
-      return [{ flag: "", number: "" }];
+      return [{ flag: "", country: "", number: "" }];
+    }
+    if (type === "location_array") {
+      if (!val) return [{ icon: "LocationOn", address: "" }];
+      try {
+        const parsed = JSON.parse(val);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((item) =>
+            typeof item === "string"
+              ? { icon: "LocationOn", address: item }
+              : { icon: item.icon || "LocationOn", address: item.address || "" }
+          );
+        }
+      } catch {
+        return [{ icon: "LocationOn", address: val }];
+      }
+      return [{ icon: "LocationOn", address: "" }];
     }
     return val || "";
   };
@@ -104,6 +153,7 @@ const SettingField = ({
   const [isSaving, setIsSaving] = useState(false);
   const [validationError, setValidationError] = useState(null);
   const [isDirty, setIsDirty] = useState(false);
+  const [openIconPicker, setOpenIconPicker] = useState(null);
 
   // Update value when existingValue changes (when data loads from API)
   useEffect(() => {
@@ -137,10 +187,15 @@ const SettingField = ({
 
   /**
    * Handle phone array item field change (flag or number)
+   * When flag changes, auto-derive country name.
    */
   const handlePhoneChange = (index, field, val) => {
+    const updates = { [field]: val };
+    if (field === "flag") {
+      updates.country = getCountryName(val);
+    }
     const newPhones = value.map((p, i) =>
-      i === index ? { ...p, [field]: val } : p
+      i === index ? { ...p, ...updates } : p
     );
     setValue(newPhones);
     setIsDirty(true);
@@ -151,7 +206,7 @@ const SettingField = ({
    * Add new phone number
    */
   const addPhone = () => {
-    setValue([...value, { flag: "", number: "" }]);
+    setValue([...value, { flag: "", country: "", number: "" }]);
     setIsDirty(true);
   };
 
@@ -166,11 +221,39 @@ const SettingField = ({
   };
 
   /**
-   * Get value for saving (convert array to JSON string for phone_array)
+   * Handle location array item field change (icon or address)
+   */
+  const handleLocationChange = (index, field, val) => {
+    const newLocations = value.map((loc, i) =>
+      i === index ? { ...loc, [field]: val } : loc
+    );
+    setValue(newLocations);
+    setIsDirty(true);
+    if (validationError) setValidationError(null);
+  };
+
+  const addLocation = () => {
+    setValue([...value, { icon: "LocationOn", address: "" }]);
+    setIsDirty(true);
+  };
+
+  const removeLocation = (index) => {
+    if (value.length > 1) {
+      setValue(value.filter((_, i) => i !== index));
+      setIsDirty(true);
+    }
+  };
+
+  /**
+   * Get value for saving (convert array to JSON string for phone_array / location_array)
    */
   const getValueForSave = () => {
     if (dataType === "phone_array") {
       const cleaned = value.filter((p) => p.number && p.number.trim() !== "");
+      return JSON.stringify(cleaned);
+    }
+    if (dataType === "location_array") {
+      const cleaned = value.filter((loc) => loc.address && loc.address.trim() !== "");
       return JSON.stringify(cleaned);
     }
     return value || "";
@@ -221,7 +304,7 @@ const SettingField = ({
           description: description || "",
           category: category || "footer",
           isPublic: isPublicDefault !== undefined ? isPublicDefault : true,
-          dataType: dataType === "phone_array" ? "string" : (dataType || "string"),
+          dataType: dataType === "phone_array" || dataType === "location_array" ? "string" : (dataType || "string"),
         };
 
         console.log(` [SettingField] PUT request for "${key}":`, payload);
@@ -269,7 +352,7 @@ const SettingField = ({
                 : existingSetting.isPublic !== undefined
                 ? existingSetting.isPublic
                 : true,
-            dataType: dataType === "phone_array" ? "string" : (dataType || existingSetting.dataType || "string"),
+            dataType: dataType === "phone_array" || dataType === "location_array" ? "string" : (dataType || existingSetting.dataType || "string"),
           };
 
           console.log(
@@ -303,7 +386,7 @@ const SettingField = ({
             description: description || "",
             category: category || "footer",
             isPublic: isPublicDefault !== undefined ? isPublicDefault : true,
-            dataType: dataType === "phone_array" ? "string" : (dataType || "string"),
+            dataType: dataType === "phone_array" || dataType === "location_array" ? "string" : (dataType || "string"),
           };
 
           console.log(
@@ -341,9 +424,12 @@ const SettingField = ({
 
   // Determine if field is a textarea
   const isTextarea = dataType === "text";
-  
+
   // Determine if field is a phone array
   const isPhoneArray = dataType === "phone_array";
+
+  // Determine if field is a location array
+  const isLocationArray = dataType === "location_array";
 
   // Check if this is a dynamic field (not in FOOTER_SETTINGS_MAP)
   const isDynamicField = fieldDef.description?.startsWith("Dynamic setting:");
@@ -373,7 +459,102 @@ const SettingField = ({
       {/* Input Field */}
       <div className="flex items-start gap-3">
         <div className="flex-1">
-          {isPhoneArray ? (
+          {isLocationArray ? (
+            /* Location Array Input with icon picker */
+            <div className="space-y-3">
+              {Array.isArray(value) && value.map((loc, index) => {
+                const selectedIconDef = LOCATION_ICONS.find((i) => i.value === (loc.icon || "LocationOn")) || LOCATION_ICONS[0];
+                const SelectedIcon = selectedIconDef.Icon;
+                const isPickerOpen = openIconPicker === index;
+                return (
+                  <div key={index} className="flex items-start gap-2">
+                    {/* Icon picker button + dropdown */}
+                    <div className="relative">
+                      <button
+                        type="button"
+                        disabled={isSaving}
+                        onClick={() => setOpenIconPicker(isPickerOpen ? null : index)}
+                        className="flex items-center gap-1.5 px-2.5 py-2 border rounded-lg bg-[var(--color-white-5)] border-[var(--color-white-20)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-10)] disabled:opacity-50 transition-colors"
+                        title="Choose location icon"
+                      >
+                        <SelectedIcon fontSize="small" />
+                        <span className="text-xs opacity-70">▾</span>
+                      </button>
+
+                      {isPickerOpen && (
+                        <>
+                          {/* Backdrop to close on outside click */}
+                          <div
+                            className="fixed inset-0 z-40"
+                            onClick={() => setOpenIconPicker(null)}
+                          />
+                          {/* Icon grid dropdown */}
+                          <div className="absolute left-0 top-full mt-1 z-50 flex flex-wrap gap-1.5 p-2.5 rounded-xl border border-[var(--color-white-20)] bg-[var(--color-brand-dark-navy)] shadow-2xl w-64">
+                            {LOCATION_ICONS.map(({ value: iconVal, label: iconLabel, Icon: IconComp }) => (
+                              <button
+                                key={iconVal}
+                                type="button"
+                                title={iconLabel}
+                                onClick={() => {
+                                  handleLocationChange(index, "icon", iconVal);
+                                  setOpenIconPicker(null);
+                                }}
+                                className={`flex flex-col items-center justify-center gap-0.5 w-[4.5rem] p-2 rounded-lg text-xs transition-colors
+                                  ${loc.icon === iconVal || (!loc.icon && iconVal === "LocationOn")
+                                    ? "bg-[var(--color-primary)] text-white ring-2 ring-[var(--color-primary)]"
+                                    : "bg-[var(--color-white-5)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-15)]"
+                                  }`}
+                              >
+                                <IconComp fontSize="small" />
+                                <span className="leading-tight text-center" style={{ fontSize: "9px" }}>{iconLabel}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Location address input */}
+                    <input
+                      type="text"
+                      value={loc.address || ""}
+                      onChange={(e) => handleLocationChange(index, "address", e.target.value)}
+                      placeholder={placeholder}
+                      disabled={isSaving}
+                      className={`flex-1 px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] placeholder-[var(--color-text-muted)]
+                        ${validationError
+                          ? "border-[var(--tw-red-500)] focus:ring-[var(--tw-red-500)]/20 focus:border-[var(--tw-red-500)]"
+                          : "focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
+                        }
+                        ${isDirty ? "bg-[var(--tw-yellow-500)]/10 border-[var(--tw-yellow-500)]/30" : ""}
+                        disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2`}
+                    />
+
+                    {value.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeLocation(index)}
+                        disabled={isSaving}
+                        className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors disabled:opacity-50"
+                        title="Remove location"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+              <button
+                type="button"
+                onClick={addLocation}
+                disabled={isSaving}
+                className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors disabled:opacity-50"
+              >
+                <PlusIcon className="w-4 h-4" />
+                Add Location
+              </button>
+            </div>
+          ) : isPhoneArray ? (
             /* Phone Array Input with flag selector */
             <div className="space-y-2">
               {Array.isArray(value) && value.map((phone, index) => (

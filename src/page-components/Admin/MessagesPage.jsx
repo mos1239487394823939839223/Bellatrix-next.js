@@ -94,13 +94,14 @@ const normalize = (m) => ({
 });
 
 // Soft avatar colours, picked deterministically from the sender's name.
+// Mixed with the surface/text tokens so they work in light and dark themes.
 const AVATAR_TONES = [
-  "bg-[#eef4ff] text-[#1d4ed8]",
-  "bg-[#ecfdf5] text-[#047857]",
-  "bg-[#fff7e6] text-[#b45309]",
-  "bg-[#fdf2f8] text-[#be185d]",
-  "bg-[#f5f3ff] text-[#6d28d9]",
-  "bg-[#ecfeff] text-[#0e7490]",
+  "bg-[color-mix(in_srgb,#2563eb_14%,var(--adm-surface))] text-[color-mix(in_srgb,#2563eb_75%,var(--adm-text))]",
+  "bg-[color-mix(in_srgb,#059669_14%,var(--adm-surface))] text-[color-mix(in_srgb,#059669_75%,var(--adm-text))]",
+  "bg-[color-mix(in_srgb,#d97706_14%,var(--adm-surface))] text-[color-mix(in_srgb,#d97706_75%,var(--adm-text))]",
+  "bg-[color-mix(in_srgb,#db2777_14%,var(--adm-surface))] text-[color-mix(in_srgb,#db2777_75%,var(--adm-text))]",
+  "bg-[color-mix(in_srgb,#7c3aed_14%,var(--adm-surface))] text-[color-mix(in_srgb,#7c3aed_75%,var(--adm-text))]",
+  "bg-[color-mix(in_srgb,#0891b2_14%,var(--adm-surface))] text-[color-mix(in_srgb,#0891b2_75%,var(--adm-text))]",
 ];
 const avatarTone = (seed = "") => {
   let h = 0;

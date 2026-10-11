@@ -406,7 +406,7 @@ body {
   --adm-border-strong: #d4dae5;
   --adm-text: #0f1a36;
   --adm-text-muted: #525f7a;
-  --adm-text-subtle: #8892a8;
+  --adm-text-subtle: #667189;
   --adm-accent: #2563eb;
   --adm-accent-hover: #1d4ed8;
   --adm-accent-text: #1d4ed8;
@@ -423,21 +423,24 @@ body {
   color: var(--adm-text);
 }
 
-.adm-dark {
-  --adm-bg: #020b24;
-  --adm-sidebar: #010820;
-  --adm-surface: #071435;
-  --adm-surface-2: #0c1c45;
-  --adm-surface-hover: #102352;
-  --adm-input-bg: rgba(255, 255, 255, 0.05);
-  --adm-border: rgba(148, 163, 216, 0.12);
-  --adm-border-strong: rgba(148, 163, 216, 0.22);
-  --adm-text: #e7ecf7;
-  --adm-text-muted: #9aa7c7;
-  --adm-text-subtle: #6c7aa1;
+/* Dark theme: chosen with the admin theme switcher (sets data-adm-theme on
+   <html>) and always used by .adm-dark islands. */
+.adm-dark,
+html[data-adm-theme="dark"] :is(.admin-layout, .adm-tokens) {
+  --adm-bg: #0a0f1c;
+  --adm-sidebar: #0c1222;
+  --adm-surface: #10182b;
+  --adm-surface-2: #162036;
+  --adm-surface-hover: #1c2842;
+  --adm-input-bg: #0d1426;
+  --adm-border: rgba(148, 163, 184, 0.12);
+  --adm-border-strong: rgba(148, 163, 184, 0.2);
+  --adm-text: #e6eaf3;
+  --adm-text-muted: #a0aac0;
+  --adm-text-subtle: #7f8aa4;
   --adm-accent: #3b82f6;
-  --adm-accent-hover: #2563eb;
-  --adm-accent-text: #93c5fd;
+  --adm-accent-hover: #2f6fe0;
+  --adm-accent-text: #8fb4ff;
   --adm-accent-soft: rgba(59, 130, 246, 0.14);
   --adm-success: #34d399;
   --adm-success-soft: rgba(52, 211, 153, 0.12);
@@ -445,10 +448,16 @@ body {
   --adm-warning-soft: rgba(251, 191, 36, 0.12);
   --adm-danger: #f87171;
   --adm-danger-soft: rgba(248, 113, 113, 0.12);
-  --adm-overlay: rgba(0, 0, 0, 0.6);
-  --adm-shadow: none;
-  --adm-shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --adm-overlay: rgba(2, 6, 23, 0.72);
+  --adm-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  --adm-shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(148, 163, 184, 0.08);
   color: var(--adm-text);
+  color-scheme: dark;
+}
+
+html[data-adm-theme="dark"] :is(.admin-layout, .adm-tokens) ::selection,
+.adm-dark ::selection {
+  background: rgba(59, 130, 246, 0.38);
 }
 
 .admin-layout {

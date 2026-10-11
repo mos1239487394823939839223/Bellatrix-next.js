@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../../hooks/useAuth";
@@ -15,6 +15,9 @@ import {
   KeyIcon,
   ArrowTopRightOnSquareIcon,
   ChevronRightIcon,
+  SunIcon,
+  MoonIcon,
+  ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
 import { useMessageNotifications } from "../../hooks/useMessageNotifications";
 import MessageNotification from "./MessageNotification";
@@ -56,7 +59,80 @@ const SUB_PAGES = [
   { prefix: "/admin/change-password", parent: null, name: "Change password", description: "Update your account password" },
 ];
 
+const THEME_KEY = "adm-theme";
+const THEME_OPTIONS = [
+  { value: "light", label: "Light", icon: SunIcon },
+  { value: "dark", label: "Dark", icon: MoonIcon },
+  { value: "system", label: "System", icon: ComputerDesktopIcon },
+];
+
+// Admin colour theme, stored per browser. The resolved theme is written to
+// <html data-adm-theme> so portalled dialogs pick it up too.
+const useAdminTheme = () => {
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_KEY) || "light";
+    } catch {
+      return "light";
+    }
+  });
+
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => {
+      const resolved = theme === "system" ? (media.matches ? "dark" : "light") : theme;
+      root.dataset.admTheme = resolved;
+    };
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, [theme]);
+
+  // Leaving the admin should not leave the attribute behind.
+  useEffect(() => () => delete document.documentElement.dataset.admTheme, []);
+
+  const update = (value) => {
+    setTheme(value);
+    try {
+      localStorage.setItem(THEME_KEY, value);
+    } catch {
+      // Storage unavailable (private mode); the choice lasts for this visit.
+    }
+  };
+
+  return [theme, update];
+};
+
+const ThemeSwitch = ({ value, onChange }) => (
+  <div role="radiogroup" aria-label="Colour theme" className="flex rounded-lg bg-[var(--adm-surface-2)] p-0.5">
+    {THEME_OPTIONS.map(({ value: v, label, icon: Icon }) => {
+      const active = v === value;
+      return (
+        <button
+          key={v}
+          type="button"
+          role="radio"
+          aria-checked={active}
+          aria-label={`${label} theme`}
+          title={`${label} theme`}
+          onClick={() => onChange(v)}
+          className={cn(
+            "flex h-7 w-7 items-center justify-center rounded-md transition-colors",
+            active
+              ? "bg-[var(--adm-surface)] text-[var(--adm-text)] shadow-sm"
+              : "text-[var(--adm-text-subtle)] hover:text-[var(--adm-text)]"
+          )}
+        >
+          <Icon className="h-4 w-4" />
+        </button>
+      );
+    })}
+  </div>
+);
+
 const ModernAdminLayout = ({ children }) => {
+  const [theme, setTheme] = useAdminTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname() || "";
@@ -239,6 +315,7 @@ const ModernAdminLayout = ({ children }) => {
             </div>
 
             <div className="flex items-center gap-1.5">
+              <ThemeSwitch value={theme} onChange={setTheme} />
               <Link
                 href="/admin/messages"
                 aria-label={`Messages, ${unread} unread`}

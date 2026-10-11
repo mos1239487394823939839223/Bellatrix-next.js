@@ -92,11 +92,11 @@ const ModernAdminLayout = ({ children }) => {
   const displayName = user?.userName || user?.name || user?.email || "Admin";
 
   return (
-    <div className="admin-layout dark flex min-h-screen" data-dashboard="true">
+    <div className="admin-layout flex min-h-screen" data-dashboard="true">
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-[var(--adm-overlay)] lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -110,7 +110,7 @@ const ModernAdminLayout = ({ children }) => {
       >
         <div className="flex h-16 items-center justify-between px-5">
           <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--adm-accent-strong)] text-sm font-bold text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--adm-accent)] text-sm font-bold text-white">
               B
             </span>
             <span className="leading-tight">
@@ -146,8 +146,8 @@ const ModernAdminLayout = ({ children }) => {
                         className={cn(
                           "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                           active
-                            ? "bg-[var(--adm-surface-2)] text-[var(--adm-text)]"
-                            : "text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface)] hover:text-[var(--adm-text)]"
+                            ? "bg-[var(--adm-accent-soft)] text-[var(--adm-accent-text)]"
+                            : "text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface-2)] hover:text-[var(--adm-text)]"
                         )}
                       >
                         <Icon
@@ -158,7 +158,7 @@ const ModernAdminLayout = ({ children }) => {
                         />
                         <span className="flex-1">{item.name}</span>
                         {item.badge === "unread" && unread > 0 && (
-                          <span className="min-w-[1.25rem] rounded-full bg-[var(--adm-accent-strong)] px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums text-white">
+                          <span className="min-w-[1.25rem] rounded-full bg-[var(--adm-accent)] px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums text-white">
                             {unread > 99 ? "99+" : unread}
                           </span>
                         )}
@@ -173,7 +173,7 @@ const ModernAdminLayout = ({ children }) => {
 
         <div className="border-t border-[var(--adm-border)] p-3">
           <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--adm-surface-2)] text-xs font-semibold text-[var(--adm-text)]">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--adm-accent-soft)] text-xs font-semibold text-[var(--adm-accent-text)]">
               {getInitials(displayName)}
             </span>
             <div className="min-w-0 flex-1">
@@ -187,8 +187,8 @@ const ModernAdminLayout = ({ children }) => {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
                 isActive("/admin/change-password")
-                  ? "bg-[var(--adm-surface-2)] text-[var(--adm-text)]"
-                  : "text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface)] hover:text-[var(--adm-text)]"
+                  ? "bg-[var(--adm-accent-soft)] text-[var(--adm-accent-text)]"
+                  : "text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface-2)] hover:text-[var(--adm-text)]"
               )}
             >
               <KeyIcon className="h-4 w-4" />
@@ -268,7 +268,13 @@ const ModernAdminLayout = ({ children }) => {
             pathname.startsWith("/admin/pages/enhanced-create") ? "p-0" : "p-4 sm:p-6 lg:p-8"
           )}
         >
-          {isEnhancedBuilder ? children : <div className="mx-auto w-full max-w-[1400px]">{children}</div>}
+          {isEnhancedBuilder ? (
+            // The page builder still uses hardcoded dark styling, so it keeps
+            // a dark island inside the light admin.
+            <div className="adm-dark adm-island dark min-h-full" data-dashboard="true">{children}</div>
+          ) : (
+            <div className="mx-auto w-full max-w-[1400px]">{children}</div>
+          )}
         </main>
       </div>
 

@@ -90,7 +90,7 @@ const ChangePassword = () => {
           <p className="mt-1 text-sm text-[var(--adm-text-muted)]">Taking you back to the dashboard…</p>
           <Link
             href="/admin/dashboard"
-            className="mt-6 inline-flex h-9 items-center rounded-lg bg-[var(--adm-accent-strong)] px-4 text-sm font-medium text-white hover:bg-[var(--adm-accent)]"
+            className="mt-6 inline-flex h-9 items-center rounded-lg bg-[var(--adm-accent)] px-4 text-sm font-medium text-white hover:bg-[var(--adm-accent-hover)]"
           >
             Go to dashboard
           </Link>

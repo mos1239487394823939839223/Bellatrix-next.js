@@ -73,27 +73,27 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
         >
           <Box
             sx={{
-              backgroundColor: '#1f2937',
-              border: '1px solid #374151',
+              backgroundColor: 'var(--adm-surface, #1f2937)',
+              border: '1px solid var(--adm-border, #374151)',
               borderRadius: '16px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              boxShadow: 'var(--adm-shadow-lg, 0 25px 50px -12px rgba(0, 0, 0, 0.25))',
               backdropFilter: 'blur(16px)',
               minWidth: 400,
               maxWidth: 500,
             }}
           >
             {/* Header */}
-            <Box className="p-4 border-b border-gray-700">
+            <Box className="p-4 border-b border-[var(--adm-border)]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-600 rounded-lg">
+                  <div className="p-2 bg-[var(--adm-accent)] rounded-lg">
                     <EmailIcon className="text-white text-lg" />
                   </div>
                   <div>
-                    <Typography variant="h6" className="text-white font-bold">
+                    <Typography variant="subtitle1" className="!font-semibold text-[var(--adm-text)]">
                       New Message Received
                     </Typography>
-                    <Typography variant="body2" className="text-gray-400">
+                    <Typography variant="body2" className="text-[var(--adm-text-subtle)]">
                       Just now
                     </Typography>
                   </div>
@@ -101,7 +101,7 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
                 <IconButton
                   onClick={handleClose}
                   size="small"
-                  className="text-gray-400 hover:text-white hover:bg-gray-700"
+                  className="!text-[var(--adm-text-subtle)] hover:!text-[var(--adm-text)]"
                 >
                   <CloseIcon fontSize="small" />
                 </IconButton>
@@ -122,20 +122,20 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
                   {getInitials(notification.message?.fullName || notification.message?.name)}
                 </Avatar>
                 <div className="flex-1">
-                  <Typography variant="subtitle1" className="text-white font-semibold">
+                  <Typography variant="subtitle1" className="!font-semibold text-[var(--adm-text)]">
                     {notification.message?.fullName || notification.message?.name || 'Unknown User'}
                   </Typography>
-                  <Typography variant="body2" className="text-gray-400 mb-2">
+                  <Typography variant="body2" className="mb-2 text-[var(--adm-text-muted)]">
                     {notification.message?.email || 'No email provided'}
                   </Typography>
                   {notification.message?.subject && (
-                    <Typography variant="body2" className="text-blue-300 font-medium mb-1">
+                    <Typography variant="body2" className="mb-1 font-medium text-[var(--adm-accent-text)]">
                       Subject: {notification.message.subject}
                     </Typography>
                   )}
                   <Typography 
                     variant="body2" 
-                    className="text-gray-300 line-clamp-2"
+                    className="line-clamp-2 text-[var(--adm-text)]"
                     sx={{
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
@@ -156,7 +156,7 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
                     size="small"
                     startIcon={<ReplyIcon />}
                     onClick={handleReply}
-                    className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white"
+                    className="!normal-case"
                   >
                     Reply
                   </Button>
@@ -165,14 +165,12 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
                     size="small"
                     startIcon={<ViewIcon />}
                     onClick={handleView}
-                    className="border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white"
+                    className="!normal-case"
                   >
-                    View All
+                    Open message
                   </Button>
                 </div>
-                <Typography variant="caption" className="text-gray-500">
-                  Click to manage messages
-                </Typography>
+                
               </div>
             </Box>
           </Box>

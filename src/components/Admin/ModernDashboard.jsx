@@ -165,7 +165,7 @@ const ModernDashboard = () => {
             title="Recent messages"
             description="Latest contact form submissions"
             actions={
-              <Link href="/admin/messages" className="inline-flex items-center gap-1 text-sm text-[#93c5fd] hover:underline">
+              <Link href="/admin/messages" className="inline-flex items-center gap-1 text-sm text-[var(--adm-accent-text)] hover:underline">
                 Open inbox <ArrowRightIcon className="h-3.5 w-3.5" />
               </Link>
             }
@@ -218,7 +218,7 @@ const ModernDashboard = () => {
             {QUICK_LINKS.map(({ name: label, description, href, icon: Icon }) => (
               <li key={href}>
                 <Link href={href} className="group flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-[var(--adm-surface-2)]">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--adm-accent-soft)] text-[#93c5fd]">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--adm-accent-soft)] text-[var(--adm-accent-text)]">
                     <Icon className="h-4 w-4" />
                   </span>
                   <span className="min-w-0 flex-1">
@@ -250,7 +250,7 @@ const ModernDashboard = () => {
           title="Pages"
           description={pages ? `${publishedPct}% of pages are published` : undefined}
           actions={
-            <Link href="/admin/pages" className="inline-flex items-center gap-1 text-sm text-[#93c5fd] hover:underline">
+            <Link href="/admin/pages" className="inline-flex items-center gap-1 text-sm text-[var(--adm-accent-text)] hover:underline">
               All pages <ArrowRightIcon className="h-3.5 w-3.5" />
             </Link>
           }
@@ -289,7 +289,7 @@ const ModernDashboard = () => {
                       {p.isPublished ? <Badge tone="success" dot>Published</Badge> : <Badge dot>Draft</Badge>}
                     </td>
                     <td className="px-3 py-2.5 text-right">
-                      <Link href={`/admin/pages/enhanced-edit/${p.id}`} className="text-sm text-[#93c5fd] hover:underline">
+                      <Link href={`/admin/pages/enhanced-edit/${p.id}`} className="text-sm text-[var(--adm-accent-text)] hover:underline">
                         Edit
                       </Link>
                     </td>

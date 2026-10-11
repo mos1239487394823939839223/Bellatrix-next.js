@@ -266,7 +266,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
           exit={{ opacity: 0 }}
 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--adm-overlay)] backdrop-blur-[2px]"
 
           onClick={handleBackdropClick}
 
@@ -282,7 +282,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
             transition={{ type: "spring", duration: 0.3 }}
 
-            className="bg-gray-800 rounded-xl shadow-2xl max-w-md w-full border border-gray-700 overflow-hidden"
+            className="bg-[var(--adm-surface)] rounded-2xl shadow-[var(--adm-shadow-lg)] max-w-md w-full border border-[var(--adm-border)] overflow-hidden"
 
             onClick={(e) => e.stopPropagation()}
 
@@ -290,9 +290,9 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
             {/* Modal Header */}
 
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700 bg-gradient-to-r from-blue-600/20 to-purple-600/20">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--adm-border)]">
 
-              <h3 className="text-xl font-semibold text-white">
+              <h3 className="text-base font-semibold text-[var(--adm-text)]">
 
                 Add New Setting
 
@@ -304,7 +304,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                 disabled={isSubmitting}
 
-                className="text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-[var(--adm-text-subtle)] hover:text-[var(--adm-text)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 
                 aria-label="Close modal"
 
@@ -330,7 +330,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   htmlFor="setting-key"
 
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-[var(--adm-text)] mb-2"
 
                 >
 
@@ -352,13 +352,13 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   disabled={isSubmitting}
 
-                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2 bg-[var(--adm-input-bg)] border border-[var(--adm-border-strong)] rounded-lg text-[var(--adm-text)] placeholder-[var(--adm-text-subtle)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
 
                   autoFocus
 
                 />
 
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-[var(--adm-text-muted)]">
 
                   Use lowercase letters, numbers, underscores, or hyphens.
 
@@ -376,7 +376,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   htmlFor="setting-value"
 
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-[var(--adm-text)] mb-2"
 
                 >
 
@@ -398,7 +398,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   disabled={isSubmitting}
 
-                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+                  className="w-full px-4 py-2 bg-[var(--adm-input-bg)] border border-[var(--adm-border-strong)] rounded-lg text-[var(--adm-text)] placeholder-[var(--adm-text-subtle)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none"
 
                 />
 
@@ -414,13 +414,13 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   htmlFor="setting-description"
 
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-sm font-medium text-[var(--adm-text)] mb-2"
 
                 >
 
                   Description{" "}
 
-                  <span className="text-gray-500 text-xs">(Optional)</span>
+                  <span className="text-[var(--adm-text-subtle)] text-xs">(Optional)</span>
 
                 </label>
 
@@ -438,7 +438,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   disabled={isSubmitting}
 
-                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+                  className="w-full px-4 py-2 bg-[var(--adm-input-bg)] border border-[var(--adm-border-strong)] rounded-lg text-[var(--adm-text)] placeholder-[var(--adm-text-subtle)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none"
 
                 />
 
@@ -456,23 +456,23 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                 </p>
 
-                <ul className="text-xs text-gray-400 space-y-1">
+                <ul className="text-xs text-[var(--adm-text-muted)] space-y-1">
 
                   <li>
 
-                    • Category: <span className="text-white">Footer</span>
+                    • Category: <span className="text-[var(--adm-text)]">Footer</span>
 
                   </li>
 
                   <li>
 
-                    • Is Public: <span className="text-white">true</span>
+                    • Is Public: <span className="text-[var(--adm-text)]">true</span>
 
                   </li>
 
                   <li>
 
-                    • Data Type: <span className="text-white">string</span>
+                    • Data Type: <span className="text-[var(--adm-text)]">string</span>
 
                   </li>
 
@@ -494,7 +494,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   disabled={isSubmitting}
 
-                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors disabled:opacity-50"
+                  className="px-4 py-2 bg-[var(--adm-surface)] border border-[var(--adm-border-strong)] hover:bg-[var(--adm-surface-2)] text-[var(--adm-text)] rounded-lg transition-colors disabled:opacity-50"
 
                 >
 
@@ -508,7 +508,7 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
                   disabled={isSubmitting || !key.trim() || !value.trim()}
 
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-[var(--adm-accent)] hover:bg-[var(--adm-accent-hover)] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 
                 >
 

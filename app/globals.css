@@ -237,83 +237,55 @@ body {
   position: relative;
 }
 
-/* Force dark color scheme on admin/dashboard pages - prevents system theme from affecting form elements */
-/* This overrides Windows light/dark mode preferences */
-
-/* Apply to root when admin-layout or data-dashboard is present */
-:root:has(.admin-layout),
-:root:has([data-dashboard="true"]) {
-  color-scheme: dark only !important;
-}
-
+/* Admin form controls follow the --adm-* tokens below, so light areas get
+   light inputs and .adm-dark islands (page builder) keep dark ones. */
 .admin-layout,
-.admin-layout *,
-[data-dashboard="true"],
-[data-dashboard="true"] * {
-  color-scheme: dark only !important;
+.adm-tokens {
+  color-scheme: light;
 }
 
-/* Force ALL form elements and cards in admin to use dark theme colors explicitly */
-/* IMPORTANT: Exclude checkboxes and radio buttons from appearance:none to keep them clickable */
-.admin-layout input:not([type="checkbox"]):not([type="radio"]),
-.admin-layout textarea,
-.admin-layout select,
-.admin-layout button,
-[data-dashboard="true"] input:not([type="checkbox"]):not([type="radio"]),
-[data-dashboard="true"] textarea,
-[data-dashboard="true"] select,
-[data-dashboard="true"] button {
-  color-scheme: dark only !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
+.adm-dark {
+  color-scheme: dark;
 }
 
-/* Keep checkboxes and radio buttons with proper styling but allow native behavior */
-.admin-layout input[type="checkbox"],
-.admin-layout input[type="radio"],
-[data-dashboard="true"] input[type="checkbox"],
-[data-dashboard="true"] input[type="radio"] {
-  color-scheme: dark only !important;
-  accent-color: var(--color-primary);
+:is(.admin-layout, .adm-tokens) input:not([type="checkbox"]):not([type="radio"]),
+:is(.admin-layout, .adm-tokens) textarea,
+:is(.admin-layout, .adm-tokens) select,
+:is(.admin-layout, .adm-tokens) button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
-/* Override any system light mode styles on inputs */
-.admin-layout input:not([type="checkbox"]):not([type="radio"]),
-.admin-layout textarea,
-[data-dashboard="true"] input:not([type="checkbox"]):not([type="radio"]),
-[data-dashboard="true"] textarea {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+:is(.admin-layout, .adm-tokens) input[type="checkbox"],
+:is(.admin-layout, .adm-tokens) input[type="radio"] {
+  accent-color: var(--adm-accent);
 }
 
-/* Placeholder text color */
-.admin-layout input::placeholder,
-.admin-layout textarea::placeholder,
-[data-dashboard="true"] input::placeholder,
-[data-dashboard="true"] textarea::placeholder {
-  color: rgba(156, 163, 175, 1) !important;
+:is(.admin-layout, .adm-tokens) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+:is(.admin-layout, .adm-tokens) textarea,
+:is(.admin-layout, .adm-tokens) select {
+  background-color: var(--adm-input-bg) !important;
+  color: var(--adm-text) !important;
+  border-color: var(--adm-border-strong) !important;
+}
+
+:is(.admin-layout, .adm-tokens) input::placeholder,
+:is(.admin-layout, .adm-tokens) textarea::placeholder {
+  color: var(--adm-text-subtle) !important;
   opacity: 1 !important;
 }
 
-/* Autofill styles - prevent browser from making it white */
-.admin-layout input:-webkit-autofill,
-.admin-layout input:-webkit-autofill:hover,
-.admin-layout input:-webkit-autofill:focus,
-.admin-layout textarea:-webkit-autofill,
-[data-dashboard="true"] input:-webkit-autofill,
-[data-dashboard="true"] input:-webkit-autofill:hover,
-[data-dashboard="true"] input:-webkit-autofill:focus,
-[data-dashboard="true"] textarea:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px rgba(30, 41, 59, 1) inset !important;
-  -webkit-text-fill-color: white !important;
-  caret-color: white !important;
+:is(.admin-layout, .adm-tokens) input:-webkit-autofill,
+:is(.admin-layout, .adm-tokens) input:-webkit-autofill:hover,
+:is(.admin-layout, .adm-tokens) input:-webkit-autofill:focus,
+:is(.admin-layout, .adm-tokens) textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--adm-input-bg) inset !important;
+  -webkit-text-fill-color: var(--adm-text) !important;
+  caret-color: var(--adm-text) !important;
 }
 
-/* Ensure Slide Description label in Implementation/Landing hero arrays is white in dark admin mode */
-.admin-layout .hero-slide-description-label,
-[data-dashboard="true"] .hero-slide-description-label {
+.adm-dark .hero-slide-description-label {
   color: var(--color-white) !important;
 }
 
@@ -419,22 +391,53 @@ body {
 
 /* ==================================================
    ADMIN DASHBOARD TOKENS
-   Scoped to .admin-layout so the public site is untouched.
+   Light by default; .adm-dark re-themes a subtree (page builder, legacy
+   modals) that still uses hardcoded dark styling.
    ================================================== */
 .admin-layout,
 .adm-tokens {
+  --adm-bg: #f5f7fb;
+  --adm-sidebar: #ffffff;
+  --adm-surface: #ffffff;
+  --adm-surface-2: #f1f4f9;
+  --adm-surface-hover: #e8edf5;
+  --adm-input-bg: #ffffff;
+  --adm-border: #e5e9f0;
+  --adm-border-strong: #d4dae5;
+  --adm-text: #0f1a36;
+  --adm-text-muted: #525f7a;
+  --adm-text-subtle: #8892a8;
+  --adm-accent: #2563eb;
+  --adm-accent-hover: #1d4ed8;
+  --adm-accent-text: #1d4ed8;
+  --adm-accent-soft: #eef4ff;
+  --adm-success: #059669;
+  --adm-success-soft: #ecfdf5;
+  --adm-warning: #b45309;
+  --adm-warning-soft: #fff7e6;
+  --adm-danger: #dc2626;
+  --adm-danger-soft: #fef2f2;
+  --adm-overlay: rgba(15, 23, 42, 0.45);
+  --adm-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.04);
+  --adm-shadow-lg: 0 12px 32px -8px rgba(16, 24, 40, 0.18), 0 4px 8px -4px rgba(16, 24, 40, 0.06);
+  color: var(--adm-text);
+}
+
+.adm-dark {
   --adm-bg: #020b24;
   --adm-sidebar: #010820;
   --adm-surface: #071435;
   --adm-surface-2: #0c1c45;
   --adm-surface-hover: #102352;
+  --adm-input-bg: rgba(255, 255, 255, 0.05);
   --adm-border: rgba(148, 163, 216, 0.12);
   --adm-border-strong: rgba(148, 163, 216, 0.22);
   --adm-text: #e7ecf7;
   --adm-text-muted: #9aa7c7;
   --adm-text-subtle: #6c7aa1;
   --adm-accent: #3b82f6;
-  --adm-accent-strong: #2563eb;
+  --adm-accent-hover: #2563eb;
+  --adm-accent-text: #93c5fd;
   --adm-accent-soft: rgba(59, 130, 246, 0.14);
   --adm-success: #34d399;
   --adm-success-soft: rgba(52, 211, 153, 0.12);
@@ -442,6 +445,9 @@ body {
   --adm-warning-soft: rgba(251, 191, 36, 0.12);
   --adm-danger: #f87171;
   --adm-danger-soft: rgba(248, 113, 113, 0.12);
+  --adm-overlay: rgba(0, 0, 0, 0.6);
+  --adm-shadow: none;
+  --adm-shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   color: var(--adm-text);
 }
 
@@ -449,28 +455,30 @@ body {
   background-color: var(--adm-bg);
 }
 
-.admin-layout ::selection,
-.adm-tokens ::selection {
-  background: rgba(59, 130, 246, 0.45);
-  color: #fff;
+.adm-dark.adm-island {
+  background-color: var(--adm-bg);
 }
 
-.admin-layout .adm-scroll {
+:is(.admin-layout, .adm-tokens) ::selection {
+  background: rgba(37, 99, 235, 0.18);
+  color: inherit;
+}
+
+.adm-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 216, 0.22) transparent;
+  scrollbar-color: var(--adm-border-strong) transparent;
 }
 
-.admin-layout .adm-scroll::-webkit-scrollbar {
+.adm-scroll::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.admin-layout .adm-scroll::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 216, 0.22);
+.adm-scroll::-webkit-scrollbar-thumb {
+  background: var(--adm-border-strong);
   border-radius: 999px;
 }
 
-/* Focus ring for keyboard users across the admin */
 :is(.admin-layout, .adm-tokens) :is(button, a, input, textarea, select, [tabindex]):focus-visible {
   outline: 2px solid var(--adm-accent);
   outline-offset: 2px;

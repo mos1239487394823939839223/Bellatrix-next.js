@@ -236,7 +236,7 @@ function CategoriesManagement() {
                 {categories.map((cat) => (
                   <tr key={cat.id} className="group hover:bg-[var(--adm-surface-2)]/50">
                     <td className="px-4 py-3">
-                      <button type="button" onClick={() => openEdit(cat)} className="font-medium text-[var(--adm-text)] hover:text-[#93c5fd]">
+                      <button type="button" onClick={() => openEdit(cat)} className="font-medium text-[var(--adm-text)] hover:text-[var(--adm-accent-text)]">
                         {cat.name}
                       </button>
                       {cat.description && (

@@ -40,7 +40,7 @@ const Modal = ({
           {/* Modal */}
           <div className="flex min-h-full items-center justify-center p-4">
             <MotionDiv
-              className={`relative w-full ${sizeClasses[size]} bg-[var(--adm-surface,#0b1a3f)] border border-[var(--adm-border-strong,rgba(255,255,255,0.2))] rounded-xl shadow-2xl ${className}`}
+              className={`adm-dark dark relative w-full ${sizeClasses[size]} bg-[var(--adm-surface,#0b1a3f)] border border-[var(--adm-border-strong,rgba(255,255,255,0.2))] rounded-xl shadow-2xl ${className}`}
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}

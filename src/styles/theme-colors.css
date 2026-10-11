@@ -674,8 +674,11 @@
 [data-dashboard="true"] .transition-all,
 .admin-layout button,
 .admin-layout a,
-.admin-layout .transition-all {
-  transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease !important;
+.admin-layout .transition-all,
+.admin-layout [class*="transition-colors"],
+.admin-layout [class*="transition-transform"] {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease, transform 0.2s ease, opacity 0.15s ease !important;
 }
 
 /* ==================================================

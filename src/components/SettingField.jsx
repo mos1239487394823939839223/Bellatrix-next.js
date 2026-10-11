@@ -435,10 +435,10 @@ const SettingField = ({
   const isDynamicField = fieldDef.description?.startsWith("Dynamic setting:");
 
   return (
-    <div className="bg-[var(--color-white-5)] hover:bg-[var(--color-white-10)] rounded-xl border border-[var(--color-white-10)] hover:border-[var(--color-white-20)] p-4 transition-all duration-200">
+    <div className="bg-[var(--adm-surface)] hover:bg-[var(--adm-surface-2)] rounded-xl border border-[var(--adm-border)] hover:border-[var(--adm-border-strong)] p-4 transition-all duration-200">
       {/* Label and Description */}
       <div className="mb-3">
-        <label className="flex items-center gap-2 text-sm font-semibold text-[var(--color-text-inverse)] mb-1">
+        <label className="flex items-center gap-2 text-sm font-semibold text-[var(--adm-text)] mb-1">
           {label}
           {fieldDef.validation?.required && (
             <span className="text-[var(--tw-red-400)] ml-1">*</span>
@@ -450,7 +450,7 @@ const SettingField = ({
           )}
         </label>
         {description && (
-          <p className="text-xs text-[var(--color-text-inverse)] mb-2">
+          <p className="text-xs text-[var(--adm-text-muted)] mb-2">
             {description}
           </p>
         )}
@@ -474,7 +474,7 @@ const SettingField = ({
                         type="button"
                         disabled={isSaving}
                         onClick={() => setOpenIconPicker(isPickerOpen ? null : index)}
-                        className="flex items-center gap-1.5 px-2.5 py-2 border rounded-lg bg-[var(--color-white-5)] border-[var(--color-white-20)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-10)] disabled:opacity-50 transition-colors"
+                        className="flex items-center gap-1.5 px-2.5 py-2 border rounded-lg bg-[var(--adm-surface)] border-[var(--adm-border-strong)] text-[var(--adm-text)] hover:bg-[var(--adm-surface-2)] disabled:opacity-50 transition-colors"
                         title="Choose location icon"
                       >
                         <SelectedIcon fontSize="small" />
@@ -489,7 +489,7 @@ const SettingField = ({
                             onClick={() => setOpenIconPicker(null)}
                           />
                           {/* Icon grid dropdown */}
-                          <div className="absolute left-0 top-full mt-1 z-50 flex flex-wrap gap-1.5 p-2.5 rounded-xl border border-[var(--color-white-20)] bg-[var(--color-brand-dark-navy)] shadow-2xl w-64">
+                          <div className="absolute left-0 top-full mt-1 z-50 flex flex-wrap gap-1.5 p-2.5 rounded-xl border border-[var(--adm-border-strong)] bg-[var(--adm-surface)] shadow-[var(--adm-shadow-lg)] shadow-2xl w-64">
                             {LOCATION_ICONS.map(({ value: iconVal, label: iconLabel, Icon: IconComp }) => (
                               <button
                                 key={iconVal}
@@ -502,7 +502,7 @@ const SettingField = ({
                                 className={`flex flex-col items-center justify-center gap-0.5 w-[4.5rem] p-2 rounded-lg text-xs transition-colors
                                   ${loc.icon === iconVal || (!loc.icon && iconVal === "LocationOn")
                                     ? "bg-[var(--color-primary)] text-white ring-2 ring-[var(--color-primary)]"
-                                    : "bg-[var(--color-white-5)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-15)]"
+                                    : "bg-[var(--adm-surface)] text-[var(--adm-text)] hover:bg-[var(--adm-surface-2)]"
                                   }`}
                               >
                                 <IconComp fontSize="small" />
@@ -521,10 +521,10 @@ const SettingField = ({
                       onChange={(e) => handleLocationChange(index, "address", e.target.value)}
                       placeholder={placeholder}
                       disabled={isSaving}
-                      className={`flex-1 px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] placeholder-[var(--color-text-muted)]
+                      className={`flex-1 px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--adm-surface)] text-[var(--adm-text)] border-[var(--adm-border-strong)] placeholder-[var(--adm-text-subtle)]
                         ${validationError
                           ? "border-[var(--tw-red-500)] focus:ring-[var(--tw-red-500)]/20 focus:border-[var(--tw-red-500)]"
-                          : "focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
+                          : "focus:ring-[var(--adm-accent)]/20 focus:border-[var(--adm-accent)]"
                         }
                         ${isDirty ? "bg-[var(--tw-yellow-500)]/10 border-[var(--tw-yellow-500)]/30" : ""}
                         disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2`}
@@ -564,7 +564,7 @@ const SettingField = ({
                     value={phone.flag || ""}
                     onChange={(e) => handlePhoneChange(index, "flag", e.target.value)}
                     disabled={isSaving}
-                    className="w-44 px-2 py-2.5 border rounded-lg text-sm bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] disabled:opacity-50 cursor-pointer appearance-none"
+                    className="w-44 px-2 py-2.5 border rounded-lg text-sm bg-[var(--adm-surface)] text-[var(--adm-text)] border-[var(--adm-border-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--adm-accent)]/20 focus:border-[var(--adm-accent)] disabled:opacity-50 cursor-pointer appearance-none"
                   >
                     {PHONE_FLAGS.map((f) => (
                       <option key={f.flag} value={f.flag}>
@@ -580,11 +580,11 @@ const SettingField = ({
                     onChange={(e) => handlePhoneChange(index, "number", e.target.value)}
                     placeholder={placeholder}
                     disabled={isSaving}
-                    className={`flex-1 px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] placeholder-[var(--color-text-muted)]
+                    className={`flex-1 px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--adm-surface)] text-[var(--adm-text)] border-[var(--adm-border-strong)] placeholder-[var(--adm-text-subtle)]
                       ${
                         validationError
                           ? "border-[var(--tw-red-500)] focus:ring-[var(--tw-red-500)]/20 focus:border-[var(--tw-red-500)]"
-                          : "focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
+                          : "focus:ring-[var(--adm-accent)]/20 focus:border-[var(--adm-accent)]"
                       }
                       ${isDirty ? "bg-[var(--tw-yellow-500)]/10 border-[var(--tw-yellow-500)]/30" : ""}
                       disabled:opacity-50 disabled:cursor-not-allowed
@@ -621,11 +621,11 @@ const SettingField = ({
               placeholder={placeholder}
               rows={3}
               disabled={isSaving}
-              className={`w-full px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] placeholder-[var(--color-text-muted)]
+              className={`w-full px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--adm-surface)] text-[var(--adm-text)] border-[var(--adm-border-strong)] placeholder-[var(--adm-text-subtle)]
                 ${
                   validationError
                     ? "border-[var(--tw-red-500)] focus:ring-[var(--tw-red-500)]/20 focus:border-[var(--tw-red-500)]"
-                    : "focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
+                    : "focus:ring-[var(--adm-accent)]/20 focus:border-[var(--adm-accent)]"
                 }
                 ${isDirty ? "bg-[var(--tw-yellow-500)]/10 border-[var(--tw-yellow-500)]/30" : ""}
                 disabled:opacity-50 disabled:cursor-not-allowed
@@ -644,11 +644,11 @@ const SettingField = ({
               onChange={handleChange}
               placeholder={placeholder}
               disabled={isSaving}
-              className={`w-full px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--color-white-5)] text-[var(--color-text-inverse)] border-[var(--color-white-20)] placeholder-[var(--color-text-muted)]
+              className={`w-full px-4 py-2.5 border rounded-lg text-sm transition-all duration-200 bg-[var(--adm-surface)] text-[var(--adm-text)] border-[var(--adm-border-strong)] placeholder-[var(--adm-text-subtle)]
                 ${
                   validationError
                     ? "border-[var(--tw-red-500)] focus:ring-[var(--tw-red-500)]/20 focus:border-[var(--tw-red-500)]"
-                    : "focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
+                    : "focus:ring-[var(--adm-accent)]/20 focus:border-[var(--adm-accent)]"
                 }
                 ${isDirty ? "bg-[var(--tw-yellow-500)]/10 border-[var(--tw-yellow-500)]/30" : ""}
                 disabled:opacity-50 disabled:cursor-not-allowed
@@ -687,7 +687,7 @@ const SettingField = ({
           <button
             onClick={handleSave}
             disabled={!isDirty || isSaving}
-            className="p-2.5 rounded-lg bg-[var(--color-primary)] text-[var(--color-text-inverse)] hover:bg-[var(--color-primary-dark)] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-[var(--color-primary)]/25"
+            className="p-2.5 rounded-lg bg-[var(--adm-accent)] text-white hover:bg-[var(--adm-accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-[var(--color-primary)]/25"
             title="Save"
           >
             {isSaving ? (

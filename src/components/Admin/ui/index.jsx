@@ -35,7 +35,7 @@ export const PageHeader = ({ title, description, actions, eyebrow }) => (
 export const Panel = ({ children, className = "", as: Tag = "section", ...props }) => (
   <Tag
     className={cn(
-      "rounded-xl border border-[var(--adm-border)] bg-[var(--adm-surface)]",
+      "rounded-xl border border-[var(--adm-border)] bg-[var(--adm-surface)] shadow-[var(--adm-shadow)]",
       className
     )}
     {...props}
@@ -63,14 +63,14 @@ export const PanelHeader = ({ title, description, actions, className = "" }) => 
 
 const BUTTON_VARIANTS = {
   primary:
-    "bg-[var(--adm-accent-strong)] text-white hover:bg-[var(--adm-accent)] border border-transparent",
+    "bg-[var(--adm-accent)] text-white hover:bg-[var(--adm-accent-hover)] border border-transparent shadow-sm",
   secondary:
-    "bg-[var(--adm-surface-2)] text-[var(--adm-text)] border border-[var(--adm-border-strong)] hover:bg-[var(--adm-surface-hover)]",
+    "bg-[var(--adm-surface)] text-[var(--adm-text)] border border-[var(--adm-border-strong)] hover:bg-[var(--adm-surface-2)] shadow-sm",
   ghost:
     "bg-transparent text-[var(--adm-text-muted)] border border-transparent hover:bg-[var(--adm-surface-2)] hover:text-[var(--adm-text)]",
   danger:
-    "bg-[var(--adm-danger-soft)] text-[var(--adm-danger)] border border-[rgba(248,113,113,0.25)] hover:bg-[rgba(248,113,113,0.2)]",
-  dangerSolid: "bg-red-600 text-white border border-transparent hover:bg-red-500",
+    "bg-[var(--adm-surface)] text-[var(--adm-danger)] border border-[var(--adm-border-strong)] hover:bg-[var(--adm-danger-soft)] hover:border-[color-mix(in_srgb,var(--adm-danger)_30%,transparent)]",
+  dangerSolid: "bg-red-600 text-white border border-transparent hover:bg-red-700 shadow-sm",
 };
 
 const BUTTON_SIZES = {
@@ -136,10 +136,10 @@ export const IconBtn = ({ icon: Icon, label, variant = "ghost", className = "", 
 
 const BADGE_TONES = {
   neutral: "bg-[var(--adm-surface-2)] text-[var(--adm-text-muted)] border-[var(--adm-border)]",
-  accent: "bg-[var(--adm-accent-soft)] text-[#93c5fd] border-[rgba(59,130,246,0.3)]",
-  success: "bg-[var(--adm-success-soft)] text-[var(--adm-success)] border-[rgba(52,211,153,0.25)]",
-  warning: "bg-[var(--adm-warning-soft)] text-[var(--adm-warning)] border-[rgba(251,191,36,0.25)]",
-  danger: "bg-[var(--adm-danger-soft)] text-[var(--adm-danger)] border-[rgba(248,113,113,0.25)]",
+  accent: "bg-[var(--adm-accent-soft)] text-[var(--adm-accent-text)] border-[color-mix(in_srgb,var(--adm-accent)_22%,transparent)]",
+  success: "bg-[var(--adm-success-soft)] text-[var(--adm-success)] border-[color-mix(in_srgb,var(--adm-success)_22%,transparent)]",
+  warning: "bg-[var(--adm-warning-soft)] text-[var(--adm-warning)] border-[color-mix(in_srgb,var(--adm-warning)_22%,transparent)]",
+  danger: "bg-[var(--adm-danger-soft)] text-[var(--adm-danger)] border-[color-mix(in_srgb,var(--adm-danger)_22%,transparent)]",
 };
 
 export const Badge = ({ tone = "neutral", children, dot = false, className = "" }) => (
@@ -157,7 +157,7 @@ export const Badge = ({ tone = "neutral", children, dot = false, className = "" 
 
 export const StatCard = ({ label, value, hint, icon: Icon, tone = "accent", onClick }) => {
   const iconTone = {
-    accent: "text-[#93c5fd] bg-[var(--adm-accent-soft)]",
+    accent: "text-[var(--adm-accent-text)] bg-[var(--adm-accent-soft)]",
     success: "text-[var(--adm-success)] bg-[var(--adm-success-soft)]",
     warning: "text-[var(--adm-warning)] bg-[var(--adm-warning-soft)]",
     neutral: "text-[var(--adm-text-muted)] bg-[var(--adm-surface-2)]",
@@ -168,8 +168,8 @@ export const StatCard = ({ label, value, hint, icon: Icon, tone = "accent", onCl
       type={onClick ? "button" : undefined}
       onClick={onClick}
       className={cn(
-        "flex w-full items-start justify-between gap-4 rounded-xl border border-[var(--adm-border)] bg-[var(--adm-surface)] p-5 text-left",
-        onClick && "transition-colors hover:border-[var(--adm-border-strong)] hover:bg-[var(--adm-surface-2)]"
+        "flex w-full items-start justify-between gap-4 rounded-xl border border-[var(--adm-border)] bg-[var(--adm-surface)] p-5 text-left shadow-[var(--adm-shadow)]",
+        onClick && "transition-colors hover:border-[var(--adm-border-strong)]"
       )}
     >
       <div className="min-w-0">
@@ -216,7 +216,7 @@ export const Segmented = ({ options, value, onChange, className = "" }) => (
   <div
     role="tablist"
     className={cn(
-      "inline-flex rounded-lg border border-[var(--adm-border)] bg-[var(--adm-bg)] p-0.5",
+      "inline-flex rounded-lg bg-[var(--adm-surface-2)] p-0.5",
       className
     )}
   >
@@ -232,7 +232,7 @@ export const Segmented = ({ options, value, onChange, className = "" }) => (
           className={cn(
             "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
             active
-              ? "bg-[var(--adm-surface-2)] text-[var(--adm-text)] shadow-sm"
+              ? "bg-[var(--adm-surface)] text-[var(--adm-text)] shadow-sm"
               : "text-[var(--adm-text-muted)] hover:text-[var(--adm-text)]"
           )}
         >
@@ -345,12 +345,12 @@ export const Dialog = ({ open, onClose, title, description, children, footer, si
 
   return createPortal(
     <div className="adm-tokens fixed inset-0 z-[60] flex items-center justify-center p-4" data-dashboard="true">
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="absolute inset-0 bg-[var(--adm-overlay)] backdrop-blur-[2px]" onClick={onClose} />
       <div
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative w-full rounded-xl border border-[var(--adm-border-strong)] bg-[var(--adm-surface)] shadow-2xl",
+          "relative w-full rounded-2xl border border-[var(--adm-border)] bg-[var(--adm-surface)] shadow-[var(--adm-shadow-lg)]",
           width
         )}
       >
@@ -364,7 +364,7 @@ export const Dialog = ({ open, onClose, title, description, children, footer, si
           <IconBtn icon={XMarkIcon} label="Close" onClick={onClose} />
         </div>
         {children && <div className="px-5 pt-4">{children}</div>}
-        {footer && <div className="mt-5 flex justify-end gap-2 border-t border-[var(--adm-border)] px-5 py-4">{footer}</div>}
+        {footer && <div className="mt-5 flex justify-end gap-2 rounded-b-2xl border-t border-[var(--adm-border)] bg-[var(--adm-surface-2)] px-5 py-3.5">{footer}</div>}
         {!footer && <div className="pb-5" />}
       </div>
     </div>,

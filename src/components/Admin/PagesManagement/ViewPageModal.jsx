@@ -15,7 +15,7 @@ const ViewPageModal = ({ isOpen, onClose, page }) => {
 
   return createPortal(
     <div className="adm-tokens fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-6" data-dashboard="true">
-      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
+      <div className="absolute inset-0 bg-[var(--adm-overlay)]" onClick={onClose} />
       <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-[var(--adm-border-strong)] bg-[var(--adm-surface)] shadow-2xl">
         <div className="flex items-center gap-3 border-b border-[var(--adm-border)] px-4 py-3">
           <div className="min-w-0 flex-1">

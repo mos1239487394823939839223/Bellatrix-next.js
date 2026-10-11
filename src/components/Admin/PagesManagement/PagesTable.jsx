@@ -91,7 +91,7 @@ const PagesTable = ({
                 </td>
                 <td className="px-4 py-3">
                   <button type="button" onClick={() => onEdit(page)} className="block min-w-[12rem] max-w-[22rem] text-left">
-                    <span className="flex items-center gap-2 truncate font-medium text-[var(--adm-text)] group-hover:text-[#93c5fd]">
+                    <span className="flex items-center gap-2 truncate font-medium text-[var(--adm-text)] group-hover:text-[var(--adm-accent-text)]">
                       {page.title || page.slug}
                       {page.isHomepage && (
                         <HomeIcon className="h-3.5 w-3.5 shrink-0 text-[var(--adm-warning)]" aria-label="Homepage" />

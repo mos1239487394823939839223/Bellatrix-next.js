@@ -118,7 +118,7 @@ const QuickLinksSettings = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-3 h-40 text-white">
+      <div className="flex items-center justify-center gap-3 h-40 text-[var(--adm-text-muted)]">
         <ArrowPathIcon className="w-6 h-6 animate-spin" />
         <span className="text-sm">Loading...</span>
       </div>
@@ -162,7 +162,7 @@ const QuickLinksSettings = () => {
             type="button"
             onClick={handleSave}
             disabled={!dirty || saving}
-            className="flex h-9 items-center gap-2 rounded-lg bg-[var(--adm-accent-strong)] px-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--adm-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-9 items-center gap-2 rounded-lg bg-[var(--adm-accent)] px-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--adm-accent-hover)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving ? (
               <>
@@ -180,16 +180,16 @@ const QuickLinksSettings = () => {
       </div>
 
       {/* Links list */}
-      <div className="bg-[var(--color-white-10)] border border-[var(--color-white-20)] rounded-xl p-6 space-y-4">
+      <div className="bg-[var(--adm-surface)] border border-[var(--adm-border)] shadow-[var(--adm-shadow)] rounded-xl p-6 space-y-4">
         {links.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-white gap-3">
+          <div className="flex flex-col items-center justify-center py-10 text-[var(--adm-text-muted)] gap-3">
             <LinkIcon className="w-10 h-10 opacity-40" />
             <p className="text-sm">No quick links yet. Click "Add Link" to get started.</p>
           </div>
         ) : (
           <>
             {/* Column headers */}
-            <div className="grid grid-cols-[1fr_1fr_40px] gap-3 text-xs font-semibold text-white uppercase tracking-wide pb-1 border-b border-[var(--color-white-10)]">
+            <div className="grid grid-cols-[1fr_1fr_40px] gap-3 text-xs font-semibold text-[var(--adm-text-muted)] uppercase tracking-wide pb-1 border-b border-[var(--adm-border)]">
               <span>Display Name</span>
               <span>URL</span>
               <span />
@@ -210,14 +210,14 @@ const QuickLinksSettings = () => {
                     value={link.name}
                     onChange={(e) => handleChange(index, "name", e.target.value)}
                     placeholder="e.g. Home"
-                    className="w-full px-3 py-2 rounded-lg bg-[var(--color-white-5)] border border-[var(--color-white-20)] text-[var(--color-text-inverse)] placeholder-[var(--color-ww-100)] text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+                    className="w-full px-3 py-2 rounded-lg bg-[var(--adm-surface)] border border-[var(--adm-border-strong)] text-[var(--adm-text)] placeholder-[var(--adm-text-subtle)] text-sm focus:outline-none focus:border-[var(--adm-accent)] transition-colors"
                   />
                   <input
                     type="text"
                     value={link.url}
                     onChange={(e) => handleChange(index, "url", e.target.value)}
                     placeholder="e.g. /about or https://..."
-                    className="w-full px-3 py-2 rounded-lg bg-[var(--color-white-5)] border border-[var(--color-white-20)] text-[var(--color-text-inverse)] placeholder-[var(--color-ww-100)] text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+                    className="w-full px-3 py-2 rounded-lg bg-[var(--adm-surface)] border border-[var(--adm-border-strong)] text-[var(--adm-text)] placeholder-[var(--adm-text-subtle)] text-sm focus:outline-none focus:border-[var(--adm-accent)] transition-colors"
                   />
                   <button
                     type="button"
@@ -238,7 +238,7 @@ const QuickLinksSettings = () => {
           <button
             type="button"
             onClick={handleAdd}
-            className="w-full mt-2 py-2 rounded-lg border border-dashed border-[var(--color-white-20)] text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full mt-2 py-2 rounded-lg border border-dashed border-[var(--adm-border-strong)] text-[var(--adm-text-muted)] hover:border-[var(--adm-accent)] hover:text-[var(--adm-accent-text)] transition-colors text-sm flex items-center justify-center gap-2"
           >
             <PlusIcon className="w-4 h-4" />
             Add another link

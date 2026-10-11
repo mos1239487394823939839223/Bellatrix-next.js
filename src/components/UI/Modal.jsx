@@ -32,7 +32,7 @@ const Modal = ({
           <MotionDiv
             className={`fixed inset-0 bg-black transition-opacity ${overlayClassName}`}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
+            animate={{ opacity: 0.6 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
           />
@@ -40,7 +40,7 @@ const Modal = ({
           {/* Modal */}
           <div className="flex min-h-full items-center justify-center p-4">
             <MotionDiv
-              className={`relative w-full ${sizeClasses[size]} bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl shadow-xl ${className}`}
+              className={`relative w-full ${sizeClasses[size]} bg-[var(--adm-surface,#0b1a3f)] border border-[var(--adm-border-strong,rgba(255,255,255,0.2))] rounded-xl shadow-2xl ${className}`}
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -49,9 +49,9 @@ const Modal = ({
             >
               {/* Header */}
               {(title || showCloseButton) && (
-                <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--adm-border,rgba(255,255,255,0.1))]">
                   {title && (
-                    <h2 className="text-xl font-semibold text-white">
+                    <h2 className="text-base font-semibold text-[var(--adm-text,#fff)]">
                       {title}
                     </h2>
                   )}
@@ -60,7 +60,7 @@ const Modal = ({
                       variant="ghost"
                       size="icon"
                       onClick={onClose}
-                      className="h-8 w-8 text-white hover:bg-white/10"
+                      className="h-8 w-8 text-[var(--adm-text-muted,#fff)] hover:bg-white/10 hover:text-white"
                     >
                       <XMarkIcon className="h-4 w-4" />
                     </Button>
@@ -79,14 +79,14 @@ const Modal = ({
 };
 
 const ModalHeader = ({ children, className = "" }) => (
-  <div className={`border-b border-white/10 pb-4 mb-4 ${className}`}>
+  <div className={`border-b border-[var(--adm-border,rgba(255,255,255,0.1))] pb-4 mb-4 ${className}`}>
     {children}
   </div>
 );
 
 const ModalFooter = ({ children, className = "" }) => (
   <div
-    className={`border-t border-white/10 pt-4 mt-4 flex justify-end space-x-2 ${className}`}
+    className={`border-t border-[var(--adm-border,rgba(255,255,255,0.1))] pt-4 mt-4 flex justify-end space-x-2 ${className}`}
   >
     {children}
   </div>

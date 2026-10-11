@@ -1,8 +1,8 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../../hooks/useAuth";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Bars3Icon,
   XMarkIcon,
@@ -10,305 +10,279 @@ import {
   DocumentTextIcon,
   ViewColumnsIcon,
   Cog6ToothIcon,
-  BellIcon,
-  MagnifyingGlassIcon,
-  SunIcon,
-  MoonIcon,
   PowerIcon,
-  ChatBubbleLeftRightIcon,
+  InboxIcon,
   KeyIcon,
+  ArrowTopRightOnSquareIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
-import {
-  HomeIcon as HomeIconSolid,
-  DocumentTextIcon as DocumentTextIconSolid,
-  ViewColumnsIcon as ViewColumnsIconSolid,
-  Cog6ToothIcon as Cog6ToothIconSolid,
-  ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
-} from "@heroicons/react/24/solid";
-import Button from "../UI/Button";
-import { Input } from "../UI/Input";
-import { useTheme } from "../../context/ThemeContext";
 import { useMessageNotifications } from "../../hooks/useMessageNotifications";
 import MessageNotification from "./MessageNotification";
+import { cn, getInitials } from "./ui";
+
+const NAV_SECTIONS = [
+  {
+    label: "Overview",
+    items: [
+      { id: "dashboard", name: "Dashboard", path: "/admin/dashboard", icon: HomeIcon, description: "Overview of your site and inbox" },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { id: "pages", name: "Pages", path: "/admin/pages", icon: DocumentTextIcon, description: "Create and manage website pages" },
+      { id: "categories", name: "Categories", path: "/admin/categories", icon: ViewColumnsIcon, description: "Group pages in the site navigation" },
+    ],
+  },
+  {
+    label: "Inbox",
+    items: [
+      { id: "messages", name: "Messages", path: "/admin/messages", icon: InboxIcon, description: "Contact form submissions", badge: "unread" },
+    ],
+  },
+  {
+    label: "System",
+    items: [
+      { id: "settings", name: "Settings", path: "/admin/settings", icon: Cog6ToothIcon, description: "Footer and site-wide settings" },
+    ],
+  },
+];
+
+const ALL_ITEMS = NAV_SECTIONS.flatMap((s) => s.items);
+
+const SUB_PAGES = [
+  { prefix: "/admin/pages/enhanced-create", parent: "pages", name: "New page" },
+  { prefix: "/admin/pages/enhanced-edit", parent: "pages", name: "Edit page" },
+  { prefix: "/admin/change-password", parent: null, name: "Change password", description: "Update your account password" },
+];
 
 const ModernAdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
-  const { isDark, theme, toggleTheme, toggleColorTheme } = useTheme();
-  const { logout } = useAuth();
-  const isEnhancedCreate = pathname.startsWith(
-    "/admin/pages/enhanced-create"
-  );
-  const {
-    notifications: messageNotifications,
-    unreadCount,
-    removeNotification,
-    markAsRead,
-  } = useMessageNotifications();
-  const [notificationsViewed, setNotificationsViewed] = useState(false);
+  const pathname = usePathname() || "";
+  const { logout, user } = useAuth();
+  const isEnhancedBuilder =
+    pathname.startsWith("/admin/pages/enhanced-create") ||
+    pathname.startsWith("/admin/pages/enhanced-edit");
 
-  const menuItems = [
-    {
-      id: "dashboard",
-      name: "Dashboard",
-      path: "/admin",
-      icon: HomeIcon,
-      iconSolid: HomeIconSolid,
-      description: "Overview & Analytics",
-    },
-    {
-      id: "pages",
-      name: "Pages",
-      path: "/admin/pages",
-      icon: DocumentTextIcon,
-      iconSolid: DocumentTextIconSolid,
-      description: "Content Management",
-    },
-    {
-      id: "categories",
-      name: "Categories",
-      path: "/admin/categories",
-      icon: ViewColumnsIcon,
-      iconSolid: ViewColumnsIconSolid,
-      description: "Manage Categories",
-    },
-    {
-      id: "messages",
-      name: "Messages",
-      path: "/admin/messages",
-      icon: ChatBubbleLeftRightIcon,
-      iconSolid: ChatBubbleLeftRightIconSolid,
-      description: "Contact Messages",
-    },
-    {
-      id: "settings",
-      name: "Settings",
-      path: "/admin/settings",
-      icon: Cog6ToothIcon,
-      iconSolid: Cog6ToothIconSolid,
-      description: "System Configuration",
-    },
-  ];
+  const { notifications, unreadCount, removeNotification } = useMessageNotifications();
 
-  const getCurrentPageTitle = () => {
-    const currentItem = menuItems.find(
-      (item) =>
-        item.path === pathname ||
-        pathname.startsWith(item.path + "/")
-    );
-    return currentItem?.name || "Dashboard";
+  // The messages page broadcasts the live unread count after every change,
+  // so the sidebar badge stays accurate without another request.
+  const [liveUnread, setLiveUnread] = useState(null);
+  useEffect(() => {
+    const onCount = (e) => setLiveUnread(e.detail);
+    window.addEventListener("admin:unread-count", onCount);
+    return () => window.removeEventListener("admin:unread-count", onCount);
+  }, []);
+  const unread = liveUnread ?? unreadCount;
+
+  useEffect(() => setSidebarOpen(false), [pathname]);
+
+  const isActive = (path) => pathname === path || pathname.startsWith(path + "/");
+  const activeItem = ALL_ITEMS.find((item) => isActive(item.path));
+  const subPage = SUB_PAGES.find((p) => pathname.startsWith(p.prefix));
+  const parentItem = subPage?.parent ? ALL_ITEMS.find((i) => i.id === subPage.parent) : null;
+
+  const handleLogout = () => {
+    logout();
+    router.push("/auth/login");
   };
 
-  const isActive = (path) => {
-    if (path === "/admin") {
-      return pathname === "/admin" || pathname === "/admin/";
-    }
-    return pathname.startsWith(path);
-  };
-
-  const handleNavigation = (path) => {
-    router.push(path);
-    setSidebarOpen(false);
-  };
-
-  // Legacy notifications for the dropdown (can be removed if not needed)
-  const legacyNotifications = [
-    {
-      id: 1,
-      title: "New page created",
-      message: "Homepage has been updated",
-      time: "5m ago",
-      unread: true,
-    },
-
-    {
-      id: 3,
-      title: "Settings updated",
-      message: "System configuration changed",
-      time: "2h ago",
-      unread: false,
-    },
-  ];
-
-  const legacyUnreadCount = legacyNotifications.filter((n) => n.unread).length;
+  const displayName = user?.userName || user?.name || user?.email || "Admin";
 
   return (
-    <div
-      className="admin-layout dark flex min-h-screen"
-      data-dashboard="true"
-      style={{ backgroundColor: "var(--color-brand-dark-navy)" }}
-    >
-      {/* Mobile sidebar backdrop */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSidebarOpen(false)}
-          >
-            <div className="absolute inset-0 bg-[var(--color-ww-100)] opacity-75" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="admin-layout dark flex min-h-screen" data-dashboard="true">
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 shadow-xl transform transition-transform duration-200 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col ${
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--adm-border)] bg-[var(--adm-sidebar)] transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        style={{ backgroundColor: "var(--color-brand-variant)" }}
+        )}
       >
-        <div className="flex h-full flex-col">
-          {/* Logo */}
-          <div className="flex h-16 items-center justify-between px-6 border-b border-[var(--color-white-10)]">
-            <div className="flex items-center space-x-3">
-              <div className="h-8 w-8 bg-[var(--color-primary)] rounded-lg flex items-center justify-center shadow">
-                <span className="text-[var(--color-text-inverse)] font-bold text-sm">
-                  B
-                </span>
-              </div>
-              <span className="text-xl font-bold text-[var(--color-text-inverse)]">
-                Bellatrix
-              </span>
+        <div className="flex h-16 items-center justify-between px-5">
+          <Link href="/admin/dashboard" className="flex items-center gap-2.5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--adm-accent-strong)] text-sm font-bold text-white">
+              B
+            </span>
+            <span className="leading-tight">
+              <span className="block text-sm font-semibold text-[var(--adm-text)]">Bellatrix</span>
+              <span className="block text-[11px] text-[var(--adm-text-subtle)]">Admin console</span>
+            </span>
+          </Link>
+          <button
+            type="button"
+            aria-label="Close menu"
+            className="rounded-lg p-1.5 text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface-2)] lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <XMarkIcon className="h-5 w-5" />
+          </button>
+        </div>
+
+        <nav className="adm-scroll flex-1 space-y-6 overflow-y-auto px-3 py-4">
+          {NAV_SECTIONS.map((section) => (
+            <div key={section.label}>
+              <p className="mb-1.5 px-3 text-[11px] font-medium uppercase tracking-wider text-[var(--adm-text-subtle)]">
+                {section.label}
+              </p>
+              <ul className="space-y-0.5">
+                {section.items.map((item) => {
+                  const active = isActive(item.path);
+                  const Icon = item.icon;
+                  return (
+                    <li key={item.id}>
+                      <Link
+                        href={item.path}
+                        aria-current={active ? "page" : undefined}
+                        className={cn(
+                          "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                          active
+                            ? "bg-[var(--adm-surface-2)] text-[var(--adm-text)]"
+                            : "text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface)] hover:text-[var(--adm-text)]"
+                        )}
+                      >
+                        <Icon
+                          className={cn(
+                            "h-5 w-5 shrink-0",
+                            active ? "text-[var(--adm-accent)]" : "text-[var(--adm-text-subtle)] group-hover:text-[var(--adm-text-muted)]"
+                          )}
+                        />
+                        <span className="flex-1">{item.name}</span>
+                        {item.badge === "unread" && unread > 0 && (
+                          <span className="min-w-[1.25rem] rounded-full bg-[var(--adm-accent-strong)] px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums text-white">
+                            {unread > 99 ? "99+" : unread}
+                          </span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden text-[var(--color-text-inverse)] hover:bg-[var(--color-white-10)]"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <XMarkIcon className="h-5 w-5" />
-            </Button>
+          ))}
+        </nav>
+
+        <div className="border-t border-[var(--adm-border)] p-3">
+          <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--adm-surface-2)] text-xs font-semibold text-[var(--adm-text)]">
+              {getInitials(displayName)}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-[var(--adm-text)]">{displayName}</p>
+              <p className="truncate text-xs text-[var(--adm-text-subtle)]">{user?.role || "Administrator"}</p>
+            </div>
           </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            {menuItems.map((item) => {
-              const IconComponent = isActive(item.path)
-                ? item.iconSolid
-                : item.icon;
-              return (
-                <motion.button
-                  key={item.id}
-                  onClick={() => handleNavigation(item.path)}
-                  className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200 group ${
-                    isActive(item.path)
-                      ? "bg-[var(--color-primary)]/30 text-[var(--color-text-inverse)] border border-[var(--color-primary)]/30 shadow"
-                      : "text-[var(--color-ww-100)] hover:bg-[var(--color-white-10)] hover:text-[var(--color-text-inverse)]"
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <IconComponent
-                    className={`mr-3 h-5 w-5 ${
-                      isActive(item.path)
-                        ? "text-[var(--color-primary-light)]"
-                        : "text-[var(--color-text-light)]"
-                    }`}
-                  />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium">{item.name}</div>
-                    <div
-                      className={`text-xs ${
-                        isActive(item.path)
-                          ? "text-[var(--color-primary-light)]"
-                          : "text-[var(--color-text-light)]"
-                      }`}
-                    >
-                      {item.description}
-                    </div>
-                  </div>
-                </motion.button>
-              );
-            })}
-          </nav>
-
-          {/* Bottom section with Change Password and Logout */}
-          <div className="border-t border-[var(--color-white-10)] p-4 space-y-2">
-            <button
-              onClick={() => router.push('/admin/change-password')}
-              className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 group"
+          <div className="mt-1 space-y-0.5">
+            <Link
+              href="/admin/change-password"
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                isActive("/admin/change-password")
+                  ? "bg-[var(--adm-surface-2)] text-[var(--adm-text)]"
+                  : "text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface)] hover:text-[var(--adm-text)]"
+              )}
             >
-              <KeyIcon className="mr-3 h-5 w-5" />
-              <span>Change Password</span>
-            </button>
+              <KeyIcon className="h-4 w-4" />
+              Change password
+            </Link>
             <button
-              onClick={() => {
-                logout();
-                router.push('/auth/login');
-              }}
-              className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-red-400 hover:bg-red-500/10 hover:text-red-300 group"
+              type="button"
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-[var(--adm-text-muted)] transition-colors hover:bg-[var(--adm-danger-soft)] hover:text-[var(--adm-danger)]"
             >
-              <PowerIcon className="mr-3 h-5 w-5" />
-              <span>Logout</span>
+              <PowerIcon className="h-4 w-4" />
+              Sign out
             </button>
-            <div className="flex items-center space-x-3 text-sm text-gray-400 pt-2">
-              <div className="h-2 w-2 bg-[var(--tw-green-400)] rounded-full animate-pulse"></div>
-              <span>All systems operational</span>
-            </div>
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top navbar */}
-        <header
-          className="sticky top-0 z-30 shadow border-b border-[var(--color-border-secondary)]"
-          style={{ backgroundColor: "var(--color-brand-dark-navy)" }}
-        >
-          <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden text-white hover:text-white hover:bg-white/20 transition-colors duration-200"
+      {/* Main column */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 border-b border-[var(--adm-border)] bg-[var(--adm-bg)]/90 backdrop-blur">
+          <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+            <div className="flex min-w-0 items-center gap-3">
+              <button
+                type="button"
+                aria-label="Open menu"
+                className="rounded-lg p-1.5 text-[var(--adm-text-muted)] hover:bg-[var(--adm-surface-2)] lg:hidden"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Bars3Icon className="h-5 w-5" />
-              </Button>
-
-              {/* Page title */}
-              <div>
-                <h1 className="text-2xl font-bold text-[var(--color-text-inverse)]">
-                  {getCurrentPageTitle()}
-                </h1>
-                <p className="text-sm text-[var(--color-admin-text-secondary)]">
-                  {menuItems.find((item) => isActive(item.path))?.description}
-                </p>
-              </div>
+              </button>
+              <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-sm">
+                <span className="hidden text-[var(--adm-text-subtle)] sm:inline">Admin</span>
+                <ChevronRightIcon className="hidden h-3.5 w-3.5 text-[var(--adm-text-subtle)] sm:inline" />
+                {parentItem ? (
+                  <>
+                    <Link href={parentItem.path} className="text-[var(--adm-text-muted)] hover:text-[var(--adm-text)]">
+                      {parentItem.name}
+                    </Link>
+                    <ChevronRightIcon className="h-3.5 w-3.5 text-[var(--adm-text-subtle)]" />
+                    <span className="truncate font-medium text-[var(--adm-text)]">{subPage.name}</span>
+                  </>
+                ) : (
+                  <span className="truncate font-medium text-[var(--adm-text)]">
+                    {subPage?.name || activeItem?.name || "Dashboard"}
+                  </span>
+                )}
+              </nav>
             </div>
 
-            <div className="flex items-center space-x-4">
-              {/* Icons removed as requested */}
+            <div className="flex items-center gap-1.5">
+              <Link
+                href="/admin/messages"
+                aria-label={`Messages, ${unread} unread`}
+                className="relative rounded-lg p-2 text-[var(--adm-text-muted)] transition-colors hover:bg-[var(--adm-surface-2)] hover:text-[var(--adm-text)]"
+              >
+                <InboxIcon className="h-5 w-5" />
+                {unread > 0 && (
+                  <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[var(--adm-accent)] ring-2 ring-[var(--adm-bg)]" />
+                )}
+              </Link>
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--adm-border-strong)] px-3 py-1.5 text-sm text-[var(--adm-text)] transition-colors hover:bg-[var(--adm-surface-2)]"
+              >
+                <span className="hidden sm:inline">View site</span>
+                <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </header>
 
-        {/* Page content */}
         <main
-          className={`flex-1 ${
-            isEnhancedCreate ? "p-0" : "p-4 sm:p-6 lg:p-8"
-          } overflow-auto`}
+          className={cn(
+            "flex-1",
+            pathname.startsWith("/admin/pages/enhanced-create") ? "p-0" : "p-4 sm:p-6 lg:p-8"
+          )}
         >
-          {children}
+          {isEnhancedBuilder ? children : <div className="mx-auto w-full max-w-[1400px]">{children}</div>}
         </main>
       </div>
 
-      {/* Message Notifications */}
-      {messageNotifications.map((notification) => (
-        <MessageNotification
-          key={notification.id}
-          notification={notification}
-          onClose={() => removeNotification(notification.id)}
-          onReply={() => router.push("/admin/messages")}
-          onView={() => router.push("/admin/messages")}
-        />
-      ))}
+      {/* Live new-message popups */}
+      {!pathname.startsWith("/admin/messages") &&
+        notifications.map((notification) => (
+          <MessageNotification
+            key={notification.id}
+            notification={notification}
+            onClose={() => removeNotification(notification.id)}
+            onReply={(msg) => router.push(msg?.id ? `/admin/messages?id=${msg.id}` : "/admin/messages")}
+            onView={(msg) => router.push(msg?.id ? `/admin/messages?id=${msg.id}` : "/admin/messages")}
+          />
+        ))}
     </div>
   );
 };

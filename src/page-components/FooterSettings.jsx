@@ -6,12 +6,13 @@ import {
   PlusIcon,
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
-import Button from "../components/UI/Button";
 import Card, {
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "../components/UI/Card";
+import { Btn } from "../components/Admin/ui";
 import SettingField from "../components/SettingField";
 import AddSettingModal from "../components/AddSettingModal";
 import useSettingsSync from "../hooks/useSettingsSync";
@@ -305,57 +306,32 @@ const FooterSettings = () => {
   return (
     <div className="admin-component space-y-6 text-[var(--color-text-inverse)]" data-dashboard="true">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
-      >
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-[var(--color-text-inverse)] mb-1">
-            Footer Settings
-          </h2>
-          <p className="text-[var(--color-text-inverse)]">
-            Manage footer content, contact information, and social media links
+          <h2 className="text-base font-semibold text-[var(--adm-text)]">Footer settings</h2>
+          <p className="mt-1 text-sm text-[var(--adm-text-muted)]">
+            Company details, contact information and social links shown in the site footer.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            onClick={handleRefresh}
-            className="border border-[var(--color-white-20)] hover:border-[var(--color-white-30)] !text-white hover:!text-white hover:bg-[var(--color-white-10)]"
-          >
-            <ArrowPathIcon className="w-5 h-5" />
-          </Button>
-
-          <Button
+        <div className="flex flex-wrap items-center gap-2">
+          <Btn variant="ghost" icon={ArrowPathIcon} onClick={handleRefresh}>
+            Refresh
+          </Btn>
+          <Btn icon={PlusIcon} onClick={() => setIsAddModalOpen(true)}>
+            Add field
+          </Btn>
+          <Btn
             variant="primary"
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-[var(--tw-green-600)] hover:bg-[var(--tw-green-700)] text-[var(--color-text-inverse)] shadow-lg hover:shadow-[var(--tw-green-500)]/25"
-          >
-            <PlusIcon className="w-5 h-5 mr-2" />
-            Add New
-          </Button>
-
-          <Button
+            icon={CheckCircleIcon}
+            loading={isBulkSaving}
             onClick={handleBulkSave}
-            disabled={dirtyFields.size === 0 || isBulkSaving}
-            className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-[var(--color-text-inverse)] shadow-lg hover:shadow-[var(--color-primary)]/25 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={dirtyFields.size === 0}
           >
-            {isBulkSaving ? (
-              <>
-                <ArrowPathIcon className="w-5 h-5 mr-2 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <CheckCircleIcon className="w-5 h-5 mr-2" />
-                Save All ({dirtyFields.size})
-              </>
-            )}
-          </Button>
+            {isBulkSaving ? "Saving…" : `Save changes${dirtyFields.size ? ` (${dirtyFields.size})` : ""}`}
+          </Btn>
         </div>
-      </motion.div>
+      </div>
 
       {/* Tab Content */}
       <motion.div
@@ -363,15 +339,12 @@ const FooterSettings = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <Card className="bg-[var(--color-white-10)] border border-[var(--color-white-20)] shadow-lg">
-          <CardHeader className="border-b border-[var(--color-white-10)] pb-4">
-            <CardTitle className="text-[var(--color-text-inverse)] text-xl font-semibold">
-              Footer Field Settings
-            </CardTitle>
-            <p className="text-[var(--color-text-inverse)] mt-2 text-sm">
-              Configure individual footer settings. Changes are tracked and
-              can be saved all at once.
-            </p>
+        <Card hover={false}>
+          <CardHeader>
+            <CardTitle>Footer fields</CardTitle>
+            <CardDescription>
+              Edit any field below. Changes are tracked and saved together with “Save changes”.
+            </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-4">

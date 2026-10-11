@@ -43,8 +43,9 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
   const handleView = () => {
     if (onView) {
       onView(notification.message);
+    } else {
+      router.push("/admin/messages");
     }
-    router.push("/admin/messages");
     handleClose();
   };
 
@@ -118,11 +119,11 @@ const MessageNotification = ({ notification, onClose, onReply, onView }) => {
                     fontSize: '0.875rem',
                   }}
                 >
-                  {getInitials(notification.message?.name)}
+                  {getInitials(notification.message?.fullName || notification.message?.name)}
                 </Avatar>
                 <div className="flex-1">
                   <Typography variant="subtitle1" className="text-white font-semibold">
-                    {notification.message?.name || 'Unknown User'}
+                    {notification.message?.fullName || notification.message?.name || 'Unknown User'}
                   </Typography>
                   <Typography variant="body2" className="text-gray-400 mb-2">
                     {notification.message?.email || 'No email provided'}

@@ -130,10 +130,10 @@ const QuickLinksSettings = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-[var(--color-text-inverse)]">
-            Quick Links
+          <h2 className="text-base font-semibold text-[var(--adm-text)]">
+            Quick links
           </h2>
-          <p className="text-white mt-1 text-sm">
+          <p className="mt-1 text-sm text-[var(--adm-text-muted)]">
             Manage the quick links displayed in the footer. Each link needs a
             display name and a URL.
           </p>
@@ -143,7 +143,7 @@ const QuickLinksSettings = () => {
           <button
             type="button"
             onClick={fetchLinks}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--color-white-20)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-10)] transition-colors text-sm"
+            className="flex h-9 items-center gap-2 rounded-lg px-3 text-sm text-[var(--adm-text-muted)] transition-colors hover:bg-[var(--adm-surface-2)] hover:text-[var(--adm-text)]"
           >
             <ArrowPathIcon className="w-4 h-4" />
             Refresh
@@ -152,7 +152,7 @@ const QuickLinksSettings = () => {
           <button
             type="button"
             onClick={handleAdd}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--color-white-10)] border border-[var(--color-white-20)] text-[var(--color-text-inverse)] hover:bg-[var(--color-white-20)] transition-colors text-sm"
+            className="flex h-9 items-center gap-2 rounded-lg border border-[var(--adm-border-strong)] bg-[var(--adm-surface-2)] px-3 text-sm text-[var(--adm-text)] transition-colors hover:bg-[var(--adm-surface-hover)]"
           >
             <PlusIcon className="w-4 h-4" />
             Add Link
@@ -162,7 +162,7 @@ const QuickLinksSettings = () => {
             type="button"
             onClick={handleSave}
             disabled={!dirty || saving}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-primary)] text-white font-medium hover:bg-[var(--color-primary-dark)] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-9 items-center gap-2 rounded-lg bg-[var(--adm-accent-strong)] px-3.5 text-sm font-medium text-white transition-colors hover:bg-[var(--adm-accent)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving ? (
               <>

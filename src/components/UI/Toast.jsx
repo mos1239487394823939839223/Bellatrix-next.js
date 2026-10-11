@@ -36,35 +36,35 @@ const Toast = ({
   const typeConfig = {
     success: {
       icon: CheckCircleIcon,
-      bgColor: "bg-green-50",
-      borderColor: "border-green-200",
-      iconColor: "text-green-600",
-      titleColor: "text-green-800",
-      messageColor: "text-green-700",
+      bgColor: "bg-[#0c1c45]",
+      borderColor: "border-[rgba(148,163,216,0.22)]",
+      iconColor: "text-[var(--adm-success,#34d399)]",
+      titleColor: "text-[#e7ecf7]",
+      messageColor: "text-[#c3cce3]",
     },
     error: {
       icon: XCircleIcon,
-      bgColor: "bg-red-50",
-      borderColor: "border-red-200",
-      iconColor: "text-red-600",
-      titleColor: "text-red-800",
-      messageColor: "text-red-700",
+      bgColor: "bg-[#0c1c45]",
+      borderColor: "border-[rgba(148,163,216,0.22)]",
+      iconColor: "text-[var(--adm-danger,#f87171)]",
+      titleColor: "text-[#e7ecf7]",
+      messageColor: "text-[#c3cce3]",
     },
     warning: {
       icon: ExclamationTriangleIcon,
-      bgColor: "bg-yellow-50",
-      borderColor: "border-yellow-200",
-      iconColor: "text-yellow-600",
-      titleColor: "text-yellow-800",
-      messageColor: "text-yellow-700",
+      bgColor: "bg-[#0c1c45]",
+      borderColor: "border-[rgba(148,163,216,0.22)]",
+      iconColor: "text-[var(--adm-warning,#fbbf24)]",
+      titleColor: "text-[#e7ecf7]",
+      messageColor: "text-[#c3cce3]",
     },
     info: {
       icon: InformationCircleIcon,
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-200",
-      iconColor: "text-blue-600",
-      titleColor: "text-blue-800",
-      messageColor: "text-blue-700",
+      bgColor: "bg-[#0c1c45]",
+      borderColor: "border-[rgba(148,163,216,0.22)]",
+      iconColor: "text-[#93c5fd]",
+      titleColor: "text-[#e7ecf7]",
+      messageColor: "text-[#c3cce3]",
     },
   };
 
@@ -93,7 +93,7 @@ const Toast = ({
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           <div
-            className={`${config.bgColor} ${config.borderColor} border rounded-lg shadow-lg p-4`}
+            className={`${config.bgColor} ${config.borderColor} border rounded-xl shadow-2xl p-4`}
           >
             <div className="flex items-start">
               <div className="flex-shrink-0">

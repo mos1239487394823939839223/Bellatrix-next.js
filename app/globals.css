@@ -416,3 +416,62 @@ body {
   border-radius: 0.375rem;
   border: 1px solid #e5e7eb;
 }
+
+/* ==================================================
+   ADMIN DASHBOARD TOKENS
+   Scoped to .admin-layout so the public site is untouched.
+   ================================================== */
+.admin-layout,
+.adm-tokens {
+  --adm-bg: #020b24;
+  --adm-sidebar: #010820;
+  --adm-surface: #071435;
+  --adm-surface-2: #0c1c45;
+  --adm-surface-hover: #102352;
+  --adm-border: rgba(148, 163, 216, 0.12);
+  --adm-border-strong: rgba(148, 163, 216, 0.22);
+  --adm-text: #e7ecf7;
+  --adm-text-muted: #9aa7c7;
+  --adm-text-subtle: #6c7aa1;
+  --adm-accent: #3b82f6;
+  --adm-accent-strong: #2563eb;
+  --adm-accent-soft: rgba(59, 130, 246, 0.14);
+  --adm-success: #34d399;
+  --adm-success-soft: rgba(52, 211, 153, 0.12);
+  --adm-warning: #fbbf24;
+  --adm-warning-soft: rgba(251, 191, 36, 0.12);
+  --adm-danger: #f87171;
+  --adm-danger-soft: rgba(248, 113, 113, 0.12);
+  color: var(--adm-text);
+}
+
+.admin-layout {
+  background-color: var(--adm-bg);
+}
+
+.admin-layout ::selection,
+.adm-tokens ::selection {
+  background: rgba(59, 130, 246, 0.45);
+  color: #fff;
+}
+
+.admin-layout .adm-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 216, 0.22) transparent;
+}
+
+.admin-layout .adm-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.admin-layout .adm-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 216, 0.22);
+  border-radius: 999px;
+}
+
+/* Focus ring for keyboard users across the admin */
+:is(.admin-layout, .adm-tokens) :is(button, a, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--adm-accent);
+  outline-offset: 2px;
+}

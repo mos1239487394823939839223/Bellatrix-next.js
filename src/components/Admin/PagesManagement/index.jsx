@@ -1,17 +1,13 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import {
-  MagnifyingGlassIcon,
   PlusIcon,
   ArrowPathIcon,
-  ExclamationTriangleIcon,
   TrashIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
-import Button from "../../UI/Button";
-import Card, { CardContent, CardHeader, CardTitle } from "../../UI/Card";
-import { DocumentTextIcon } from "@heroicons/react/24/outline";
-import Toast from "../../UI/Toast";
+import hotToast from "react-hot-toast";
 import EditPageModal from "../EditPageModal";
 import pagesAPI from "../../../lib/pagesAPI";
 import { usePagesManagement } from "../../../hooks/usePagesManagement";
@@ -20,12 +16,23 @@ import PagesTable from "./PagesTable";
 import PagesPagination from "./PagesPagination";
 import ViewPageModal from "./ViewPageModal";
 import DeletePageModal from "./DeletePageModal";
+import {
+  Btn,
+  ConfirmDialog,
+  EmptyState,
+  ErrorBanner,
+  PageHeader,
+  Panel,
+  SearchInput,
+  Spinner,
+} from "../ui";
 
 const PagesManagement = () => {
   const router = useRouter();
   const [selectedPage, setSelectedPage] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showBulkDelete, setShowBulkDelete] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [operationLoading, setOperationLoading] = useState(false);
 
@@ -53,6 +60,14 @@ const PagesManagement = () => {
     handleToggleSelect,
     handleToggleSelectAll,
   } = usePagesManagement();
+
+  // The hook exposes toasts as state; surface them through the global toaster.
+  useEffect(() => {
+    if (!toast) return;
+    if (toast.type === "error") hotToast.error(toast.message);
+    else if (toast.type === "success") hotToast.success(toast.message);
+    else hotToast(toast.message);
+  }, [toast]);
 
   const fetchPageData = async (pageId) => {
     try {
@@ -93,6 +108,7 @@ const PagesManagement = () => {
       }
       showToast(`Deleted ${selectedIds.length} page(s)`, "success");
       setSelectedIds([]);
+      setShowBulkDelete(false);
       await fetchPages();
     } catch (err) {
       showToast("Error deleting selected pages: " + err.message, "error");
@@ -120,144 +136,88 @@ const PagesManagement = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div
-        className="admin-component flex items-center justify-center h-64"
-        data-dashboard="true"
-      >
-        <div className="flex items-center space-x-2">
-          <ArrowPathIcon className="h-5 w-5 animate-spin text-[var(--color-primary)]" />
-          <span className="text-[var(--color-text-secondary)]">
-            Loading pages...
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div
-        className="admin-component flex items-center justify-center h-64"
-        data-dashboard="true"
-      >
-        <div className="text-center">
-          <ExclamationTriangleIcon className="h-12 w-12 text-[var(--tw-red-500)] mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-[var(--color-text-inverse)] mb-2">
-            Error Loading Pages
-          </h3>
-          <p className="text-[var(--color-ww-100)] mb-4">{error}</p>
-          <Button onClick={fetchPages} variant="outline">
-            <ArrowPathIcon className="h-4 w-4 mr-2" />
-            Retry
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <Spinner label="Loading pages…" />;
 
   return (
-    <div className="admin-component space-y-6 text-white" data-dashboard="true">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white">Pages Management</h2>
-          <p className="text-gray-300">Manage your website pages and content</p>
-        </div>
-        <div className="mt-4 sm:mt-0 flex space-x-2">
-          <Button
-            icon={<PlusIcon className="h-4 w-4" />}
-            onClick={() => router.push("/admin/pages/enhanced-create")}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Enhanced Page Builder
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Pages"
+        description="Create, edit and publish the pages on your website."
+        actions={
+          <Btn variant="primary" icon={PlusIcon} onClick={() => router.push("/admin/pages/enhanced-create")}>
+            New page
+          </Btn>
+        }
+      />
+
+      {error && <ErrorBanner message={`Couldn't load pages: ${error}`} onRetry={fetchPages} />}
 
       <PagesStats pages={pages} />
 
-      <Card className="bg-white/10 border border-white/20 shadow">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
-                <DocumentTextIcon className="h-4 w-4 text-white/90" />
-              </div>
-              <CardTitle className="text-lg font-semibold text-white">
-                All Pages
-              </CardTitle>
-              <span className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/90 border border-white/20">
-                {filteredPages.length}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <MagnifyingGlassIcon className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search pages..."
-                  value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="pl-9 pr-3 py-2 text-sm border border-white/20 bg-white/5 text-white placeholder:text-gray-400 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <Button
-                variant="outline"
-                onClick={fetchPages}
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              >
-                <ArrowPathIcon className="h-4 w-4 mr-1" />
-                Refresh
-              </Button>
-              {selectedIds.length > 0 && (
-                <Button
-                  variant="destructive"
-                  onClick={handleBulkDelete}
-                  loading={operationLoading}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  <TrashIcon className="h-4 w-4 mr-1" />
-                  Delete Selected ({selectedIds.length})
-                </Button>
-              )}
-            </div>
+      <Panel className="overflow-hidden">
+        <div className="flex flex-wrap items-center gap-2 border-b border-[var(--adm-border)] p-3">
+          <SearchInput
+            value={searchTerm}
+            onChange={(v) => {
+              setSearchTerm(v);
+              setCurrentPage(1);
+            }}
+            placeholder="Search by title, slug or category…"
+            className="w-full sm:w-80"
+          />
+          <div className="ml-auto flex items-center gap-2">
+            {selectedIds.length > 0 && (
+              <>
+                <span className="text-xs text-[var(--adm-text-muted)]">{selectedIds.length} selected</span>
+                <Btn size="sm" variant="danger" icon={TrashIcon} onClick={() => setShowBulkDelete(true)}>
+                  Delete
+                </Btn>
+              </>
+            )}
+            <Btn size="sm" variant="ghost" icon={ArrowPathIcon} onClick={fetchPages}>
+              Refresh
+            </Btn>
           </div>
-        </CardHeader>
-        <CardContent>
-          {paginatedPages.length === 0 ? (
-            <div className="text-center py-16 text-gray-300">
-              No pages found
-            </div>
-          ) : (
-            <>
-              <PagesTable
-                pages={paginatedPages}
-                selectedIds={selectedIds}
-                sortBy={sortBy}
-                sortDir={sortDir}
-                onToggleSelect={handleToggleSelect}
-                onToggleSelectAll={handleToggleSelectAll}
-                onSort={handleToggleSort}
-                onView={handleView}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-              <PagesPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                startIndex={startIndex}
-                itemsPerPage={itemsPerPage}
-                totalItems={filteredPages.length}
-                onPageChange={setCurrentPage}
-              />
-            </>
-          )}
-        </CardContent>
-      </Card>
+        </div>
+
+        {paginatedPages.length === 0 ? (
+          <EmptyState
+            icon={DocumentTextIcon}
+            title={searchTerm ? "No pages match your search" : "No pages yet"}
+            description={searchTerm ? "Try a different title, slug or category." : "Create your first page to get started."}
+            action={
+              !searchTerm && (
+                <Btn variant="primary" icon={PlusIcon} onClick={() => router.push("/admin/pages/enhanced-create")}>
+                  New page
+                </Btn>
+              )
+            }
+          />
+        ) : (
+          <>
+            <PagesTable
+              pages={paginatedPages}
+              selectedIds={selectedIds}
+              sortBy={sortBy}
+              sortDir={sortDir}
+              onToggleSelect={handleToggleSelect}
+              onToggleSelectAll={handleToggleSelectAll}
+              onSort={handleToggleSort}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+            <PagesPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              startIndex={startIndex}
+              itemsPerPage={itemsPerPage}
+              totalItems={filteredPages.length}
+              onPageChange={setCurrentPage}
+            />
+          </>
+        )}
+      </Panel>
 
       <ViewPageModal
         isOpen={showViewModal}
@@ -281,16 +241,17 @@ const PagesManagement = () => {
         loading={operationLoading}
       />
 
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <ConfirmDialog
+        open={showBulkDelete}
+        onClose={() => !operationLoading && setShowBulkDelete(false)}
+        onConfirm={handleBulkDelete}
+        loading={operationLoading}
+        title={`Delete ${selectedIds.length} page${selectedIds.length === 1 ? "" : "s"}?`}
+        description="The selected pages and their sections will be permanently removed. This can't be undone."
+        confirmLabel="Delete pages"
+      />
     </div>
   );
 };
 
 export default PagesManagement;
-

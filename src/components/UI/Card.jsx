@@ -10,7 +10,7 @@ const Card = ({
   ...props
 }) => {
   const baseClasses =
-    "bg-white/10 rounded-xl border border-white/20 transition-all duration-200";
+    "bg-[var(--adm-surface,rgba(255,255,255,0.1))] rounded-xl border border-[var(--adm-border,rgba(255,255,255,0.2))] transition-colors duration-200";
 
   const paddingClasses = {
     none: "",
@@ -22,11 +22,11 @@ const Card = ({
   const shadowClasses = {
     none: "",
     sm: "shadow-sm",
-    default: "shadow-md",
+    default: "",
     lg: "shadow-lg",
   };
 
-  const hoverClasses = hover ? "hover:shadow-lg hover:-translate-y-1" : "";
+  const hoverClasses = hover ? "hover:border-[var(--adm-border-strong,rgba(255,255,255,0.3))]" : "";
 
   const cardClasses = [
     baseClasses,
@@ -43,10 +43,9 @@ const Card = ({
   return (
     <MotionComponent
       className={cardClasses}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={hover ? { y: -4 } : {}}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
       {...props}
     >
       {children}
@@ -55,19 +54,19 @@ const Card = ({
 };
 
 const CardHeader = ({ children, className = "" }) => (
-  <div className={`border-b border-white/10 pb-4 mb-4 ${className}`}>
+  <div className={`border-b border-[var(--adm-border,rgba(255,255,255,0.1))] pb-4 mb-4 ${className}`}>
     {children}
   </div>
 );
 
 const CardTitle = ({ children, className = "" }) => (
-  <h3 className={`text-lg font-semibold text-white ${className}`}>
+  <h3 className={`text-base font-semibold text-[var(--adm-text,#fff)] ${className}`}>
     {children}
   </h3>
 );
 
 const CardDescription = ({ children, className = "" }) => (
-  <p className={`text-sm text-gray-300 mt-1 ${className}`}>{children}</p>
+  <p className={`text-sm text-[var(--adm-text-muted,#d1d5db)] mt-1 ${className}`}>{children}</p>
 );
 
 const CardContent = ({ children, className = "" }) => (
@@ -75,7 +74,7 @@ const CardContent = ({ children, className = "" }) => (
 );
 
 const CardFooter = ({ children, className = "" }) => (
-  <div className={`border-t border-white/10 pt-4 mt-4 ${className}`}>
+  <div className={`border-t border-[var(--adm-border,rgba(255,255,255,0.1))] pt-4 mt-4 ${className}`}>
     {children}
   </div>
 );

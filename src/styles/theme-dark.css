@@ -248,23 +248,6 @@ html[data-theme="purple"] nav :is(.hover\:bg-gray-50, .hover\:bg-blue-50, .hover
   background-color: var(--dk-surface-2);
 }
 
-/* Navbar over a lifted section: a soft, translucent blue-grey glass (the navy
-   shows through) with deep-navy text — the light theme's dark-text navbar,
-   toned down so it doesn't glare against the dark page. */
-html[data-theme="purple"] nav.nav-ice {
-  background-color: rgba(206, 218, 240, 0.72);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.55);
-}
-html[data-theme="purple"] nav.nav-ice :is(.text-black, .text-gray-900, .text-gray-800) {
-  color: #13254d;
-}
-html[data-theme="purple"] nav.nav-ice :is(.text-black, .text-gray-900, .text-gray-800):hover {
-  color: #1d4ed8;
-}
-
 /* --------------------------------------------------------------------------
    Component specifics
    -------------------------------------------------------------------------- */

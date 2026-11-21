@@ -127,7 +127,9 @@ const Navbar = ({ initialCategories = [] }) => {
   useEffect(() => {
     // Set up section theme detection with improved logic
     const cleanup = setupSectionThemeDetection((newTheme) => {
-      setNavbarTheme(newTheme);
+      // Dark site theme: every section is navy, so the navbar keeps its light-on-dark
+      // variant — the same transparent frosted style the light theme uses over dark sections
+      setNavbarTheme(themeRef.current !== "default" ? "dark" : newTheme);
     }, 60); // 60px navbar height
 
     return cleanup;
@@ -136,7 +138,7 @@ const Navbar = ({ initialCategories = [] }) => {
   // Re-evaluate when the visitor switches site theme
   useEffect(() => {
     themeRef.current = theme;
-    setNavbarTheme(detectCurrentSectionTheme(60));
+    setNavbarTheme(theme !== "default" ? "dark" : detectCurrentSectionTheme(60));
   }, [theme]);
   const isDarkSite = theme !== "default";
   // Contact form modal functions
@@ -281,11 +283,7 @@ const Navbar = ({ initialCategories = [] }) => {
     <>
       <nav
         className={`fixed w-full top-0 left-0 z-50 transition-all duration-500 ${
-          // Dark site theme over a lifted ("light") section: frosted ice bar so the
-          // navbar's dark text/logo variant stays readable, mirroring the light theme
-          isDarkSite && navbarTheme === "light"
-            ? "nav-ice"
-            : scrolled
+          scrolled
               ? "bg-gray-900/10 shadow-2xl backdrop-blur-md"
               : "bg-transparent backdrop-blur-md"
           }`}

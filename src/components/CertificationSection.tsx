@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useInView, useReducedMotion } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface Certification {
   id: string;
@@ -56,7 +56,17 @@ export default function CertificationSection({
 }: CertificationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
-  const prefersReducedMotion = useReducedMotion();
+  // Read after mount: reading it during render made the server HTML (doubled
+  // marquee) differ from the client's first render for reduced-motion visitors,
+  // which caused a hydration error.
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const onChange = () => setPrefersReducedMotion(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
   // Scroll only when there are enough logos to loop and the user allows motion
   const shouldScroll = certifications.length > 1 && !prefersReducedMotion;
   const marqueeItems = useMemo(() => {
@@ -124,7 +134,7 @@ export default function CertificationSection({
                 whileHover={{ scale: 1.03, y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 className="
-                  group relative flex-shrink-0
+                  media-plate group relative flex-shrink-0
                   w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]
                   aspect-video
                   bg-white

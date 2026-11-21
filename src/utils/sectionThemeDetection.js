@@ -16,7 +16,9 @@
  */
 export const detectCurrentSectionTheme = (navbarHeight = 60) => {
   const checkY = navbarHeight + 10; // Add a small buffer below the navbar
-  const sections = Array.from(document.querySelectorAll("[data-theme]"));
+  // Only page sections — not <html data-theme="purple"> (the site dark theme),
+  // which covers the whole page and would always win.
+  const sections = Array.from(document.querySelectorAll("body [data-theme]"));
   
   // Default to dark theme if no sections found
   let foundTheme = "dark";

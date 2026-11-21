@@ -15,15 +15,15 @@ export const useCTAModal = () => {
 export const CTAModalProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
-    title: "Contact Us",
-    subtitle: "Let's discuss your project requirements",
+    title: "Contact Bellatrix",
+    subtitle: "Tell us about your ERP project. A consultant will reply within one business day.",
     icon: ""
   });
 
   const openCTAModal = (config = {}) => {
     setModalConfig({
-      title: config.title || "Contact Us",
-      subtitle: config.subtitle || "Let's discuss your project requirements",
+      title: config.title || "Contact Bellatrix",
+      subtitle: config.subtitle || "Tell us about your ERP project. A consultant will reply within one business day.",
       icon: config.icon || ""
     });
     setIsModalOpen(true);

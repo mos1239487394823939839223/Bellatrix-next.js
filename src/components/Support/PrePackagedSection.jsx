@@ -50,13 +50,13 @@ const PrePackagedSection = ({
       <section
           className="light-section prepackaged-support-section"
         style={{
-          backgroundColor: "#f7f7f7",
+          backgroundColor: "var(--pp-section-bg, #f7f7f7)",
           padding: "56px 20px 48px",
           margin: "80px auto",
           borderRadius: "15px",
           boxShadow:
             "0px 4px 16px rgba(0, 0, 0, 0.1), 0px 8px 32px rgba(0, 0, 0, 0.05)",
-          color: "#0f172a",
+          color: "var(--pp-text, #0f172a)",
           textAlign: "center",
           // full width minus gutters on phones, capped on desktop
           width: "min(1180px, calc(100% - 32px))",
@@ -83,7 +83,7 @@ const PrePackagedSection = ({
                   fontSize: "20px",
                   fontWeight: "600",
                   marginBottom: "16px",
-                  color: "#333",
+                  color: "var(--pp-text-2, #333)",
                 }}
               >
                 {sectionData.subtitle}
@@ -109,14 +109,14 @@ const PrePackagedSection = ({
                 <div
                   key={idx}
                   style={{
-                    background: "#fff",
+                    background: "var(--pp-card-bg, #fff)",
                     borderRadius: "12px",
                     padding: "32px 24px",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
                     display: "flex",
                     flexDirection: "column",
                     gap: "12px",
-                    border: "1px solid #e2e8f0",
+                    border: "1px solid var(--pp-border, #e2e8f0)",
                   }}
                 >
                   {/* Package Name */}
@@ -126,7 +126,7 @@ const PrePackagedSection = ({
                       style={{
                         fontSize: "20px",
                         fontWeight: "700",
-                        color: "#1a1a1a",
+                        color: "var(--pp-text, #1a1a1a)",
                         marginBottom: "4px",
                         textTransform: "uppercase",
                         letterSpacing: "-0.5px",
@@ -158,7 +158,7 @@ const PrePackagedSection = ({
                       className="prepackaged-support-description"
                       style={{
                         fontSize: "15px",
-                        color: "#555",
+                        color: "var(--pp-text-2, #555)",
                         lineHeight: "1.6",
                         margin: "0",
                       }}
@@ -187,7 +187,7 @@ const PrePackagedSection = ({
                             alignItems: "flex-start",
                             gap: "8px",
                             fontSize: "14px",
-                            color: "#444",
+                            color: "var(--pp-text-2, #444)",
                           }}
                         >
                           <span aria-hidden="true" style={{ color: "#16a34a", fontWeight: "700", flexShrink: 0 }}>

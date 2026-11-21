@@ -1,0 +1,316 @@
+/* ==========================================================================
+   DARK THEME — "Deep Navy / Electric Blue"
+   Activated by <html data-theme="purple"> (ThemeContext; value kept for
+   compatibility with existing component selectors).
+
+   Principles
+   - Two-tone rhythm: deep-navy sections alternate with lifted, brighter navy
+     bands (the light theme's light sections), so the navbar still switches:
+     white text over deep sections, a frosted ice bar with dark text over
+     lifted ones. Harmonises with the blue globe/tech videos and photography.
+   - Brand blue stays the action colour (buttons, links, focus).
+   - Depth through layered surfaces + hairline borders, not heavy shadows.
+   - Precise overrides only for the utilities the public components use; no
+     blanket "every element is white" rules. Media is never filtered/tinted.
+   - Admin is isolated (its own theme system), so nothing here targets it.
+   ========================================================================== */
+
+html[data-theme="purple"] {
+  color-scheme: dark;
+
+  /* Palette */
+  --dk-bg: #040a1c;          /* deep navy (dark sections, page) */
+  --dk-bg-alt: #0d1f4a;      /* lifted navy band (the light theme's light sections) */
+  --dk-band: linear-gradient(180deg, #102456 0%, #0b1b42 100%);
+  --dk-surface: #0b1a3d;     /* cards on deep sections */
+  --dk-surface-lift: #14295c;/* cards on lifted bands */
+  --dk-surface-2: #183370;   /* raised / hover */
+  --dk-surface-3: #1d3a7a;   /* pills, tracks, inactive dots */
+  --dk-navy: #040a1c;
+  --dk-navy-2: #071434;
+  --dk-border: rgba(96, 165, 250, 0.18);
+  --dk-border-2: rgba(96, 165, 250, 0.32);
+  --dk-text: #f1f5ff;        /* primary text */
+  --dk-text-2: #c3d2ef;      /* secondary text */
+  --dk-text-3: #93a6cc;      /* muted text */
+  --dk-accent: #6aa8ff;      /* accent text / links */
+  --dk-electric: #2f80ff;    /* electric blue */
+  --dk-glow: rgba(47, 128, 255, 0.45);
+  --dk-shadow: 0 0 0 1px rgba(96, 165, 250, 0.1), 0 22px 45px -22px rgba(0, 0, 0, 0.85);
+
+  /* Semantic tokens consumed by components (light values live in theme-colors.css) */
+  --color-bg-primary: var(--dk-bg);
+  --color-bg-secondary: var(--dk-bg-alt);
+  --color-bg-surface: var(--dk-surface);
+  --color-bg-dark: #050914;
+  --color-text-primary: var(--dk-text);
+  --color-text-secondary: var(--dk-text-2);
+  --color-text-muted: var(--dk-text-3);
+  --color-border-primary: var(--dk-border);
+  --color-border-secondary: var(--dk-border-2);
+  --color-border-light: var(--dk-border);
+  --color-primary-bg: rgba(59, 130, 246, 0.12);
+  --color-brand-dark-navy: var(--dk-navy);
+  --color-brand-dark: #08122b;
+  --color-brand-midnight: var(--dk-navy-2);
+  --color-brand-primary: var(--dk-navy);
+  --color-brand-secondary: var(--dk-navy-2);
+  /* globals.css forces .bg-gray-50/100/200, .text-gray-600…900 and
+     .border-gray-100…300 (with !important) through these --tw-gray-* tokens,
+     so the palette is applied here rather than fought with more !important. */
+  --tw-gray-50: var(--dk-bg-alt);
+  --tw-gray-100: var(--dk-surface-2);
+  --tw-gray-200: var(--dk-surface-3);
+  --tw-gray-300: #26355a;
+  --tw-gray-400: #8f9bb1;
+  --tw-gray-500: var(--dk-text-3);
+  --tw-gray-600: var(--dk-text-2);
+  --tw-gray-700: var(--dk-text-2);
+  --tw-gray-800: var(--dk-text);
+  --tw-gray-900: var(--dk-text);
+
+  /* Brand blue stays the action colour */
+  --color-primary: #2563eb;
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #1d4ed8;
+  --color-hover: #1d4ed8;
+  /* The light theme remaps blue-50 / blue-500 / cyan to pale or white values for
+     its own palette; restore real blues so accents read correctly on dark. */
+  --color-blue-50: rgba(59, 130, 246, 0.1);
+  --color-blue-100: rgba(59, 130, 246, 0.16);
+  --color-blue-500: #3b82f6;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+
+  background-color: var(--dk-bg);
+}
+
+html[data-theme="purple"] body {
+  background-color: var(--dk-bg);
+  color: var(--dk-text);
+}
+
+html[data-theme="purple"] ::selection {
+  background: rgba(59, 130, 246, 0.35);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Surfaces
+   Full-width light bands become ink (alternating with the brand-navy bands);
+   rounded light boxes become raised cards.
+   -------------------------------------------------------------------------- */
+html[data-theme="purple"] main :is(section, header, footer, div):is(.bg-white, .bg-gray-50, .bg-gray-100, .bg-slate-50, .light-section):not([class*="rounded"]) {
+  background-color: var(--dk-bg-alt);
+  background-image: var(--dk-band);
+  color: var(--dk-text);
+}
+/* Cards sitting on a lifted band are lifted one step further */
+html[data-theme="purple"] main :is(.bg-white, .bg-gray-50, .bg-slate-50, .light-section):not([class*="rounded"]) [class*="rounded"]:is(.bg-white, .bg-gray-50, .bg-slate-50) {
+  background-color: var(--dk-surface-lift) !important;
+}
+html[data-theme="purple"] main [class*="rounded"]:is(.bg-white, .bg-gray-50, .bg-gray-100, .bg-slate-50, .bg-blue-50) {
+  background-color: var(--dk-surface);
+  border-color: var(--dk-border);
+}
+/* .bg-gray-50/.bg-gray-100 are forced via !important in globals.css; rounded
+   ones are cards, so lift them to the card surface */
+html[data-theme="purple"] main [class*="rounded"]:is(.bg-gray-50, .bg-gray-100) {
+  background-color: var(--dk-surface) !important;
+}
+/* Raised cards get a hairline border even when the light design had none */
+html[data-theme="purple"] main [class*="rounded"][class*="shadow"]:is(.bg-white, .bg-gray-50, .bg-slate-50) {
+  border: 1px solid var(--dk-border);
+  box-shadow: var(--dk-shadow);
+}
+html[data-theme="purple"] main :is(.bg-white\/90, .bg-white\/80, .bg-white\/70) {
+  background-color: rgba(15, 25, 45, 0.85);
+}
+html[data-theme="purple"] main :is(.bg-gray-200, .bg-gray-300, .bg-blue-100, .bg-blue-100\/40) {
+  background-color: var(--dk-surface-3);
+}
+/* Decorative blurred blobs: pale tints become soft brand glows (not grey haze) */
+html[data-theme="purple"] main [class*="blur-"]:is(.bg-blue-100\/40, .bg-blue-50, .bg-blue-100) {
+  background-color: rgba(59, 130, 246, 0.16);
+}
+html[data-theme="purple"] main [class*="blur-"]:is(.bg-indigo-100\/30, .bg-indigo-100, .bg-purple-100) {
+  background-color: rgba(99, 102, 241, 0.14);
+}
+html[data-theme="purple"] main :is(.hover\:bg-gray-50, .hover\:bg-blue-50):hover {
+  background-color: var(--dk-surface-2);
+}
+html[data-theme="purple"] main .hover\:bg-gray-400:hover {
+  background-color: #2a3a5c;
+}
+
+/* Brand-navy and dark gradient sections: give them a subtle top light so they
+   read as a deliberate band rather than a flat block */
+html[data-theme="purple"] main .bg-\[var\(--color-brand-dark-navy\)\] {
+  background-image:
+    radial-gradient(ellipse 70% 55% at 50% 0%, rgba(47, 128, 255, 0.2), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(56, 189, 248, 0.08), transparent 70%);
+}
+
+/* Cards: electric hairline + glow on hover */
+html[data-theme="purple"] main [class*="rounded"]:is(.bg-white, .bg-gray-50, .bg-slate-50)[class*="shadow"] {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+html[data-theme="purple"] main [class*="rounded"]:is(.bg-white, .bg-gray-50, .bg-slate-50)[class*="shadow"]:hover {
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.25), 0 20px 50px -18px var(--dk-glow);
+}
+
+/* Small tinted pills (e.g. "Step 1"): brighter label on the blue tint */
+html[data-theme="purple"] main :is(.bg-blue-100, .bg-blue-50).rounded-full:is(.text-blue-600, .text-blue-700, .text-blue-800) {
+  color: #dbe8ff;
+}
+
+/* Primary actions glow electric blue */
+html[data-theme="purple"] :is(main, nav) :is(.btn-primary, .bg-blue-600, .bg-\[var\(--color-primary\)\]) {
+  box-shadow: 0 10px 28px -10px var(--dk-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Text
+   -------------------------------------------------------------------------- */
+html[data-theme="purple"] main :is(.text-gray-900, .text-gray-800, .text-black, .text-slate-900, .text-zinc-900, .text-blue-900) {
+  color: var(--dk-text);
+}
+html[data-theme="purple"] main :is(.text-gray-700, .text-slate-700, .text-gray-600, .text-slate-600) {
+  color: var(--dk-text-2);
+}
+html[data-theme="purple"] main .text-gray-500 {
+  color: var(--dk-text-3);
+}
+html[data-theme="purple"] main :is(.text-blue-600, .text-blue-700, .text-blue-800) {
+  color: var(--dk-accent);
+}
+/* Text set in the primary/brand blues reads as near-black on ink */
+html[data-theme="purple"] main :is(.text-\[var\(--color-primary-dark\)\], .text-\[var\(--color-primary\)\], .text-\[var\(--color-brand-accent\)\]) {
+  color: var(--dk-accent);
+}
+html[data-theme="purple"] main :is(h1, h2, h3, h4):is(.text-\[var\(--color-primary-dark\)\], .text-\[var\(--color-brand-accent\)\]) {
+  color: var(--dk-text);
+}
+html[data-theme="purple"] main :is(h1, h2, h3, h4):is(.text-blue-900, .text-blue-800) {
+  color: var(--dk-text);
+}
+html[data-theme="purple"] main a:is(.text-blue-600, .text-blue-700):hover {
+  color: #a8ccff;
+}
+
+/* --------------------------------------------------------------------------
+   Borders & dividers
+   -------------------------------------------------------------------------- */
+html[data-theme="purple"] main :is(.border-gray-100, .border-gray-200, .border-gray-300, .border-slate-200, .border-blue-100, .border-blue-200) {
+  border-color: var(--dk-border);
+}
+html[data-theme="purple"] main :is(.border-gray-400, .border-blue-300) {
+  border-color: var(--dk-border-2);
+}
+html[data-theme="purple"] main :is(.divide-gray-100, .divide-gray-200) > * + * {
+  border-color: var(--dk-border);
+}
+
+/* Default shadows are tuned for white pages; on ink they read as grey haze */
+html[data-theme="purple"] main :is(.shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl):not([class*="bg-blue"]):not(.btn-primary) {
+  box-shadow: var(--dk-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   Media: never tinted. Images on cards get a hairline so edges stay crisp.
+   Logos with dark ink sit on a light plate (.media-plate) to stay legible.
+   -------------------------------------------------------------------------- */
+html[data-theme="purple"] main [class*="rounded"] > img:not(.media-plate img) {
+  outline: 1px solid var(--dk-border);
+  outline-offset: -1px;
+}
+html[data-theme="purple"] .media-plate {
+  background-color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation (outside <main>)
+   -------------------------------------------------------------------------- */
+html[data-theme="purple"] nav :is(.bg-white\/80, .bg-white) {
+  background-color: rgba(10, 18, 34, 0.92);
+  border-color: var(--dk-border);
+}
+html[data-theme="purple"] nav :is(.text-gray-800, .text-gray-700, .text-gray-900) {
+  color: var(--dk-text);
+}
+html[data-theme="purple"] nav .text-gray-600 {
+  color: var(--dk-text-2);
+}
+html[data-theme="purple"] nav :is(.hover\:bg-gray-50, .hover\:bg-blue-50, .hover\:bg-gray-100):hover {
+  background-color: var(--dk-surface-2);
+}
+
+/* Navbar over a lifted section: a soft, translucent blue-grey glass (the navy
+   shows through) with deep-navy text — the light theme's dark-text navbar,
+   toned down so it doesn't glare against the dark page. */
+html[data-theme="purple"] nav.nav-ice {
+  background-color: rgba(206, 218, 240, 0.72);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.55);
+}
+html[data-theme="purple"] nav.nav-ice :is(.text-black, .text-gray-900, .text-gray-800) {
+  color: #13254d;
+}
+html[data-theme="purple"] nav.nav-ice :is(.text-black, .text-gray-900, .text-gray-800):hover {
+  color: #1d4ed8;
+}
+
+/* --------------------------------------------------------------------------
+   Component specifics
+   -------------------------------------------------------------------------- */
+/* Support pricing block (colours exposed as CSS variables in the component) */
+html[data-theme="purple"] .prepackaged-support-section {
+  --pp-section-bg: var(--dk-bg-alt);
+  --pp-card-bg: var(--dk-surface);
+  --pp-text: var(--dk-text);
+  --pp-text-2: var(--dk-text-2);
+  --pp-border: var(--dk-border);
+  box-shadow: none !important;
+  border: 1px solid var(--dk-border);
+}
+
+/* Payroll/HR/e-invoice steppers: light panels with blue tint */
+html[data-theme="purple"] main :is(.from-blue-50, .from-blue-100, .from-indigo-50, .from-sky-50):not(.bg-clip-text) {
+  --tw-gradient-from: rgba(59, 130, 246, 0.14);
+}
+/* Background gradients only — gradient TEXT (bg-clip-text, e.g. hero headlines) keeps its light stops */
+html[data-theme="purple"] main :is(.to-blue-50, .to-white, .to-blue-100, .to-indigo-50, .to-indigo-100, .to-sky-50, .to-cyan-50):not(.bg-clip-text) {
+  --tw-gradient-to: rgba(15, 25, 45, 0.6);
+}
+html[data-theme="purple"] main :is(.from-white, .from-gray-50, .from-slate-50):not(.bg-clip-text) {
+  --tw-gradient-from: var(--dk-bg-alt);
+}
+html[data-theme="purple"] main :is(.to-gray-50, .to-gray-100, .via-white, .via-gray-50):not(.bg-clip-text) {
+  --tw-gradient-to: var(--dk-bg-alt);
+  --tw-gradient-via: var(--dk-bg-alt);
+}
+
+/* Form fields inside light cards */
+html[data-theme="purple"] main :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):is(.bg-white, .bg-gray-50) {
+  background-color: var(--dk-bg-alt);
+  color: var(--dk-text);
+  border-color: var(--dk-border-2);
+}
+
+/* --------------------------------------------------------------------------
+   Theme switch: brief colour cross-fade, only while switching (ThemeContext
+   adds html.theme-switching for ~400ms). Never affects other transitions.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-switching,
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
+  }
+}

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../src/styles/theme-colors.css";
+@import "../src/styles/theme-dark.css";
 @import "../src/styles/animations.css";
 @import "../src/styles/skeleton.css";
 
@@ -723,3 +724,78 @@ html[data-adm-theme="dark"] :is(.admin-layout, .adm-tokens) ::selection,
 @media (hover: none), (pointer: coarse) {
   .cursor-ring, .cursor-dot { display: none; }
 }
+
+/* ==================================================
+   CONTACT FORM (Modal + ContactForm)
+   Solid brand navy, matching the site's navy sections and footer. Deliberately
+   plain: flat colours, hairline borders, one brand-blue action. No gradients,
+   glows or glass. Colour values live in --cf-* tokens; the dark site theme
+   lifts the panel one step so it separates from the darker page.
+   Explicit colours because the theme files remap several Tailwind
+   blue/cyan/gray utilities.
+   ================================================== */
+:root {
+  --cf-bg: #0b1736;            /* brand navy */
+  --cf-border: rgba(255, 255, 255, 0.1);
+  --cf-field: #12224a;         /* one step lighter */
+  --cf-field-border: #2c3f6d;
+  --cf-field-border-hover: #3d5288;
+}
+html[data-theme="purple"] {
+  --cf-bg: #0e1f48;            /* lifted: the dark theme's page is darker navy */
+  --cf-field: #142a5c;
+  --cf-field-border: #33497e;
+  --cf-field-border-hover: #4760a0;
+}
+
+.cf-panel {
+  background: var(--cf-bg);
+  border: 1px solid var(--cf-border);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+  color: #f1f5fb;
+}
+.cf-header { border-bottom: 1px solid var(--cf-border); }
+
+.cf-title { color: #ffffff; }
+.cf-divider { border-color: var(--cf-border); }
+.cf-label { color: #dbe4f5; }
+.cf-muted { color: #a9b7d4; }
+.cf-subtle { color: #8fa0c2; }
+.cf-accent { color: #93c5fd; }
+.cf-warn { color: #fbbf24; }
+.cf-link { color: #93c5fd; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(147, 197, 253, 0.4); }
+.cf-link:hover { color: #bfdbfe; text-decoration-color: currentColor; }
+
+.cf-close { color: #a9b7d4; }
+.cf-close:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.08); }
+
+.cf-input {
+  background-color: var(--cf-field);
+  border: 1px solid var(--cf-field-border);
+  color: #ffffff;
+}
+.cf-input::placeholder { color: #8fa0c2; opacity: 1; }
+.cf-input:hover { border-color: var(--cf-field-border-hover); }
+.cf-input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+.cf-input.cf-invalid { border-color: #f87171; }
+.cf-input.cf-invalid:focus { box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.25); }
+select.cf-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a9b7d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
+  background-position: right 12px center !important;
+}
+.cf-option { background-color: #12224a; color: #ffffff; }
+
+.cf-submit { color: #ffffff; background: #2563eb; }
+.cf-submit:hover { background: #1d4ed8; }
+.cf-submit-busy { background: rgba(255, 255, 255, 0.1); color: #a9b7d4; }
+.cf-secondary-btn { color: #dbe4f5; border-color: var(--cf-field-border); background: transparent; }
+.cf-secondary-btn:hover { background-color: rgba(255, 255, 255, 0.06); }
+
+.cf-error { color: #fca5a5; }
+.cf-error-box { background: rgba(248, 113, 113, 0.12); border-color: rgba(248, 113, 113, 0.35); color: #fecaca; }
+.cf-success-badge { background: rgba(74, 222, 128, 0.12); border-color: rgba(74, 222, 128, 0.35); }
+.cf-success-icon { color: #4ade80; }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 
 const ThemeContext = createContext();
 
@@ -33,8 +33,17 @@ export const ThemeProvider = ({ children }) => {
     }
   }, []);
 
-  // Update document data-theme attribute and localStorage when theme changes
+  // Update document data-theme attribute and localStorage when theme changes.
+  // Skipped on the very first run: the inline script in app/layout.jsx already
+  // applied the saved theme before first paint, and running here with the
+  // initial "default" state would briefly strip it (light flash for dark users)
+  // and overwrite the saved preference.
+  const themeSynced = useRef(false);
   useEffect(() => {
+    if (!themeSynced.current) {
+      themeSynced.current = true;
+      return;
+    }
     // Note: Still using "purple" as the data-theme attribute for CSS compatibility
     if (theme === "dark" || theme === "purple") {
       document.documentElement.setAttribute("data-theme", "purple");
@@ -54,7 +63,16 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem("bellatrix-dark-mode", isDark.toString());
   }, [isDark]);
 
+  // Colour cross-fade only while switching (see html.theme-switching in theme-dark.css)
+  const markSwitching = () => {
+    const root = document.documentElement;
+    root.classList.add("theme-switching");
+    window.clearTimeout(markSwitching.t);
+    markSwitching.t = window.setTimeout(() => root.classList.remove("theme-switching"), 420);
+  };
+
   const toggleTheme = (newTheme) => {
+    markSwitching();
     if (
       typeof newTheme === "string" &&
       (newTheme === "default" || newTheme === "dark" || newTheme === "purple")

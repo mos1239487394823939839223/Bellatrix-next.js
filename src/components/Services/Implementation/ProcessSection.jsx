@@ -219,7 +219,7 @@ const ProcessSection = (props) => {
                         <div className="ml-6 flex-1">
                           <div className="bg-white p-4 rounded-xl border-2 border-blue-100 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 hover:shadow-lg">
                             <header className="flex items-center mb-2">
-                              <span className="bg-blue-100 text-blue-600 text-xs font-semibold px-2 py-1 rounded-full mr-3">
+                              <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-3">
                                 Step {step.number}
                               </span>
                               <h3 className="text-lg font-bold text-gray-800">

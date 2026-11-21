@@ -97,21 +97,6 @@
   transition: background-color 0.6s ease;
 }
 
-/* Purple theme (second theme): Solid dark silver background - no animation */
-[data-theme="purple"] .animate-background-glow {
-  animation: none !important;
-  background-color: #202328 !important; /* Dark silver color */
-}
-
-[data-theme="purple"] .theme-bg-animated {
-  background-color: #202328 !important; /* Dark silver color */
-  animation: none !important;
-}
-
-/* Purple theme: Light gray background for stat cards and content cards */
-[data-theme="purple"] .bg-\[var\(--color-primary-bg\)\] {
-  background-color: #eaeaea !important;
-}
 
 /* Default theme (first theme): Solid dark blue background instead of gradient */
 /* When no data-theme is set (default state), use solid dark blue */
@@ -119,10 +104,6 @@
   background: #001038 !important;
 }
 
-/* Purple theme (second theme): Solid dark silver background instead of gradient */
-[data-theme="purple"] .bg-gradient-to-r.from-blue-600.to-cyan-600 {
-  background: #202328 !important;
-}
 
 .theme-gradient-overlay {
   background: linear-gradient(

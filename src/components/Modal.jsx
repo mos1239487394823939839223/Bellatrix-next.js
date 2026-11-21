@@ -67,7 +67,7 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
   
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4 md:p-6"
+      className="fixed inset-0 bg-[rgba(16,24,40,0.6)] flex items-center justify-center z-50 p-3 sm:p-4 md:p-6"
       onClick={onClose}
     >
       <div
@@ -77,31 +77,22 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
         aria-labelledby={titleId}
         aria-describedby={subtitle ? subtitleId : undefined}
         tabIndex={-1}
-        className="w-full max-w-2xl relative shadow-2xl overflow-hidden animate-fade-in-up rounded-2xl flex flex-col max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] focus:outline-none"
+        className="cf-panel w-full max-w-2xl relative overflow-hidden animate-fade-in-up rounded-lg flex flex-col max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] focus:outline-none"
         onClick={(e) => e.stopPropagation()}
-        style={{ backgroundColor: 'var(--color-brand-dark-navy)' }}
       >
         {/* Decorative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
-          <div className="absolute top-1/2 right-0 w-24 h-24 bg-blue-400/5 rounded-full blur-xl"></div>
         </div>
 
         {/* Header */}
-        <div className="relative px-6 py-4 border-b border-white/10 flex-shrink-0">
+        <div className="cf-header relative px-6 sm:px-8 pt-6 pb-5 flex-shrink-0">
           <div className="flex items-start gap-4">
-            {icon && (
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                <span className="text-white text-lg">{icon}</span>
-              </div>
-            )}
             <div className="flex-1 min-w-0">
-              <h2 id={titleId} className="text-xl font-bold text-white leading-tight">
+              <h2 id={titleId} className="cf-title text-xl font-semibold leading-snug">
                 {title}
               </h2>
               {subtitle && (
-                <p id={subtitleId} className="text-white/70 text-sm mt-1">
+                <p id={subtitleId} className="cf-muted text-sm leading-relaxed mt-1 max-w-md">
                   {subtitle}
                 </p>
               )}
@@ -109,7 +100,7 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
             <button
               type="button"
               onClick={onClose}
-              className="text-white/70 hover:text-white transition-all duration-300 p-2.5 hover:bg-white/10 rounded-full flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              className="cf-close transition-all duration-300 p-2.5 rounded-full flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
               aria-label="Close dialog"
             >
               <svg
@@ -131,7 +122,7 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
         </div>
 
         {/* Content — scrolls when taller than the screen (short phones, landscape) */}
-        <div className="relative px-6 py-4 overflow-y-auto overscroll-contain custom-scrollbar" data-lenis-prevent>
+        <div className="relative px-6 sm:px-8 py-6 overflow-y-auto overscroll-contain custom-scrollbar" data-lenis-prevent>
           {children}
         </div>
       </div>
@@ -165,7 +156,7 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
         @keyframes fade-in-up {
           from {
             opacity: 0;
-            transform: translateY(20px) scale(0.95);
+            transform: translateY(6px) scale(0.98);
           }
           to {
             opacity: 1;
@@ -174,7 +165,7 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
         }
 
         .animate-fade-in-up {
-          animation: fade-in-up 0.3s ease-out forwards;
+          animation: fade-in-up 0.18s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
         @media (prefers-reduced-motion: reduce) {

@@ -17,6 +17,16 @@ const XMark = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
   </svg>
 );
+const SunIcon = () => (
+  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor" className="h-5 w-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+  </svg>
+);
+const MoonIcon = () => (
+  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor" className="h-5 w-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+  </svg>
+);
 const ChevronDown = ({ className = "ml-1 h-4 w-4 shrink-0" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -27,7 +37,7 @@ import Link from "next/link";
 
 import { useTheme } from "../context/ThemeContext";
 
-import { setupSectionThemeDetection } from "../utils/sectionThemeDetection";
+import { setupSectionThemeDetection, detectCurrentSectionTheme } from "../utils/sectionThemeDetection";
 
 import { getApiBaseUrlWithApi } from "../config/api.js";
 import { cachedFetch } from "../lib/apiCache.js";
@@ -72,6 +82,7 @@ const Navbar = ({ initialCategories = [] }) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps — intentionally run once; initialCategories is stable
   const { theme, toggleTheme } = useTheme();
   const [navbarTheme, setNavbarTheme] = useState("dark");
+  const themeRef = useRef(theme); // read by the scroll-driven section detection
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mobileMenuButtonRef = useRef(null);
@@ -121,14 +132,21 @@ const Navbar = ({ initialCategories = [] }) => {
 
     return cleanup;
   }, []);
+
+  // Re-evaluate when the visitor switches site theme
+  useEffect(() => {
+    themeRef.current = theme;
+    setNavbarTheme(detectCurrentSectionTheme(60));
+  }, [theme]);
+  const isDarkSite = theme !== "default";
   // Contact form modal functions
   const openContactModal = () => { setHasOpenedContact(true); setIsContactModalOpen(true); };
   const closeContactModal = () => setIsContactModalOpen(false);
 
   // Contact form data
   const modalContent = {
-    title: "Contact Us",
-    subtitle: "Let's discuss your project",
+    title: "Contact Bellatrix",
+    subtitle: "Tell us about your ERP project. A consultant will reply within one business day.",
     formFields: {
       contactInfo: {
         title: "Contact Information",
@@ -262,9 +280,14 @@ const Navbar = ({ initialCategories = [] }) => {
   return (
     <>
       <nav
-        className={`fixed w-full top-0 left-0 z-50 transition-all duration-500 ${scrolled
-          ? "bg-gray-900/10 shadow-2xl backdrop-blur-md"
-          : "bg-transparent backdrop-blur-md"
+        className={`fixed w-full top-0 left-0 z-50 transition-all duration-500 ${
+          // Dark site theme over a lifted ("light") section: frosted ice bar so the
+          // navbar's dark text/logo variant stays readable, mirroring the light theme
+          isDarkSite && navbarTheme === "light"
+            ? "nav-ice"
+            : scrolled
+              ? "bg-gray-900/10 shadow-2xl backdrop-blur-md"
+              : "bg-transparent backdrop-blur-md"
           }`}
       >
         {/* Floating Geometric Elements */}
@@ -473,11 +496,17 @@ const Navbar = ({ initialCategories = [] }) => {
                 onClick={() =>
                   toggleTheme(theme === "default" ? "purple" : "default")
                 }
-                className="relative ml-2 px-3 py-3 bg-[var(--color-white)]/10 hover:bg-[var(--color-white)]/20 text-[var(--color-white)] text-sm font-medium rounded-xl transition-all duration-300 border border-[var(--color-white)]/10 backdrop-blur-sm cursor-pointer"
-                title={`Switch to ${theme === "default" ? "Dark Mode" : "Light Mode"
-                  } theme`}
+                type="button"
+                aria-label={isDarkSite ? "Switch to light mode" : "Switch to dark mode"}
+                aria-pressed={isDarkSite}
+                title={isDarkSite ? "Switch to light mode" : "Switch to dark mode"}
+                className={`relative ml-2 inline-flex h-11 w-11 items-center justify-center rounded-xl border backdrop-blur-sm transition-colors duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] ${
+                  navbarTheme === "light"
+                    ? "border-gray-300 bg-white/70 text-gray-700 hover:bg-white"
+                    : "border-white/15 bg-white/10 text-white hover:bg-white/20"
+                }`}
               >
-                <span className="text-lg">{theme === "default" ? "" : ""}</span>
+                {isDarkSite ? <SunIcon /> : <MoonIcon />}
               </button>
 
               {/* Premium Contact button */}
@@ -611,9 +640,12 @@ const Navbar = ({ initialCategories = [] }) => {
                 onClick={() =>
                   toggleTheme(theme === "default" ? "purple" : "default")
                 }
-                className="block w-full px-4 py-3 mt-4 text-center bg-[var(--color-white)]/10 hover:bg-[var(--color-white)]/20 text-[var(--color-white)] font-medium rounded-xl border border-[var(--color-white)]/10 transition-all duration-300 touch-target"
+                type="button"
+                aria-pressed={isDarkSite}
+                className="flex w-full items-center justify-center gap-2 px-4 py-3 mt-4 bg-[var(--color-white)]/10 hover:bg-[var(--color-white)]/20 text-[var(--color-white)] font-medium rounded-xl border border-[var(--color-white)]/10 transition-all duration-300 touch-target"
               >
-                {theme === "default" ? " Switch to Dark Mode" : " Switch to Light Mode"}
+                {isDarkSite ? <SunIcon /> : <MoonIcon />}
+                {isDarkSite ? "Switch to light mode" : "Switch to dark mode"}
               </button>
 
               {/* Mobile Contact button */}
@@ -637,7 +669,7 @@ const Navbar = ({ initialCategories = [] }) => {
             title={modalContent.title}
             subtitle={modalContent.subtitle}
           >
-            <div className="p-2">
+            <div>
               <LazyContactForm onDone={closeContactModal} />
             </div>
           </LazyModal>

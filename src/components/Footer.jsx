@@ -68,7 +68,7 @@ const footerStyles = `
   }
 
   [data-theme="purple"] .footer-social-link:hover {
-    background-color: #6c757d !important;
+    background-color: rgba(59, 130, 246, 0.28) !important;
   }
 
   .footer-link:hover {
@@ -98,7 +98,7 @@ const footerStyles = `
   }
 
   [data-theme="purple"] .footer-link:hover {
-    color: #8b95a1 !important;
+    color: #7cb4ff !important;
     opacity: 1 !important;
   }
 

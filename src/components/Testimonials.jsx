@@ -129,7 +129,7 @@ const Testimonials = ({
                         <div className="font-semibold text-gray-900 text-base">
                           {activeTestimonial.name}
                         </div>
-                        <div className="text-gray-400 text-sm">
+                        <div className="text-gray-500 text-sm">
                           {activeTestimonial.title}
                         </div>
                         {activeTestimonial.company && (

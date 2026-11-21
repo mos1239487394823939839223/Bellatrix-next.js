@@ -101,8 +101,17 @@ const websiteJsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the inline theme script below may set data-theme
+    // before React hydrates
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Apply the saved site theme before first paint (no light flash for dark-mode visitors) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('bellatrix-theme');if(t==='dark'||t==='purple')document.documentElement.setAttribute('data-theme','purple')}catch(e){}",
+          }}
+        />
         {/* JSON-LD structured data */}
         <script
           type="application/ld+json"

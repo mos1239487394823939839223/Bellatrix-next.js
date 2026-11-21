@@ -6,7 +6,7 @@ import ContactForm from "./ContactForm";
 
 
 
-const ContactModal = ({ isOpen, onClose, title = "Contact Us", subtitle = "Let's discuss your project requirements", icon = "" }) => {
+const ContactModal = ({ isOpen, onClose, title = "Contact Bellatrix", subtitle = "Tell us about your ERP project. A consultant will reply within one business day.", icon = "" }) => {
 
   return (
 

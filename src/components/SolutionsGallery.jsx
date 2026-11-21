@@ -31,6 +31,10 @@ const OPTIMIZABLE_HOSTS = /^https:\/\/(www\.)?bellatrixinc\.com\//i;
 // so hand it the absolute CMS URL instead (an allowed remote pattern).
 const toImageSrc = (src) =>
   typeof src === "string" && src.startsWith("/uploads/") ? `https://bellatrixinc.com${src}` : src;
+// Accent colours are used as text on the navy section; mixing ~30% white keeps
+// the hue while lifting contrast above 4.5:1 for saturated accents (e.g. indigo).
+const accentText = (c) => (c ? `color-mix(in srgb, ${c} 70%, #ffffff)` : undefined);
+
 const shouldBypassOptimization = (src) =>
   typeof src === "string" &&
   !OPTIMIZABLE_HOSTS.test(src) &&
@@ -177,7 +181,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
             className="inline-block text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full mb-4"
             style={{
               background: "rgba(99,102,241,0.15)",
-              color: "var(--color-primary, #6366f1)",
+              color: "#a5b4fc", // indigo-300: readable on the navy section in both themes
               border: "1px solid rgba(99,102,241,0.25)",
             }}
           >
@@ -303,7 +307,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                         // Dark backing keeps the badge legible on any photo
                         background: "rgba(2, 6, 23, 0.72)",
                         border: `1px solid ${featured.accentColor}66`,
-                        color: featured.accentColor,
+                        color: accentText(featured.accentColor),
                       }}
                     >
                       {featured.category}
@@ -320,7 +324,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                       </h3>
                       <p
                         className="text-sm font-medium mb-4"
-                        style={{ color: featured.accentColor }}
+                        style={{ color: accentText(featured.accentColor) }}
                       >
                         {featured.subtitle}
                       </p>
@@ -352,7 +356,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                     <a
                       href={featured.href}
                       className="inline-flex items-center gap-2 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
-                      style={{ color: featured.accentColor }}
+                      style={{ color: accentText(featured.accentColor) }}
                       onClick={(e) => e.stopPropagation()}
                     >
                       Explore Solution <ArrowRight />
@@ -426,7 +430,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                       // Dark backing keeps the badge legible on any photo
                       background: "rgba(2, 6, 23, 0.72)",
                       border: `1px solid ${solution.accentColor}66`,
-                      color: solution.accentColor,
+                      color: accentText(solution.accentColor),
                     }}
                   >
                     {solution.category}
@@ -438,7 +442,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                     </h3>
                     <p
                       className="text-xs font-medium"
-                      style={{ color: solution.accentColor, textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
+                      style={{ color: accentText(solution.accentColor), textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
                     >
                       {solution.subtitle}
                     </p>
@@ -474,7 +478,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                   <a
                     href={solution.href}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
-                    style={{ color: solution.accentColor }}
+                    style={{ color: accentText(solution.accentColor) }}
                     onClick={(e) => e.stopPropagation()}
                   >
                     Explore Solution <ArrowRight />

@@ -60,71 +60,20 @@ export const CTA_PATTERNS = {
 
 // Default modal configurations for different CTA types
 export const DEFAULT_MODAL_CONFIGS = {
-  getStarted: {
-    title: "Get Started Today",
-    subtitle: "Let's discuss your project requirements and get you started",
-    icon: ""
-  },
-  contact: {
-    title: "Contact Us",
-    subtitle: "We'd love to hear from you. Send us a message and we'll respond as soon as possible",
-    icon: ""
-  },
-  request: {
-    title: "Request Information",
-    subtitle: "Tell us what you need and we'll provide you with the information",
-    icon: "ℹ"
-  },
-  demo: {
-    title: "Request a Demo",
-    subtitle: "See our solutions in action with a personalized demonstration",
-    icon: ""
-  },
-  quote: {
-    title: "Get a Quote",
-    subtitle: "Get a customized quote for your specific requirements",
-    icon: ""
-  },
-  learn: {
-    title: "Learn More",
-    subtitle: "Get detailed information about our services and solutions",
-    icon: ""
-  },
-  book: {
-    title: "Book a Meeting",
-    subtitle: "Schedule a time to discuss your needs with our experts",
-    icon: ""
-  },
-  schedule: {
-    title: "Schedule a Demo",
-    subtitle: "Book a time for a personalized demonstration",
-    icon: ""
-  },
-  download: {
-    title: "Download Resources",
-    subtitle: "Get access to our resources and documentation",
-    icon: ""
-  },
-  subscribe: {
-    title: "Subscribe",
-    subtitle: "Join our community and stay updated with the latest news",
-    icon: ""
-  },
-  buy: {
-    title: "Purchase",
-    subtitle: "Complete your purchase and start using our solutions",
-    icon: ""
-  },
-  choose: {
-    title: "Choose Your Plan",
-    subtitle: "Let's discuss your requirements and find the best plan for you",
-    icon: ""
-  },
-  default: {
-    title: "Contact Us",
-    subtitle: "Let's discuss your requirements",
-    icon: ""
-  }
+  // Specific, plain copy in sentence case. No icons: the dialog doesn't render them.
+  getStarted: { title: "Start your project", subtitle: "Share a few details about your business and we'll suggest the next steps." },
+  contact: { title: "Contact Bellatrix", subtitle: "Tell us about your ERP project. A consultant will reply within one business day." },
+  request: { title: "Request information", subtitle: "Tell us what you'd like to know about NetSuite or Odoo and we'll send you the details." },
+  demo: { title: "Request a demo", subtitle: "We'll walk you through NetSuite or Odoo set up for a business like yours." },
+  quote: { title: "Get a quote", subtitle: "Describe your requirements and we'll send you an estimate." },
+  learn: { title: "Talk to a consultant", subtitle: "Ask us anything about this service. A consultant will reply within one business day." },
+  book: { title: "Book a meeting", subtitle: "Tell us when suits you and what you'd like to cover." },
+  schedule: { title: "Schedule a demo", subtitle: "Tell us about your business and we'll arrange a time for a walkthrough." },
+  download: { title: "Request resources", subtitle: "Tell us what you need and we'll email the documents to you." },
+  subscribe: { title: "Stay in touch", subtitle: "Leave your details and we'll keep you posted on NetSuite and Odoo updates." },
+  buy: { title: "Get started", subtitle: "Tell us about your business and we'll prepare the next steps." },
+  choose: { title: "Choose a plan", subtitle: "Tell us about your business and we'll recommend the right plan." },
+  default: { title: "Contact Bellatrix", subtitle: "Tell us about your ERP project. A consultant will reply within one business day." },
 };
 
 /**

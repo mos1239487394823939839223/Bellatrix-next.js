@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useBackgroundVideo } from "../../hooks/useBackgroundVideo";
-import { VideoSources } from "../../utils/videoSources";
+import { VideoSources, getPosterSrc } from "../../utils/videoSources";
 
 const AboutHero = ({ 
   data,
@@ -87,9 +87,14 @@ const AboutHero = ({
       className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-br from-[var(--color-brand-midnight,#0a0a2e)] via-black to-[var(--color-primary,#C41E3A)]"
     >
       {/* Background Video — fades in only after it's ready (mirrors Home Hero) */}
+      {/* Still frame behind the video: visible when autoplay is blocked or the video is skipped */}
+      {getPosterSrc(heroData.backgroundVideo || "/Videos/about-hero.mp4") && (
+        <img src={getPosterSrc(heroData.backgroundVideo || "/Videos/about-hero.mp4")} alt="" aria-hidden="true" decoding="async" fetchPriority="low" className="absolute inset-0 w-full h-full object-cover" />
+      )}
       {allowVideo && (
       <video
         ref={videoRef}
+        poster={getPosterSrc(heroData.backgroundVideo || "/Videos/about-hero.mp4") || undefined}
         autoPlay
         muted
         loop

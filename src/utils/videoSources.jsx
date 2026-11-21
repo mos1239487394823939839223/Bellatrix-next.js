@@ -13,6 +13,17 @@ const HAS_MOBILE_VARIANT = new Set([
 
 export const MOBILE_VIDEO_MEDIA = "(max-width: 767px)";
 
+/**
+ * Still frame (JPEG) for a known video, or null. Shown while the video loads,
+ * when autoplay is blocked (iOS Low Power Mode), and instead of the video for
+ * visitors with "reduce motion" or Data Saver.
+ */
+export function getPosterSrc(src) {
+  if (typeof src !== "string") return null;
+  const path = src.replace(/^https?:\/\/(www\.)?bellatrixinc\.com/i, "").split(/[?#]/)[0];
+  return HAS_MOBILE_VARIANT.has(path) ? path.replace(/\.mp4$/i, "-poster.jpg") : null;
+}
+
 /** Returns the 720p variant path for a known video, or null. */
 export function getMobileVideoSrc(src) {
   if (typeof src !== "string") return null;

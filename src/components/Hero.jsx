@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { useCTAModal } from "../contexts/CTAModalContext";
 import { useBackgroundVideo } from "../hooks/useBackgroundVideo";
-import { VideoSources } from "../utils/videoSources";
+import { VideoSources, getPosterSrc } from "../utils/videoSources";
 
 const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
@@ -89,6 +89,25 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   const slides = propsSlides.length > 0 ? propsSlides : (data?.slides?.length > 0 ? data.slides : defaultSlides);
   const stats = propsStats.length > 0 ? propsStats : (data?.stats || []);
   const currentVideoSrc = slides[currentSlide]?.video || "/Videos/implementation/homepage_hero.mp4";
+  // Still frame: shown while the video loads, when autoplay is blocked (iOS Low
+  // Power Mode) and instead of the video for reduce-motion / Data Saver visitors
+  const posterSrc = getPosterSrc(currentVideoSrc);
+  const [posterReady, setPosterReady] = useState(false);
+  useEffect(() => setPosterReady(false), [posterSrc]);
+
+  // iOS only autoplays inline video that is muted *before* play; set it on the
+  // element directly (React doesn't render the muted attribute) and start it
+  // as soon as it mounts instead of waiting for loadeddata.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!allowVideo || !v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute("muted", "");
+    v.setAttribute("playsinline", "");
+    const p = v.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, [allowVideo, currentVideoSrc]);
 
   // Play the current video with autoplay-restriction handling
   const tryPlayVideo = useCallback(async (videoEl) => {
@@ -213,7 +232,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
             video's first frame, or right after hydration when video is skipped. */}
         <div
           className={`absolute inset-0 transition-opacity duration-700 ${
-            !isVideoReady && (!hydrated || allowVideo) ? "opacity-100" : "opacity-0"
+            !isVideoReady && !posterReady && (!hydrated || allowVideo || posterSrc) ? "opacity-100" : "opacity-0"
           }`}
         >
           <div className="absolute inset-0 hero-placeholder-horizon" />
@@ -226,12 +245,27 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
       {/* Background Video */}
 
+      {/* Poster frame (client-only, so it never competes with the server-rendered headline) */}
+      {hydrated && posterSrc && (
+        <img
+          src={posterSrc}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          onLoad={() => setPosterReady(true)}
+          className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500 ${
+            posterReady ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
+
       {allowVideo && (
       <video
 
         ref={videoRef}
         // key: remount (and load the new file) when the slide's video changes
         key={currentVideoSrc}
+        poster={posterSrc || undefined}
 
         autoPlay
 

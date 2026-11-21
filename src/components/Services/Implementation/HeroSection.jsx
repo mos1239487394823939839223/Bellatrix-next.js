@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useBackgroundVideo } from "../../../hooks/useBackgroundVideo";
-import { VideoSources } from "../../../utils/videoSources";
+import { VideoSources, getPosterSrc } from "../../../utils/videoSources";
 
 
 import {
@@ -141,8 +141,16 @@ const HeroSection = (props) => {
           const isVideo = /\.(mp4|webm)(\?|#|$)/i.test(media);
           if (isVideo) {
             // Decorative video: skipped for Data Saver / reduced motion (section gradient shows instead)
-            return allowVideo ? (
+            const poster = getPosterSrc(media);
+            return (
+              <>
+                {/* Still frame behind the video: visible when autoplay is blocked or the video is skipped */}
+                {poster && (
+                  <img src={poster} alt="" aria-hidden="true" decoding="async" fetchPriority="low" className="absolute inset-0 w-full h-full object-cover" />
+                )}
+                {allowVideo && (
               <video
+                poster={poster || undefined}
                 autoPlay
                 muted
                 loop
@@ -152,7 +160,9 @@ const HeroSection = (props) => {
               >
                 <VideoSources src={media} type={media.toLowerCase().includes(".webm") ? "video/webm" : "video/mp4"} />
               </video>
-            ) : null;
+                )}
+              </>
+            );
           }
           // Only real images go into background-image (a video URL here made the
           // browser download a multi-MB file it could never display)

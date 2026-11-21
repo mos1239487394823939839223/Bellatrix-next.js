@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useBackgroundVideo } from "../../../hooks/useBackgroundVideo";
-import { VideoSources } from "../../../utils/videoSources";
+import { VideoSources, getPosterSrc } from "../../../utils/videoSources";
 
 const HeroSection = ({ 
   data = {},
@@ -59,8 +59,13 @@ const HeroSection = ({
       <header className="w-full min-h-screen bg-gradient-to-br from-[var(--color-brand-midnight)] via-black to-[var(--color-primary)] py-24 md:py-32 text-center flex flex-col items-center justify-center relative overflow-hidden">
         {/* Background Video */}
         <div className="absolute inset-0 w-full h-full">
+          {/* Still frame behind the video: visible when autoplay is blocked or the video is skipped */}
+          {getPosterSrc(heroData.bgVideo) && (
+            <img src={getPosterSrc(heroData.bgVideo)} alt="" aria-hidden="true" decoding="async" fetchPriority="low" className="absolute inset-0 w-full h-full object-cover" />
+          )}
           {allowVideo && (
           <video
+            poster={getPosterSrc(heroData.bgVideo) || undefined}
             autoPlay
             muted
             loop

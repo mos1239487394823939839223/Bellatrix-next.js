@@ -109,8 +109,15 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
     }
   }, [isPlaying, tryPlayVideo]);
 
-  // Trigger text fade and reset skeleton when slide media changes
+  // On slide changes: fade the text out/in and wait for the new video's first frame.
+  // Skipped on first load — the server-rendered headline is already visible, and
+  // hiding it again during hydration caused a visible flash.
+  const isFirstSlideRender = useRef(true);
   useEffect(() => {
+    if (isFirstSlideRender.current) {
+      isFirstSlideRender.current = false;
+      return undefined;
+    }
     setIsVideoReady(false);
     setFadeClass("hero-text-exit");
     const fadeTimer = setTimeout(() => setFadeClass("hero-text-enter"), 50);
@@ -163,24 +170,23 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
     <section ref={sectionRef} className="min-h-[100dvh] relative overflow-hidden" aria-label="Homepage hero">
 
-      {/* Initial loading skeleton until the first video frame is ready */}
-      <div
-        aria-hidden="true"
-        // Background layer (below the headline): branded gradient while the video
-        // loads, and the permanent backdrop when video is skipped
-        className={`absolute inset-0 z-0 pointer-events-none transition-opacity duration-700 ${
-          isVideoReady ? "opacity-0" : "opacity-100"
-        }`}
-      >
+      {/* Backdrop — always present, server-rendered, never fades out. It is what
+          visitors see while the video loads (and permanently when the video is
+          skipped), so the hero can never flash white. */}
+      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, var(--color-brand-dark) 0%, var(--color-brand-midnight) 55%, var(--color-blue-900) 100%)",
+              "radial-gradient(ellipse 120% 70% at 50% 110%, rgba(37, 99, 235, 0.45) 0%, transparent 60%), linear-gradient(135deg, var(--color-brand-dark, #001038) 0%, var(--color-brand-midnight, #191970) 55%, var(--color-blue-900, #1e3a8a) 100%)",
           }}
         />
-        <div className="absolute inset-0 animate-pulse bg-[linear-gradient(110deg,rgba(255,255,255,0.03),rgba(255,255,255,0.1),rgba(255,255,255,0.03))]" />
-
+        {/* Loading shimmer: only until the first video frame is on screen */}
+        <div
+          className={`absolute inset-0 hero-loading-shimmer transition-opacity duration-500 ${
+            allowVideo && !isVideoReady ? "opacity-100" : "opacity-0"
+          }`}
+        />
       </div>
 
       {/* Background Video */}
@@ -203,14 +209,18 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
         preload="auto"
         aria-hidden="true"
 
-        className="absolute inset-0 z-0 w-full h-full object-cover"
+        // Invisible until a frame is actually playing, then cross-fades over the backdrop
+        className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-700 ease-out ${
+          isVideoReady ? "opacity-100" : "opacity-0"
+        }`}
 
         onLoadedData={() => {
-          setIsVideoReady(true);
           if (!reduceMotion) tryPlayVideo(videoRef.current);
         }}
-        onCanPlay={() => setIsVideoReady(true)}
-        onError={() => setIsVideoReady(true)}
+        // "playing" = a real frame is being shown. Not "error": on desktop the phone
+        // <source> is skipped with an error event, which used to fade out the backdrop
+        // early and leave the hero white until the video arrived.
+        onPlaying={() => setIsVideoReady(true)}
 
       >
         <VideoSources src={currentVideoSrc} />

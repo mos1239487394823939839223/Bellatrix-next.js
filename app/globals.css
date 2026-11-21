@@ -514,3 +514,21 @@ html[data-adm-theme="dark"] :is(.admin-layout, .adm-tokens) ::selection,
     scroll-behavior: auto !important;
   }
 }
+
+/* Homepage hero: soft light sweep over the backdrop while the video loads */
+.hero-loading-shimmer {
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  animation: hero-shimmer 2.2s ease-in-out infinite;
+}
+@keyframes hero-shimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}

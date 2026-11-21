@@ -512,6 +512,7 @@ const Navbar = ({ initialCategories = [] }) => {
         {/* Premium Mobile menu — always rendered, animated via max-height */}
         <div
           id="mobile-menu"
+          data-lenis-prevent
           className={`lg:hidden transition-all duration-300 ease-in-out ${
             mobileMenuOpen
               ? 'max-h-[calc(100dvh-5rem)] opacity-100 overflow-y-auto overscroll-contain'

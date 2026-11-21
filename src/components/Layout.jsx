@@ -2,6 +2,9 @@
 import { lazy, Suspense } from 'react';
 import Navbar from './Navbar';
 import { NotificationContainer } from './NotificationToast';
+import SmoothScroll from './motion/SmoothScroll';
+import CursorFollower from './motion/CursorFollower';
+import ScrollReveal from './motion/ScrollReveal';
 
 // Footer is below the fold — lazy load so it doesn't block first paint
 const Footer = lazy(() => import('./Footer'));
@@ -28,6 +31,11 @@ const Layout = ({ children, initialCategories = [] }) => {
       </Suspense>
 
       <NotificationContainer />
+
+      {/* Motion system — public pages only (admin uses its own layout) */}
+      <SmoothScroll />
+      <ScrollReveal />
+      <CursorFollower />
     </div>
   );
 };

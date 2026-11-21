@@ -131,7 +131,7 @@ const Modal = ({ isOpen, onClose, icon, title, subtitle, children }) => {
         </div>
 
         {/* Content — scrolls when taller than the screen (short phones, landscape) */}
-        <div className="relative px-6 py-4 overflow-y-auto overscroll-contain custom-scrollbar">
+        <div className="relative px-6 py-4 overflow-y-auto overscroll-contain custom-scrollbar" data-lenis-prevent>
           {children}
         </div>
       </div>

@@ -517,20 +517,38 @@ html[data-adm-theme="dark"] :is(.admin-layout, .adm-tokens) ::selection,
 
 /* Homepage hero video placeholder (shown until the video's first frame) */
 .hero-loading-shimmer {
+  overflow: hidden;
+}
+/* A wide, soft, blurred band of light moved with GPU transforms (smoother than
+   animating background-position). One unhurried pass, then a short rest. */
+.hero-loading-shimmer::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 55%;
   background: linear-gradient(
-    110deg,
-    transparent 25%,
-    rgba(255, 255, 255, 0.08) 42%,
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(255, 255, 255, 0.08) 58%,
-    transparent 75%
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(191, 219, 254, 0.05) 25%,
+    rgba(224, 242, 254, 0.16) 45%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(224, 242, 254, 0.16) 55%,
+    rgba(191, 219, 254, 0.05) 75%,
+    rgba(255, 255, 255, 0) 100%
   );
-  background-size: 250% 100%;
-  animation: hero-shimmer 1.8s ease-in-out infinite;
+  filter: blur(18px);
+  transform: translate3d(200%, 0, 0) skewX(-12deg);
+  animation: hero-shimmer 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+  will-change: transform;
 }
 @keyframes hero-shimmer {
-  0% { background-position: 120% 0; }
-  100% { background-position: -120% 0; }
+  0%   { transform: translate3d(200%, 0, 0) skewX(-12deg); opacity: 0; }
+  10%  { opacity: 1; }
+  70%  { transform: translate3d(-110%, 0, 0) skewX(-12deg); opacity: 1; }
+  78%  { opacity: 0; }
+  100% { transform: translate3d(-110%, 0, 0) skewX(-12deg); opacity: 0; }
 }
 /* Glowing "planet horizon" where the globe video appears */
 .hero-placeholder-horizon {
@@ -551,4 +569,157 @@ html[data-adm-theme="dark"] :is(.admin-layout, .adm-tokens) ::selection,
 @keyframes hero-loading-bar {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
+}
+
+/* ==================================================
+   MOTION SYSTEM (public site)
+   Easing/timing modelled on immersive studio sites: long ease-out settles,
+   combined opacity + translate + blur. Everything is disabled by the global
+   prefers-reduced-motion rule above.
+   ================================================== */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hero entrance — pure CSS, plays from first paint (no JS gate, content always in HTML) */
+.hero-intro > * {
+  animation: hero-intro-in 1s var(--ease-out-expo) both;
+}
+/* Short stagger: the headline (LCP element) starts almost immediately */
+.hero-intro > *:nth-child(1) { animation-delay: 0s; }
+.hero-intro > *:nth-child(2) { animation-delay: 0.06s; }
+.hero-intro > *:nth-child(3) { animation-delay: 0.16s; }
+.hero-intro > *:nth-child(4) { animation-delay: 0.26s; }
+@keyframes hero-intro-in {
+  from { opacity: 0; transform: translateY(22px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+/* Hero recedes while scrolling (driven by --hero-p, 0 → 1, set from JS) */
+.hero-parallax-content {
+  transform: translate3d(0, calc(var(--hero-p, 0) * 90px), 0);
+  opacity: calc(1 - var(--hero-p, 0) * 1.15);
+  will-change: transform, opacity;
+}
+.hero-parallax-bg {
+  transform: scale(calc(1 + var(--hero-p, 0) * 0.08));
+  transform-origin: 50% 60%;
+  will-change: transform;
+}
+
+/* Scroll cue */
+.scroll-cue-line {
+  position: relative;
+  width: 1px;
+  height: 44px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.22);
+}
+.scroll-cue-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -40%;
+  width: 1px;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, #ffffff);
+  animation: scroll-cue 1.8s var(--ease-out-soft) infinite;
+}
+@keyframes scroll-cue {
+  0% { top: -40%; }
+  100% { top: 100%; }
+}
+
+/* Hero aurora: two large, heavily blurred light fields drifting slowly across
+   the top of the sky. Long cycles and low opacity keep it calm, not busy. */
+.hero-aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+.hero-aurora-a {
+  top: -22%;
+  left: -10%;
+  width: 62%;
+  height: 58%;
+  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.38), rgba(37, 99, 235, 0.18) 55%, transparent);
+  animation: hero-aurora-a 22s ease-in-out infinite alternate;
+}
+.hero-aurora-b {
+  top: -28%;
+  right: -12%;
+  width: 58%;
+  height: 62%;
+  background: radial-gradient(closest-side, rgba(129, 140, 248, 0.32), rgba(59, 130, 246, 0.14) 55%, transparent);
+  animation: hero-aurora-b 28s ease-in-out infinite alternate;
+}
+@keyframes hero-aurora-a {
+  0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
+  50%  { transform: translate3d(18%, 6%, 0) scale(1.12); opacity: 1; }
+  100% { transform: translate3d(34%, -2%, 0) scale(0.96); opacity: 0.75; }
+}
+@keyframes hero-aurora-b {
+  0%   { transform: translate3d(0, 0, 0) scale(1.05); opacity: 0.8; }
+  50%  { transform: translate3d(-20%, 8%, 0) scale(0.95); opacity: 0.55; }
+  100% { transform: translate3d(-32%, 0, 0) scale(1.1); opacity: 0.9; }
+}
+/* Vignette: darker edges, focus on the headline */
+.hero-vignette {
+  background:
+    radial-gradient(ellipse 75% 65% at 50% 45%, transparent 45%, rgba(2, 6, 23, 0.55) 100%),
+    linear-gradient(to bottom, rgba(2, 6, 23, 0.35), transparent 22%);
+}
+
+/* Scroll reveal (classes added by ScrollReveal.jsx after hydration only) */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+}
+.reveal-init.is-revealed {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 0.9s var(--ease-out-soft) var(--reveal-delay, 0ms),
+    transform 0.9s var(--ease-out-soft) var(--reveal-delay, 0ms),
+    filter 0.9s var(--ease-out-soft) var(--reveal-delay, 0ms);
+}
+
+/* Cursor accent (desktop mouse only; the native cursor stays visible) */
+.cursor-ring,
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 9999px;
+  transition: opacity 0.3s ease, width 0.35s var(--ease-out-soft), height 0.35s var(--ease-out-soft),
+    background-color 0.35s ease, border-color 0.35s ease;
+}
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(96, 165, 250, 0.75);
+  mix-blend-mode: difference;
+}
+.cursor-ring.is-hover {
+  width: 58px;
+  height: 58px;
+  background-color: rgba(96, 165, 250, 0.12);
+  border-color: rgba(147, 197, 253, 0.9);
+}
+.cursor-ring.is-press { width: 26px; height: 26px; }
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  background: #60a5fa;
+}
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring, .cursor-dot { display: none; }
 }

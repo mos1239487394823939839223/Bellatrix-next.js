@@ -147,9 +147,29 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   const secondaryCta = slide.secondaryCtaText || data?.secondaryCtaText || "Explore our services";
   const scrollPastHero = () => {
     const next = sectionRef.current?.closest("section[data-theme]")?.nextElementSibling || sectionRef.current?.nextElementSibling;
-    if (next) next.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    if (next && window.__lenis) window.__lenis.scrollTo(next, { offset: -72 });
+    else if (next) next.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     else window.scrollBy({ top: window.innerHeight, behavior: reduceMotion ? "auto" : "smooth" });
   };
+
+  // Scroll-linked recede: content drifts up and fades, background slowly zooms
+  // (like a camera pulling back). Writes one CSS variable per frame — no re-renders.
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    const el = sectionRef.current;
+    if (!el) return undefined;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const h = el.offsetHeight || window.innerHeight;
+      const p = Math.min(1, Math.max(0, window.scrollY / (h * 0.9)));
+      el.style.setProperty("--hero-p", p.toFixed(4));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, [reduceMotion]);
 
 
 
@@ -177,6 +197,8 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       {/* Backdrop — always present, server-rendered, never fades out. It is what
           visitors see while the video loads (and permanently when the video is
           skipped), so the hero can never flash white. */}
+      {/* Background layers (backdrop → video → network) zoom together on scroll */}
+      <div className="absolute inset-0 hero-parallax-bg">
       <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none">
         <div
           className="absolute inset-0"
@@ -240,15 +262,26 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       </video>
       )}
 
+      {/* Aurora light drifting across the sky + cinematic vignette (CSS only) */}
+      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="hero-aurora hero-aurora-a" />
+        <div className="hero-aurora hero-aurora-b" />
+      </div>
+      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none hero-vignette" />
+      {/* Bottom fade so the next section starts cleanly */}
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-40 z-0 pointer-events-none bg-gradient-to-t from-black/50 to-transparent" />
+      </div>
+
       {/* Content */}
       <div
         className="relative z-10 min-h-[100dvh] flex items-center justify-center pt-20 pb-12"
         onPointerDown={reduceMotion ? undefined : handleUserInteraction}
       >
 
-        <div className="w-full max-w-6xl mx-auto px-6">
+        <div className="w-full max-w-6xl mx-auto px-6 hero-parallax-content">
 
-            <article className={`hero-text-transition ${fadeClass}`}>
+            {/* hero-intro: staggered CSS entrance from first paint (no JS gate) */}
+            <article className={`hero-text-transition hero-intro ${fadeClass}`}>
 
               {/* Subtitle */}
 
@@ -329,6 +362,20 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
         </div>
 
+      </div>
+
+      {/* Scroll cue (wrapper handles position + parallax; button stays untransformed) */}
+      <div className="hero-parallax-content absolute bottom-7 inset-x-0 z-10 hidden sm:flex justify-center pointer-events-none">
+        <button
+          type="button"
+          data-no-cta-intercept
+          onClick={scrollPastHero}
+          aria-label="Scroll to the next section"
+          className="pointer-events-auto flex flex-col items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-white/70 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-md px-2 py-1"
+        >
+          <span>Scroll to explore</span>
+          <span className="scroll-cue-line" aria-hidden="true" />
+        </button>
       </div>
 
     </section>

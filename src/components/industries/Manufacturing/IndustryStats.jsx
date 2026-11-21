@@ -1,7 +1,6 @@
 import React from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import SEO from "../../SEO";
 
 
 
@@ -135,21 +134,6 @@ const IndustryStats = (props) => {
 
     <section className="manufacturing-stats bg-white py-16 light-section">
 
-      <SEO
-
-        title="Manufacturing Industry Statistics | Bellatrix Performance Metrics"
-
-        description="Discover proven manufacturing statistics with Bellatrix ERP. Real performance metrics showing efficiency gains and cost reductions in manufacturing operations."
-
-        keywords="manufacturing statistics, NetSuite manufacturing metrics, manufacturing performance, ERP manufacturing results, manufacturing industry data"
-
-        ogTitle="Manufacturing Industry Statistics | Bellatrix Performance Metrics"
-
-        ogDescription="Real manufacturing performance data and industry statistics with Bellatrix ERP solutions."
-
-        ogImage="/images/manufacturing-stats.jpg"
-
-      />
 
 
 
@@ -196,6 +180,8 @@ const IndustryStats = (props) => {
               initial={{ opacity: 0, y: 20 }}
 
               whileInView={{ opacity: 1, y: 0 }}
+
+              viewport={{ once: true, amount: 0.2 }}
 
               transition={{ delay: index * 0.1 }}
 

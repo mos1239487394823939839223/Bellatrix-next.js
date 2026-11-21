@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 
 const SolutionsSection = (props) => {
   console.log(" [SolutionsSection] ALL PROPS:", props);
@@ -87,14 +86,6 @@ const SolutionsSection = (props) => {
 
   return (
     <section className="manufacturing-solutions bg-gray-50 py-20 light-section">
-      <SEO
-        title="Bellatrix Manufacturing Solutions | Production Management ERP"
-        description="Comprehensive Bellatrix manufacturing solutions for production management, inventory control, and quality assurance. Streamline manufacturing operations."
-        keywords="Bellatrix manufacturing solutions, production management ERP, manufacturing inventory control, NetSuite manufacturing modules, ERP manufacturing software"
-        ogTitle="Bellatrix Manufacturing Solutions | Production Management ERP"
-        ogDescription="Advanced Bellatrix manufacturing solutions for comprehensive production management and operational optimization."
-        ogImage="/images/manufacturing-solutions.jpg"
-      />
 
       <div className="container mx-auto px-6">
         {/* Title and Subtitle */}
@@ -209,12 +200,14 @@ const SolutionsSection = (props) => {
 
             {/* Solution Navigation */}
             {finalSolutions.length > 1 && (
-              <div className="flex space-x-2 mt-6 justify-center">
+              <div className="flex gap-4 mt-6 justify-center">
                 {finalSolutions.map((_, index) => (
                   <button
+                  type="button"
+                  aria-current={activeSolution === index ? "true" : undefined}
                     key={index}
                     onClick={() => handlePaginationClick(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`relative w-3 h-3 rounded-full after:absolute after:-inset-2 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all duration-300 ${
                       activeSolution === index ? "bg-blue-600" : "bg-gray-300"
                     }`}
                     aria-label={`Go to solution ${index + 1}`}

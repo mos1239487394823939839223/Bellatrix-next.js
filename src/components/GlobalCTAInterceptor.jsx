@@ -94,6 +94,33 @@ const GlobalCTAInterceptor = ({ children }) => {
       if (ctaElement.hasAttribute('data-no-cta-intercept') || ctaElement.closest('[data-no-cta-intercept]')) {
         return;
       }
+
+      // Never hijack real navigation: a link with a destination (e.g. "Explore
+      // Solution" → /implementation, "Learn more" → /training) must navigate.
+      // Only placeholder links ("#", "", javascript:) fall through to the modal.
+      const navLink = ctaElement.closest('a[href]');
+      if (navLink) {
+        const href = (navLink.getAttribute('href') || '').trim();
+        const isPlaceholder = href === '' || href === '#' || /^javascript:/i.test(href);
+        // There is no /contact page — CMS buttons pointing there mean "open the contact form"
+        const isContactLink = /^(https?:\/\/(www\.)?bellatrixinc\.com)?\/contact(-us)?\/?([?#].*)?$/i.test(href);
+        if (!isPlaceholder && !isContactLink) return;
+        if (isContactLink) {
+          event.preventDefault();
+          event.stopPropagation();
+          openCTAModal(autoGenerateModalConfig(getElementText(ctaElement) || 'Contact Us'));
+          return;
+        }
+      }
+
+      // Never intercept form submits or controls that manage their own UI state
+      if (
+        ctaElement.closest('form') ||
+        ctaElement.getAttribute('aria-expanded') !== null ||
+        ctaElement.getAttribute('aria-controls') !== null
+      ) {
+        return;
+      }
       
       // Get the text content
       const buttonText = getElementText(ctaElement);
@@ -110,7 +137,6 @@ const GlobalCTAInterceptor = ({ children }) => {
         // Open the contact modal
         openCTAModal(modalConfig);
         
-        console.log('[GlobalCTAInterceptor] Intercepted CTA click:', buttonText);
       }
     };
 

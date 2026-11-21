@@ -1,18 +1,11 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { AdminProvider } from '../../src/contexts/AdminContext'
-import ProtectedRoute from '../../src/components/ProtectedRoute'
-import ModernAdminLayout from '../../src/components/Admin/ModernAdminLayout'
+// Server layout: keeps these private pages out of search results.
+// (robots.txt only blocks crawling; noindex is what prevents indexing.)
+import AdminShell from './AdminShell'
 
-export default function AdminLayout({ children }) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  if (!mounted) return null
-  return (
-    <AdminProvider>
-      <ProtectedRoute>
-        <ModernAdminLayout>{children}</ModernAdminLayout>
-      </ProtectedRoute>
-    </AdminProvider>
-  )
+export const metadata = {
+  robots: { index: false, follow: false, nocache: true },
+}
+
+export default function Layout({ children }) {
+  return <AdminShell>{children}</AdminShell>
 }

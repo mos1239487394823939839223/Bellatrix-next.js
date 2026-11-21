@@ -30,7 +30,8 @@ const PageSection = memo(({ section, index, componentData, isNewFormat = false }
       _updatedAt: section.updatedAt || section.updated_at,
       renderIcon: safeProps.renderIcon || (() => null),
       openProgramModal: safeProps.openProgramModal || (() => {}),
-      openFeatureModal: safeProps.openFeatureModal || (() => {}),
+      // Left undefined when absent so cards can hide "Learn More" buttons that would do nothing
+      openFeatureModal: safeProps.openFeatureModal,
       onCtaClick: safeProps.onCtaClick || (() => {}),
     };
 

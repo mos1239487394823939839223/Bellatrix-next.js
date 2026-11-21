@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 
-import SEO from "../../SEO";
 import { loadImplementationData } from "../../../data/implementationDataLoader";
 
 const WhyChooseSection = (props) => {
@@ -66,14 +65,6 @@ const WhyChooseSection = (props) => {
 
   return (
     <>
-      <SEO
-        title="Why Choose Bellatrix | Bellatrix ERP Implementation Excellence"
-        description="Choose Bellatrix for Bellatrix ERP implementation with 18+ years expertise, certified technology consultants, proven methodologies, and cutting-edge enterprise solutions for guaranteed success."
-        keywords="Bellatrix certified consultants, ERP implementation expertise, enterprise technology solutions, Oracle consulting company, IT implementation excellence, CRM deployment specialists, business transformation experts"
-        ogTitle="Why Choose Bellatrix | Bellatrix ERP Implementation Excellence"
-        ogDescription="Leading Bellatrix ERP implementation company with certified consultants, proven methodologies, and 18+ years of enterprise technology expertise."
-        ogImage="/Videos/implementation/whyChoese.jpg"
-      />
 
       <section
         className="py-12 relative overflow-hidden animate-background-glow"

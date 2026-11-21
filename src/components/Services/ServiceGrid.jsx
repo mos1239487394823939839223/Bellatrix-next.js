@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import CTAButton from '../CTAButton';
 
 
@@ -122,7 +123,9 @@ const ServiceGrid = ({ data = {} }) => {
 
         {/* Services Grid */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {/* Phones: one swipeable row with the next card peeking in (instead of ~3000px of stacked cards).
+            md+: regular grid. */}
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 max-w-7xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 -mx-4 px-4 md:mx-auto md:px-0 pb-4 md:pb-0 [scrollbar-width:thin]">
 
           {services.map((service, index) => (
 
@@ -130,23 +133,23 @@ const ServiceGrid = ({ data = {} }) => {
 
               key={index}
 
-              className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 border border-gray-200 hover:border-blue-300 group"
+              // flex column + mt-auto on the CTA keeps buttons aligned across a row
+              className="snap-start shrink-0 w-[85%] sm:w-[60%] md:w-auto flex flex-col h-full bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-7 md:p-8 border border-gray-200 hover:border-blue-300 group"
 
             >
 
-              {/* Icon */}
-
-              <div className="text-5xl mb-6 text-center group-hover:scale-110 transition-transform duration-300">
-
-                {service.icon || ""}
-
-              </div>
+              {/* Icon (only when set — avoids an empty gap above the title) */}
+              {service.icon && (
+                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                  {service.icon}
+                </div>
+              )}
 
 
 
               {/* Title & Description */}
 
-              <div className="text-center mb-6">
+              <div className="mb-5">
 
                 <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors duration-300">
 
@@ -168,25 +171,25 @@ const ServiceGrid = ({ data = {} }) => {
 
               {service.features && service.features.length > 0 && (
 
-                <div className="space-y-2">
+                <ul className="space-y-2.5 border-t border-gray-100 pt-5">
 
                   {service.features.map((feature, idx) => (
 
-                    <div key={idx} className="flex items-center text-sm text-gray-700">
+                    <li key={idx} className="flex items-start text-sm text-gray-700">
 
-                      <svg className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg aria-hidden="true" className="w-4 h-4 text-green-500 mr-2.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
 
                       </svg>
 
-                      <span>{feature}</span>
+                      <span>{String(feature).trim()}</span>
 
-                    </div>
+                    </li>
 
                   ))}
 
-                </div>
+                </ul>
 
               )}
 
@@ -194,21 +197,31 @@ const ServiceGrid = ({ data = {} }) => {
 
               {/* CTA Button */}
 
-              <div className="mt-6 text-center">
-
-                <CTAButton
-                  variant="primary"
-                  size="md"
-                  className="rounded-lg transition-all duration-300 transform group-hover:scale-105"
-                  modalConfig={{
-                    title: service.title || "Learn More",
-                    subtitle: service.description || "Let's discuss how we can help you",
-                    icon: service.icon || ""
-                  }}
-                >
-                  Learn More
-                </CTAButton>
-
+              <div className="mt-auto pt-7">
+                {service.link || service.href ? (
+                  // CMS supplied a page for this service — navigate there
+                  <Link
+                    href={service.link || service.href}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--color-primary)] px-5 py-3 font-semibold text-white transition-colors duration-200 hover:bg-[var(--color-primary-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  >
+                    {service.ctaText || "Learn more"}
+                    <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  </Link>
+                ) : (
+                  // No page to link to — the button opens the contact form, so say so
+                  <CTAButton
+                    variant="primary"
+                    size="md"
+                    className="w-full rounded-lg transition-all duration-300"
+                    modalConfig={{
+                      title: service.title || "Talk to an expert",
+                      subtitle: service.description || "Let's discuss how we can help you",
+                      icon: service.icon || ""
+                    }}
+                  >
+                    {service.ctaText || "Talk to an expert"}
+                  </CTAButton>
+                )}
               </div>
 
             </div>

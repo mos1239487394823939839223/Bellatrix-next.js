@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 
 const FAQSection = ({ data, openFAQ, setOpenFAQ }) => {
   // استخدم useState داخلي إذا لم يتم تمرير setOpenFAQ
@@ -79,18 +78,6 @@ const FAQSection = ({ data, openFAQ, setOpenFAQ }) => {
   });
   return (
     <>
-      <SEO
-        title={`Bellatrix HR FAQ | ${
-          displayData.faq.title || "Frequently Asked Questions"
-        }`}
-        description="Get answers to common Bellatrix HR questions: security, compliance, integration, implementation, pricing, and support. Expert HR solution guidance available."
-        keywords="Bellatrix HR FAQ, HR platform questions, NetSuite HR security, ERP HR integration, HR compliance answers, HR implementation questions"
-        ogTitle={`NetSuite HR FAQ - ${
-          displayData.faq.title || "Common Questions Answered"
-        }`}
-        ogDescription="Find answers to frequently asked questions about Bellatrix HR solutions, security, compliance, and implementation. Expert guidance available."
-        ogImage="/images/netsuite-hr-faq.jpg"
-      />
       <section className="py-20 bg-[var(--color-bg-primary)]/90 animate-fade-in-up light-section">
         <div className="max-w-4xl mx-auto px-4">
           <header className="text-center mb-10">

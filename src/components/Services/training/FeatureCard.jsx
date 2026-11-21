@@ -1,6 +1,5 @@
 // FeatureCard.jsx
 import React from "react";
-import SEO from "../../SEO";
 
 const FeatureCard = ({ feature, openFeatureModal, index }) => {
   // Add null checks for feature data
@@ -16,30 +15,6 @@ const FeatureCard = ({ feature, openFeatureModal, index }) => {
 
   return (
     <>
-      <SEO
-        title={`Bellatrix Training Feature | ${
-          feature.title || "Training Feature"
-        }`}
-        description={`Discover ${feature.title || "training feature"}: ${(
-          feature.shortDescription ||
-          feature.description ||
-          "Feature description"
-        ).substring(0, 120)}... Professional Bellatrix training.`}
-        keywords={`NetSuite training feature, ${
-          feature.title || "training"
-        }, Oracle ERP training, NetSuite education, ERP skill development`}
-        ogTitle={`NetSuite Training Feature - ${
-          feature.title || "Professional ERP Education"
-        }`}
-        ogDescription={`Learn about ${
-          feature.title || "training feature"
-        } in our Bellatrix training program. ${(
-          feature.shortDescription ||
-          feature.description ||
-          ""
-        ).substring(0, 100)}...`}
-        ogImage="/images/netsuite-training-feature.jpg"
-      />
       <article
         className="group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100 p-6 animate-fade-in-up"
         style={{ animationDelay: `${0.1 * (index + 1)}s` }}
@@ -58,9 +33,12 @@ const FeatureCard = ({ feature, openFeatureModal, index }) => {
               "Professional Bellatrix training feature description"}
           </p>
 
-          {/* Learn More Link */}
+          {/* Learn More Link — only when there is detail content to open */}
+          {typeof openFeatureModal === "function" && (
           <button
-            onClick={() => openFeatureModal && openFeatureModal(feature)}
+            type="button"
+            data-no-cta-intercept
+            onClick={() => openFeatureModal(feature)}
             className="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors duration-300 group-hover:translate-x-1 transform cursor-pointer"
             aria-label={`Learn more about ${
               feature.title || "training feature"
@@ -83,6 +61,7 @@ const FeatureCard = ({ feature, openFeatureModal, index }) => {
               />
             </svg>
           </button>
+          )}
         </div>
       </article>
     </>

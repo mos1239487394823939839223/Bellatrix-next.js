@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 import HeroSection from "./HeroSection";
 import IndustryStats from "./IndustryStats";
 import ChallengesSection from "./ChallengesSection";
@@ -71,15 +70,6 @@ const Manufacturing = ({ data: propsData = null }) => {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <SEO
-        title="Bellatrix Manufacturing Solutions | Bellatrix ERP Consulting"
-        description="Transform your manufacturing operations with Bellatrix ERP solutions. Expert manufacturing consulting, implementation, and optimization services for production efficiency."
-        keywords="Bellatrix manufacturing, NetSuite ERP manufacturing, manufacturing software, production management, ERP manufacturing solutions, NetSuite manufacturing consulting"
-        ogTitle="Bellatrix Manufacturing Solutions | Bellatrix ERP Consulting"
-        ogDescription="Expert Bellatrix manufacturing solutions for streamlined production, inventory management, and manufacturing operations optimization."
-        ogImage="/images/manufacturing-solutions.jpg"
-        canonicalUrl="https://bellatrix.com/industries/manufacturing"
-      />
 
       <section data-theme="dark">
         <HeroSection data={data.hero} />

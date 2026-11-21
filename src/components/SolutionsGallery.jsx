@@ -23,8 +23,17 @@ const isValidImageSrc = (src) => {
 
 const getSafeImageSrc = (src) => (isValidImageSrc(src) ? src.trim() : "");
 
+// Hosts allowed by images.remotePatterns in next.config.mjs can go through the
+// optimizer (resized + AVIF/WebP — a 750 KB PNG upload becomes ~40 KB on phones).
+// Everything else is served as-is.
+const OPTIMIZABLE_HOSTS = /^https:\/\/(www\.)?bellatrixinc\.com\//i;
+// "/uploads/…" is proxied to the CMS via a rewrite that the optimizer can't follow,
+// so hand it the absolute CMS URL instead (an allowed remote pattern).
+const toImageSrc = (src) =>
+  typeof src === "string" && src.startsWith("/uploads/") ? `https://bellatrixinc.com${src}` : src;
 const shouldBypassOptimization = (src) =>
   typeof src === "string" &&
+  !OPTIMIZABLE_HOSTS.test(src) &&
   (src.startsWith("/uploads/") || src.startsWith("http://") || src.startsWith("https://"));
 
 export const DEFAULT_SOLUTIONS = [
@@ -194,8 +203,10 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
           {categories.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => setActiveCategory(cat)}
-              className="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300"
+              aria-pressed={activeCategory === cat}
+              className="px-4 py-2 min-h-[40px] rounded-full text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
               style={
                 activeCategory === cat
                   ? {
@@ -260,12 +271,12 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                   <div className="relative md:w-1/2 h-56 md:h-auto overflow-hidden flex-shrink-0">
                     {getSafeImageSrc(featured.image) ? (
                       <Image
-                        src={getSafeImageSrc(featured.image)}
+                        src={toImageSrc(getSafeImageSrc(featured.image))}
                         alt={featured.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        unoptimized={shouldBypassOptimization(getSafeImageSrc(featured.image))}
+                        unoptimized={shouldBypassOptimization(toImageSrc(getSafeImageSrc(featured.image)))}
                       />
                     ) : (
                       <div className="absolute inset-0" style={{ background: `${featured.accentColor}22` }} />
@@ -289,9 +300,10 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                     <span
                       className="absolute top-4 left-4 text-xs font-semibold tracking-widest uppercase px-2.5 py-0.5 rounded-full backdrop-blur-sm"
                       style={{
-                        background: `${featured.accentColor}22`,
+                        // Dark backing keeps the badge legible on any photo
+                        background: "rgba(2, 6, 23, 0.72)",
+                        border: `1px solid ${featured.accentColor}66`,
                         color: featured.accentColor,
-                        border: `1px solid ${featured.accentColor}44`,
                       }}
                     >
                       {featured.category}
@@ -382,12 +394,12 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                 <div className="relative h-48 overflow-hidden flex-shrink-0">
                   {getSafeImageSrc(solution.image) ? (
                     <Image
-                      src={getSafeImageSrc(solution.image)}
+                      src={toImageSrc(getSafeImageSrc(solution.image))}
                       alt={solution.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      unoptimized={shouldBypassOptimization(getSafeImageSrc(solution.image))}
+                      unoptimized={shouldBypassOptimization(toImageSrc(getSafeImageSrc(solution.image)))}
                     />
                   ) : (
                     <div className="absolute inset-0" style={{ background: `${solution.accentColor}22` }} />
@@ -411,9 +423,10 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                   <span
                     className="absolute top-3 right-3 text-xs font-semibold tracking-widest uppercase px-2.5 py-0.5 rounded-full backdrop-blur-sm"
                     style={{
-                      background: `${solution.accentColor}22`,
+                      // Dark backing keeps the badge legible on any photo
+                      background: "rgba(2, 6, 23, 0.72)",
+                      border: `1px solid ${solution.accentColor}66`,
                       color: solution.accentColor,
-                      border: `1px solid ${solution.accentColor}44`,
                     }}
                   >
                     {solution.category}
@@ -425,7 +438,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                     </h3>
                     <p
                       className="text-xs font-medium"
-                      style={{ color: solution.accentColor }}
+                      style={{ color: solution.accentColor, textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
                     >
                       {solution.subtitle}
                     </p>

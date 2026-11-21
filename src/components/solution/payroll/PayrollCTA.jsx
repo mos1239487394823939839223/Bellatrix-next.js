@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 import { smartRender } from "../../../utils/htmlSanitizer";
 
@@ -33,27 +32,6 @@ const PayrollCTA = ({
 
   return (
     <>
-      <SEO
-        title={`Get Started with Bellatrix Payroll | ${
-          finalData.title || "Ready to Simplify Your Payroll?"
-        }`}
-        description={`${
-          finalData.description ||
-          "Ready to transform your payroll operations with Bellatrix? Start now"
-        } - Expert implementation support and comprehensive ERP payroll solutions.`}
-        keywords="Bellatrix payroll, get started NetSuite payroll, payroll system demo, ERP payroll implementation, NetSuite payroll pricing"
-        ogTitle={`Get Started with NetSuite Payroll - ${
-          finalData.title || "Transform Your Payroll Today"
-        }`}
-        ogDescription={`${(
-          finalData.description ||
-          "Start your Bellatrix payroll transformation today"
-        ).substring(
-          0,
-          120
-        )}... Professional ERP payroll solutions and support.`}
-        ogImage="/images/netsuite-payroll-cta.jpg"
-      />
       <section className="py-20 relative overflow-hidden">
         {/* Background Gradient */}
         <div className="absolute inset-0 bg-[var(--color-brand-dark-navy)]"></div>

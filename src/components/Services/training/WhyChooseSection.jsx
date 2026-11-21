@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import SEO from "../../SEO";
 
 import FeatureCard from "./FeatureCard";
 
@@ -87,22 +86,6 @@ const WhyChooseSection = ({
 
   return (
     <>
-      <SEO
-        title={`Why Choose Bellatrix Training | ${safeTitle || "Professional ERP Education"}`}
-        description={`${
-          safeDescription ||
-          "Discover why our Bellatrix training is the best choice for professional ERP education"
-        } - Expert instructors, hands-on learning, industry recognition.`}
-        keywords="why choose NetSuite training, Oracle ERP education benefits, professional NetSuite certification, ERP training advantages, NetSuite learning benefits"
-        ogTitle={`Why Choose Our Bellatrix Training - ${
-          safeTitle || "Professional ERP Education"
-        }`}
-        ogDescription={`${(
-          safeDescription ||
-          "Professional Bellatrix training with industry-leading benefits"
-        ).substring(0, 120)}... Discover training excellence.`}
-        ogImage="/images/netsuite-training-benefits.jpg"
-      />
 
       <section className="bg-gray-50 py-12 light-section">
         <div className="container mx-auto px-6">

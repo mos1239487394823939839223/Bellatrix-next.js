@@ -43,6 +43,7 @@ const AboutDifferentiators = ({ differentiators = [], data = {} }) => {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ delay: index * 0.1 }}
                 className="text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group"
               >

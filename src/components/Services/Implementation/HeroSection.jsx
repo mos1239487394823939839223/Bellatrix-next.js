@@ -1,8 +1,9 @@
 // components/Implementation/HeroSection.jsx
 
 import React, { useState, useEffect } from "react";
+import { useBackgroundVideo } from "../../../hooks/useBackgroundVideo";
+import { VideoSources } from "../../../utils/videoSources";
 
-import SEO from "../../SEO";
 
 import {
   getVariantClasses,
@@ -12,6 +13,8 @@ import {
 import CTAButton from "../../CTAButton";
 
 const HeroSection = (props) => {
+  // Decorative hero video only when the visitor hasn't asked for less data/motion
+  const allowVideo = useBackgroundVideo();
   const [defaultData, setDefaultData] = useState(null);
 
   // Extract direct props from Page Builder
@@ -129,43 +132,38 @@ const HeroSection = (props) => {
 
   return (
     <>
-      <SEO
-        title="Bellatrix ERP Implementation | Where Vision Meets Technology Reality"
-        description="Transform your business operations with expert Bellatrix ERP implementation. Our certified consultants craft enterprise solutions that revolutionize how you do business with proven technology."
-        keywords="Bellatrix ERP implementation, enterprise technology solutions, certified Oracle consultants, business transformation, ERP deployment, CRM integration, IT consulting services"
-        ogTitle="Bellatrix ERP Implementation | Where Vision Meets Technology Reality"
-        ogDescription="Expert Bellatrix ERP implementation services with certified consultants. Transform your business operations with enterprise technology solutions."
-        ogImage="/Videos/HomeHeroSectionV.mp4"
-      />
 
       <header className="min-h-screen relative overflow-hidden pt-20">
         {/* Background Video or Image */}
 
-        {displayData.backgroundVideo &&
-        (displayData.backgroundVideo.includes(".mp4") ||
-          displayData.backgroundVideo.includes(".webm")) ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src={displayData.backgroundVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        ) : (
-          <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(${
-                displayData.backgroundVideo ||
-                displayData.backgroundImage ||
-                "/Videos/HomeHeroSectionV.mp4"
-              })`,
-            }}
-          />
-        )}
+        {(() => {
+          const media = displayData.backgroundVideo || "";
+          const isVideo = /\.(mp4|webm)(\?|#|$)/i.test(media);
+          if (isVideo) {
+            // Decorative video: skipped for Data Saver / reduced motion (section gradient shows instead)
+            return allowVideo ? (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <VideoSources src={media} type={media.toLowerCase().includes(".webm") ? "video/webm" : "video/mp4"} />
+              </video>
+            ) : null;
+          }
+          // Only real images go into background-image (a video URL here made the
+          // browser download a multi-MB file it could never display)
+          const image = media || displayData.backgroundImage;
+          return image ? (
+            <div
+              className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${image})` }}
+            />
+          ) : null;
+        })()}
 
         {/* Creative Overlay with Animated Gradient */}
 

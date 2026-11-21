@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 
 const CTASection = (props) => {
@@ -75,14 +74,6 @@ const CTASection = (props) => {
 
   return (
     <section className="bg-gray-50 py-20 light-section">
-      <SEO
-        title="Get Started with Bellatrix Retail | Contact E-commerce Experts"
-        description="Transform your retail business with Bellatrix e-commerce solutions. Contact our retail experts for consultation and implementation services. Get started today."
-        keywords="Bellatrix retail contact, e-commerce consultation, NetSuite retail implementation, retail software experts, ERP retail services, e-commerce platform setup"
-        ogTitle="Get Started with Bellatrix Retail | Contact E-commerce Experts"
-        ogDescription="Ready to transform your retail operations? Contact our Bellatrix retail experts for personalized e-commerce consultation and implementation."
-        ogImage="/images/retail-cta.jpg"
-      />
 
       <div className="container mx-auto px-6">
         <div 

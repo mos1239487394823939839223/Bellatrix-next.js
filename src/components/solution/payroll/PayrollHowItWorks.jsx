@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import SEO from "../../SEO";
 
 
 
@@ -76,41 +75,6 @@ const PayrollHowItWorks = ({ data }) => {
 
     <>
 
-      <SEO
-
-        title={`Bellatrix Payroll Process | ${
-
-          sectionData.title || "How Our Payroll System Works"
-
-        }`}
-
-        description={`${
-
-          sectionData.description ||
-
-          "Discover how Bellatrix payroll system works"
-
-        } - Automated processing, compliance management, and seamless ERP integration for efficient payroll operations.`}
-
-        keywords="Bellatrix payroll process, how payroll system works, automated payroll workflow, ERP payroll processing, NetSuite payroll automation"
-
-        ogTitle={`NetSuite Payroll Process - ${
-
-          sectionData.title || "How Our Payroll System Works"
-
-        }`}
-
-        ogDescription={`${(
-
-          sectionData.description ||
-
-          "Bellatrix automated payroll process workflow"
-
-        ).substring(0, 120)}... Professional ERP payroll management.`}
-
-        ogImage="/images/netsuite-payroll-process.jpg"
-
-      />
 
       <section
 
@@ -134,7 +98,7 @@ const PayrollHowItWorks = ({ data }) => {
 
 
 
-        <div className="container mx-auto px-6 max-w-6xl relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
 
           {/* Title */}
 
@@ -154,7 +118,7 @@ const PayrollHowItWorks = ({ data }) => {
 
 
 
-          <div className="bg-gradient-to-br from-[var(--color-bg-dark)]/90 via-[var(--color-bg-dark)]/80 to-[var(--color-bg-dark)]/90 rounded-xl p-12 shadow-2xl max-w-6xl mx-auto border border-[var(--color-primary)]/30 backdrop-blur-sm hover:shadow-[var(--color-primary)]/20 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
+          <div className="bg-gradient-to-br from-[var(--color-bg-dark)]/90 via-[var(--color-bg-dark)]/80 to-[var(--color-bg-dark)]/90 rounded-xl p-5 sm:p-8 md:p-12 shadow-2xl max-w-6xl mx-auto border border-[var(--color-primary)]/30 backdrop-blur-sm hover:shadow-[var(--color-primary)]/20 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
 
             {/* Background Effects */}
 
@@ -230,7 +194,7 @@ const PayrollHowItWorks = ({ data }) => {
 
                       key={idx}
 
-                      className="bg-[var(--color-background-dark)]/70 border border-[var(--color-text-secondary)]/50 p-6 rounded-lg shadow-md hover:shadow-[var(--color-primary)]/20 transition"
+                      className="bg-[var(--color-background-dark)]/70 border border-[var(--color-text-secondary)]/50 p-5 sm:p-6 rounded-lg shadow-md hover:shadow-[var(--color-primary)]/20 transition"
 
                       role="article"
 

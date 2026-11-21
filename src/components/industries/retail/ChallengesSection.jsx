@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 
 const ChallengesSection = ({
   data,
@@ -85,14 +84,6 @@ const ChallengesSection = ({
 
   return (
     <section className="py-20 relative overflow-hidden theme-bg-primary bg-[var(--color-brand-dark-navy)]">
-      <SEO
-        title="Retail Challenges | Bellatrix Solutions for Modern Retail"
-        description="Overcome retail challenges with Bellatrix solutions. Address omnichannel complexity, inventory management, customer experience, and profitability issues."
-        keywords="retail challenges, omnichannel retail, retail inventory management, customer experience retail, Bellatrix retail solutions, retail profitability"
-        ogTitle="Retail Challenges | Bellatrix Solutions for Modern Retail"
-        ogDescription="Comprehensive Bellatrix solutions to address critical retail challenges and modern commerce complexities."
-        ogImage="/images/retail-challenges.jpg"
-      />
 
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full">
@@ -203,12 +194,15 @@ const ChallengesSection = ({
             </div>
 
             {/* Challenge Navigation */}
-            <div className="flex space-x-2 mt-6 justify-center">
+            <div className="flex gap-4 mt-6 justify-center">
               {finalChallenges.map((_, index) => (
                 <button
+                  type="button"
+                  aria-label={`Show item ${index + 1}`}
+                  aria-current={activeChallenge === index ? "true" : undefined}
                   key={index}
                   onClick={() => setActiveChallenge(index)}
-                  className={`w-3 h-3 rounded-full transition-colors duration-600 ease-in-out theme-nav-dot ${
+                  className={`relative w-3 h-3 rounded-full after:absolute after:-inset-2 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-colors duration-600 ease-in-out theme-nav-dot ${
                     activeChallenge === index
                       ? "bg-[var(--color-brand-accent)]"
                       : "bg-[var(--color-gray-500)]"

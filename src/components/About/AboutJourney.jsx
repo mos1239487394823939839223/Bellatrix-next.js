@@ -81,7 +81,7 @@ const AboutJourney = ({ data = {} }) => {
               {displayData.growthText || "Over the years, we've evolved from a small consulting firm to a comprehensive digital transformation partner, helping hundreds of organizations across various industries unlock their full potential."}
             </p>
             <div
-              className="p-6 rounded-xl backdrop-blur-sm bg-[linear-gradient(90deg,var(--color-primary)/0.2,var(--color-cyan-600)/0.2)] border border-[var(--color-primary)]/30 transition-all duration-600 ease-in-out"
+              className="p-6 rounded-xl backdrop-blur-sm bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-primary)_20%,transparent),color-mix(in_srgb,var(--color-cyan-600)_20%,transparent))] border border-[var(--color-primary)]/30 transition-all duration-600 ease-in-out"
             >
               <h4
                 className="font-bold mb-2 text-[var(--color-cyan-300)] transition-colors duration-600 ease-in-out"

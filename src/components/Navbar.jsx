@@ -74,6 +74,7 @@ const Navbar = ({ initialCategories = [] }) => {
   const [navbarTheme, setNavbarTheme] = useState("dark");
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMenuButtonRef = useRef(null);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openSubDropdown, setOpenSubDropdown] = useState(null);
   const [scrolled, setScrolled] = useState(false);
@@ -95,14 +96,21 @@ const Navbar = ({ initialCategories = [] }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []); // empty deps: register once, never re-register on scroll
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll when mobile menu is open; Escape closes it
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
+    if (!mobileMenuOpen) return undefined;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        mobileMenuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
       document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
+      document.removeEventListener('keydown', onKeyDown);
+    };
   }, [mobileMenuOpen]);
 
   useEffect(() => {
@@ -347,6 +355,8 @@ const Navbar = ({ initialCategories = [] }) => {
                       key={cat.id}
                       onMouseEnter={() => handleMenuEnter(cat.id)}
                       onMouseLeave={handleMenuLeave}
+                      // Close when keyboard focus moves outside this menu (Tab past it)
+                      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setOpenDropdown(null); }}
                     >
                       <button
                         className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-300 border ${openDropdown === cat.id
@@ -400,6 +410,7 @@ const Navbar = ({ initialCategories = [] }) => {
                           className="relative"
                           onMouseEnter={() => handleMenuEnter("more")}
                           onMouseLeave={handleMenuLeave}
+                          onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setOpenDropdown(null); }}
                         >
                           <button
                             className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-300 border ${openDropdown === "more"
@@ -472,7 +483,7 @@ const Navbar = ({ initialCategories = [] }) => {
               {/* Premium Contact button */}
               <button
                 onClick={openContactModal}
-                className="relative ml-2 px-6 py-3 flex items-center justify-center bg-gradient-to-r from-[var(--tw-blue-200)] to-[var(--tw-blue-900)] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/40 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm group overflow-hidden cursor-pointer"
+                className="relative ml-2 px-6 py-3 flex items-center justify-center bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/40 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm group overflow-hidden cursor-pointer"
               >
                 <span className="relative z-10">Contact</span>
               </button>
@@ -481,6 +492,9 @@ const Navbar = ({ initialCategories = [] }) => {
             {/* Mobile menu button */}
             <div className="lg:hidden flex items-center">
               <button
+                ref={mobileMenuButtonRef}
+                type="button"
+                aria-controls="mobile-menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileMenuOpen}
@@ -497,12 +511,15 @@ const Navbar = ({ initialCategories = [] }) => {
 
         {/* Premium Mobile menu — always rendered, animated via max-height */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          id="mobile-menu"
+          className={`lg:hidden transition-all duration-300 ease-in-out ${
             mobileMenuOpen
-              ? 'max-h-[80vh] opacity-100'
-              : 'max-h-0 opacity-0 pointer-events-none'
+              ? 'max-h-[calc(100dvh-5rem)] opacity-100 overflow-y-auto overscroll-contain'
+              : 'max-h-0 opacity-0 pointer-events-none overflow-hidden'
           } bg-gray-900/40 backdrop-blur-2xl border-t border-white/10`}
           aria-hidden={!mobileMenuOpen}
+          // inert: closed menu links must not be reachable with Tab
+          inert={!mobileMenuOpen}
         >
             <div className="px-4 pt-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] space-y-2">
               {/* Dynamic Mobile Categories Dropdowns */}
@@ -602,7 +619,7 @@ const Navbar = ({ initialCategories = [] }) => {
 
               <button
                 onClick={openContactModal}
-                className="block w-full px-4 py-3 mt-4 text-center bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary-light)] to-[var(--color-primary-dark)] text-[var(--color-white)] font-medium rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/25 transition-all duration-300 cursor-pointer touch-target"
+                className="block w-full px-4 py-3 mt-4 text-center bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-[var(--color-white)] font-medium rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/25 transition-all duration-300 cursor-pointer touch-target"
               >
                 Contact
               </button>
@@ -620,7 +637,7 @@ const Navbar = ({ initialCategories = [] }) => {
             subtitle={modalContent.subtitle}
           >
             <div className="p-2">
-              <LazyContactForm onSuccess={closeContactModal} />
+              <LazyContactForm onDone={closeContactModal} />
             </div>
           </LazyModal>
         </Suspense>

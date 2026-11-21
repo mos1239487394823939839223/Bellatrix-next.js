@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
+import { useBackgroundVideo } from "../../../hooks/useBackgroundVideo";
+import { VideoSources } from "../../../utils/videoSources";
 
 const HeroSection = ({ 
   data = {},
@@ -9,6 +10,8 @@ const HeroSection = ({
   bgVideo: propsBgVideo,
   bgColor: propsBgColor,
 }) => {
+  // Decorative hero video only when the visitor hasn't asked for less data/motion
+  const allowVideo = useBackgroundVideo();
   const [defaultData, setDefaultData] = useState(null);
 
   useEffect(() => {
@@ -53,17 +56,10 @@ const HeroSection = ({
 
   return (
     <>
-      <SEO
-        title={`Bellatrix HR Solutions | ${heroData.title || "Modern HR Platform"}`}
-        description={`${heroData.subtitle || "Transform your HR operations with Bellatrix comprehensive HR platform"} - Employee management, payroll automation, and compliance in one solution.`}
-        keywords="Bellatrix HR platform, modern HR management, employee management system, HR automation, ERP human resources, payroll management"
-        ogTitle={`NetSuite HR Platform - ${heroData.title || "Modern HR Management"}`}
-        ogDescription={`${(heroData.subtitle || "Bellatrix HR platform for modern workforce management").substring(0, 120)}... Professional ERP HR solutions.`}
-        ogImage="/images/netsuite-hr-hero.jpg"
-      />
       <header className="w-full min-h-screen bg-gradient-to-br from-[var(--color-brand-midnight)] via-black to-[var(--color-primary)] py-24 md:py-32 text-center flex flex-col items-center justify-center relative overflow-hidden">
         {/* Background Video */}
         <div className="absolute inset-0 w-full h-full">
+          {allowVideo && (
           <video
             autoPlay
             muted
@@ -84,9 +80,10 @@ const HeroSection = ({
               WebkitUserSelect: "none",
             }}
           >
-            <source src={heroData.bgVideo} type="video/mp4" />
+            <VideoSources src={heroData.bgVideo} />
             Your browser does not support the video tag.
           </video>
+          )}
         </div>
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/40 z-0"></div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-import SEO from "../../SEO";
 
 
 
@@ -308,41 +307,6 @@ const PayrollStepper = ({ steps = [], title, description }) => {
 
     <>
 
-      <SEO
-
-        title={`Bellatrix Payroll Steps | ${
-
-          displayTitle || "Payroll Process Workflow"
-
-        }`}
-
-        description={`${
-
-          displayDescription ||
-
-          "Step-by-step Bellatrix payroll process workflow"
-
-        } - Interactive payroll stepper with detailed process stages and benefits.`}
-
-        keywords="Bellatrix payroll steps, payroll workflow process, step-by-step payroll guide, NetSuite payroll implementation steps"
-
-        ogTitle={`NetSuite Payroll Process Steps - ${
-
-          displayTitle || "Interactive Workflow Guide"
-
-        }`}
-
-        ogDescription={`${(
-
-          displayDescription ||
-
-          "Bellatrix interactive payroll process steps"
-
-        ).substring(0, 120)}... Professional ERP payroll workflow.`}
-
-        ogImage="/images/netsuite-payroll-steps.jpg"
-
-      />
 
       
 
@@ -394,7 +358,7 @@ const PayrollStepper = ({ steps = [], title, description }) => {
 
                     idx <= current
 
-                      ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-600"
+                      ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600"
 
                       : "bg-white text-gray-500 border-gray-300"
 
@@ -456,7 +420,7 @@ const PayrollStepper = ({ steps = [], title, description }) => {
 
                   idx === current
 
-                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-600 shadow-lg"
+                    ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg"
 
                     : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
 
@@ -746,7 +710,7 @@ const PayrollStepper = ({ steps = [], title, description }) => {
 
                   
 
-                  <span className="flex items-center px-4 text-sm text-gray-500 font-medium">
+                  <span className="flex items-center px-3 sm:px-4 text-sm text-gray-500 font-medium whitespace-nowrap" aria-live="polite">
 
                     {current + 1} of {displaySteps.length}
 

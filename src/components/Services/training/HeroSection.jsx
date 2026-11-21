@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import SEO from "../../SEO";
 
 import { getVariantClasses } from "../../../utils/variantSystem";
 import CTAButton from "../../CTAButton";
@@ -108,14 +107,6 @@ const HeroSection = ({
 
   return (
     <>
-      <SEO
-        title="Bellatrix Training Hero | Professional ERP Education & Skills Development"
-        description="Transform your career with Bellatrix training programs. Expert-led education covering ERP implementation, customization, and advanced system management for business success."
-        keywords="Bellatrix training hero, NetSuite education programs, ERP training courses, NetSuite skill development, Oracle training certification, professional ERP education"
-        ogTitle="Bellatrix Training - Professional ERP Education Programs"
-        ogDescription="Master Bellatrix with comprehensive training programs. Expert-led education for implementation, customization, and advanced ERP management skills."
-        ogImage="/images/netsuite-training-hero.jpg"
-      />
 
       <header className="min-h-screen relative overflow-hidden pt-20">
         {/* Pure CSS background (no image or video) */}

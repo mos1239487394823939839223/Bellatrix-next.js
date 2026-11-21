@@ -1,31 +1,9 @@
 // ModuleCard.jsx
 import React from "react";
-import SEO from "../../SEO";
 
 const ModuleCard = ({ module, index }) => {
   return (
     <>
-      <SEO
-        title={`Bellatrix Training Module | ${
-          module.title || "ERP Learning Module"
-        }`}
-        description={`${module.title || "Bellatrix training module"}: ${(
-          module.description || "Professional ERP training module"
-        ).substring(0, 120)}... Duration: ${module.duration || "Variable"}.`}
-        keywords={`NetSuite training module, ${
-          module.title || "ERP module"
-        }, Oracle training curriculum, NetSuite learning, ERP education module`}
-        ogTitle={`NetSuite Training Module - ${
-          module.title || "Oracle ERP Learning"
-        }`}
-        ogDescription={`Master ${
-          module.title || "Bellatrix concepts"
-        } in this training module. ${(module.description || "").substring(
-          0,
-          100
-        )}... Professional ERP education.`}
-        ogImage="/images/netsuite-training-module.jpg"
-      />
       <article className="group relative overflow-hidden bg-gray-800 rounded-3xl p-6 border border-gray-600/50 shadow-2xl hover:shadow-blue-500/20 hover:shadow-2xl transition-all duration-500 backdrop-blur-sm">
         <div className="relative z-10">
           <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-600 transition-colors duration-300">

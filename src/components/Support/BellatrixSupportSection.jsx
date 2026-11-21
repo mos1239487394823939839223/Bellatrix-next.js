@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../SEO";
 
 // Component for each support card
 const SupportCard = ({ title, items }) => (
@@ -124,14 +123,6 @@ const BellatrixSupportSection = ({
 
   return (
     <>
-      <SEO
-        title="Bellatrix Support Services | Admin, Functional & Development Support"
-        description="Comprehensive Bellatrix support services including admin support, functional support, and development support. Expert consultants for all your ERP needs."
-        keywords="Bellatrix admin support, functional support, development support, ERP consulting, NetSuite administration, business process optimization"
-        ogTitle="Bellatrix Support Services | Admin, Functional & Development Support"
-        ogDescription="Get comprehensive Bellatrix support with our expert consultants covering administration, functional processes, and development needs."
-        ogImage="/images/Support/bellatrix-support-services.jpg"
-      />
       <section style={styles.section}>
         {/* Background Pattern */}
         <div style={styles.backgroundPattern}>
@@ -214,7 +205,6 @@ const styles = {
     backgroundColor: "var(--color-brand-dark-navy)",
     padding: "50px 0",
     color: "#ffffff",
-    fontFamily: '"Gotham A", "Gotham B"',
     position: "relative",
     overflow: "hidden",
   },

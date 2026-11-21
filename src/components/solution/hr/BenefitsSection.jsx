@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 
 const BenefitsSection = ({
@@ -47,14 +46,6 @@ const BenefitsSection = ({
 
   return (
     <>
-      <SEO
-        title={`${displayData.title} | Bellatrix`}
-        description={`${displayData.description} - Employee management, automation, compliance, and analytics benefits.`}
-        keywords="Bellatrix HR benefits, HR platform advantages, employee management benefits, HR automation features, NetSuite HR system benefits"
-        ogTitle={`${displayData.title} | Bellatrix`}
-        ogDescription={`${displayData.description.substring(0, 120)}... Professional ERP HR solutions.`}
-        ogImage="/images/netsuite-hr-benefits.jpg"
-      />
       <section className="py-20 bg-[var(--color-bg-secondary)] animate-fade-in-up light-section">
         <div className="max-w-6xl mx-auto px-4">
           <header className="text-center mb-10">

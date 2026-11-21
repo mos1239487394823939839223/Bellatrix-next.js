@@ -1,5 +1,5 @@
 import React from "react";
-import SEO from "../SEO";
+import { useCTAModal } from "../../contexts/CTAModalContext";
 
 const PrePackagedSection = ({
   data,
@@ -10,6 +10,7 @@ const PrePackagedSection = ({
   items: propItems,
   packages: propPackages,
 }) => {
+  const { openCTAModal } = useCTAModal();
   // Default data from schema
   const schemaDefault = {
     title: "Pre-Packaged Support Solutions",
@@ -46,28 +47,19 @@ const PrePackagedSection = ({
 
   return (
     <>
-      <SEO
-        title="Pre-Packaged Flexible Support | Bellatrix ERP Support Solutions"
-        description="Get pre-packaged yet flexible Bellatrix support solutions backed by 18 years of ERP experience. Perfect balance of expertise and control over resources."
-        keywords="pre-packaged support, flexible ERP solutions, Bellatrix expertise, 18 years experience, resource management, ERP consulting packages"
-        ogTitle="Pre-Packaged Flexible Support | Bellatrix ERP Support Solutions"
-        ogDescription="Leverage 18 years of ERP expertise with our pre-packaged yet flexible support solutions that keep you in control of resource allocation."
-        ogImage="/images/Support/prepackaged-support.jpg"
-      />
       <section
           className="light-section prepackaged-support-section"
         style={{
           backgroundColor: "#f7f7f7",
-          padding: "60px 25px 50px 25px",
-          margin: "100px auto",
+          padding: "56px 20px 48px",
+          margin: "80px auto",
           borderRadius: "15px",
           boxShadow:
             "0px 4px 16px rgba(0, 0, 0, 0.1), 0px 8px 32px rgba(0, 0, 0, 0.05)",
-          opacity: 0.9,
-          color: "#000",
+          color: "#0f172a",
           textAlign: "center",
-          fontFamily: '"Gotham A", "Gotham B"',
-          width: "80%",
+          // full width minus gutters on phones, capped on desktop
+          width: "min(1180px, calc(100% - 32px))",
         }}
       >
         <div
@@ -81,7 +73,6 @@ const PrePackagedSection = ({
                 letterSpacing: "-1px",
                 fontWeight: "bold",
                 textTransform: "uppercase",
-                fontFamily: "Gotham A , san-saif",
               }}
             >
               {sectionData.title}
@@ -125,6 +116,7 @@ const PrePackagedSection = ({
                     display: "flex",
                     flexDirection: "column",
                     gap: "12px",
+                    border: "1px solid #e2e8f0",
                   }}
                 >
                   {/* Package Name */}
@@ -149,9 +141,10 @@ const PrePackagedSection = ({
                     <p
                       className="prepackaged-support-price"
                       style={{
-                        fontSize: "22px",
-                        fontWeight: "700",
-                        color: "#C41E3A",
+                        fontSize: "28px",
+                        fontWeight: "800",
+                        color: "var(--color-primary, #2563eb)",
+                        letterSpacing: "-0.5px",
                         margin: "0",
                       }}
                     >
@@ -197,7 +190,7 @@ const PrePackagedSection = ({
                             color: "#444",
                           }}
                         >
-                          <span style={{ color: "#C41E3A", fontWeight: "700", flexShrink: 0 }}>
+                          <span aria-hidden="true" style={{ color: "#16a34a", fontWeight: "700", flexShrink: 0 }}>
                             ✓
                           </span>
                           {typeof feature === "string" ? feature : feature.text || feature.label || ""}
@@ -205,6 +198,24 @@ const PrePackagedSection = ({
                       ))}
                     </ul>
                   )}
+
+                  {/* Every plan needs a way to act on it */}
+                  <button
+                    type="button"
+                    data-no-cta-intercept
+                    onClick={() =>
+                      openCTAModal({
+                        title: `Get started with ${pkg.name || "this plan"}`,
+                        subtitle: pkg.price
+                          ? `${pkg.price} — tell us about your NetSuite setup and we'll get you onboarded.`
+                          : "Tell us about your NetSuite setup and we'll get you onboarded.",
+                      })
+                    }
+                    className="mt-auto w-full rounded-lg bg-[var(--color-primary)] px-5 py-3 font-semibold text-white transition-colors duration-200 hover:bg-[var(--color-primary-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    style={{ minHeight: 48, marginTop: "auto" }}
+                  >
+                    {pkg.ctaText || `Get started with ${pkg.name ? pkg.name.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()) : "this plan"}`}
+                  </button>
                 </div>
               ))}
             </div>

@@ -1,6 +1,5 @@
 // components/Implementation/PricingSection.jsx
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 import { loadImplementationData } from "../../../data/implementationDataLoader";
 
@@ -69,14 +68,6 @@ const PricingSection = (props) => {
 
   return (
     <>
-      <SEO
-        title="Bellatrix ERP Implementation Pricing | Enterprise Technology Consulting Packages"
-        description="Transparent Bellatrix ERP implementation pricing with flexible consulting packages. Choose from starter, professional, or enterprise plans with certified technology consultants and comprehensive support."
-        keywords="Bellatrix implementation pricing, ERP consulting packages, NetSuite implementation cost, enterprise technology pricing, IT consulting rates, CRM implementation packages, Oracle certified consultants"
-        ogTitle="Bellatrix ERP Implementation Pricing | Enterprise Technology Consulting Packages"
-        ogDescription="Flexible Bellatrix ERP implementation pricing with transparent consulting packages and certified technology experts for your business transformation."
-        ogImage="/Videos/implementation/pricing-plans.jpg"
-      />
       <section className="bg-gray-50 py-12 light-section">
         <div className="container mx-auto px-6">
           {/* Section Header */}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import SEO from "../../SEO";
 
 import ContactForm from "../../ContactForm";
 
@@ -202,23 +201,6 @@ const Retail = ({ data: propsData = null }) => {
 
     <main className="min-h-screen bg-gray-50">
 
-      <SEO
-
-        title="Bellatrix Retail Solutions | Complete E-commerce & Retail Management"
-
-        description="Transform your retail operations with Bellatrix retail solutions. Comprehensive e-commerce, inventory management, and omnichannel retail platform for modern retailers."
-
-        keywords="Bellatrix retail, NetSuite e-commerce, retail management software, omnichannel retail, NetSuite retail solutions, e-commerce ERP, retail POS system"
-
-        ogTitle="Bellatrix Retail Solutions | Complete E-commerce & Retail Management"
-
-        ogDescription="Complete Bellatrix retail platform for e-commerce, inventory management, and omnichannel retail operations."
-
-        ogImage="/images/retail-solutions.jpg"
-
-        canonicalUrl="https://bellatrix.com/industries/retail"
-
-      />
 
 
 

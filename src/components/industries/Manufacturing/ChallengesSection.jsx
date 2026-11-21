@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import SEO from "../../SEO";
 
 const ChallengesSection = (props) => {
   console.log(" [ChallengesSection] ALL PROPS:", props);
@@ -142,14 +141,6 @@ const ChallengesSection = (props) => {
       className="manufacturing-challenges py-20 relative overflow-hidden animate-background-glow theme-bg-animated"
       style={{ backgroundColor: "var(--color-brand-dark-navy)" }}
     >
-      <SEO
-        title="Manufacturing Challenges | Bellatrix Solutions for Complex Operations"
-        description="Overcome manufacturing challenges with Bellatrix ERP. Address supply chain complexity, quality control, cost management, and operational inefficiencies."
-        keywords="manufacturing challenges, supply chain complexity, quality control, manufacturing cost management, Bellatrix manufacturing solutions"
-        ogTitle="Manufacturing Challenges | Bellatrix Solutions for Complex Operations"
-        ogDescription="Comprehensive Bellatrix solutions to address critical manufacturing challenges and operational complexities."
-        ogImage="/images/manufacturing-challenges.jpg"
-      />
 
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full">
@@ -257,12 +248,14 @@ const ChallengesSection = (props) => {
             {/* Challenge Navigation */}
 
             {finalChallenges.length > 1 && (
-              <div className="flex space-x-2 mt-6 justify-center">
+              <div className="flex gap-4 mt-6 justify-center">
                 {finalChallenges.map((_, index) => (
                   <button
+                  type="button"
+                  aria-current={activeChallenge === index ? "true" : undefined}
                     key={index}
                     onClick={() => handlePaginationClick(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    className={`relative w-3 h-3 rounded-full after:absolute after:-inset-2 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all duration-300 ${
                       activeChallenge === index ? "bg-blue-400" : "bg-gray-500"
                     }`}
                     aria-label={`Go to challenge ${index + 1}`}

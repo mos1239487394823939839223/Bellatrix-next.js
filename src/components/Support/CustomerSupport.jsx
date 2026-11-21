@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../SEO";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
 
 const CustomerSupport = ({
@@ -62,14 +61,6 @@ const CustomerSupport = ({
 
   return (
     <>
-      <SEO
-        title="Bellatrix Customer Support | 24/7 ERP Technical Support Services"
-        description="Professional Bellatrix customer support available 24/7. Get expert ERP technical assistance, project management, and real-time communication support."
-        keywords="Bellatrix customer support, 24/7 ERP support, technical assistance, project management, JIRA access, Slack communication, ERP consulting"
-        ogTitle="Bellatrix Customer Support | 24/7 ERP Technical Support Services"
-        ogDescription="Comprehensive customer support for Bellatrix ERP with dedicated project managers, real-time communication, and expert technical assistance."
-        ogImage={sectionData.image}
-      />
       <section
         className="py-20 relative overflow-hidden animate-background-glow theme-bg-animated"
         style={{ backgroundColor: "var(--color-brand-dark-navy)" }}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 
 const SolutionsSection = ({
   data,
@@ -101,14 +100,6 @@ const SolutionsSection = ({
 
   return (
     <section className="bg-gray-50 py-20 light-section">
-      <SEO
-        title="Bellatrix Retail Solutions | E-commerce & Omnichannel Platform"
-        description="Comprehensive Bellatrix retail solutions for unified commerce operations. E-commerce integration, inventory management, and customer experience optimization."
-        keywords="Bellatrix retail solutions, e-commerce platform, omnichannel retail, NetSuite commerce, retail inventory management, unified commerce solutions"
-        ogTitle="Bellatrix Retail Solutions | E-commerce & Omnichannel Platform"
-        ogDescription="Advanced Bellatrix retail solutions for comprehensive e-commerce and omnichannel retail operations."
-        ogImage="/images/retail-solutions-platform.jpg"
-      />
 
       <div className="container mx-auto px-6">
         <header className="text-center mb-16">
@@ -273,12 +264,15 @@ const SolutionsSection = ({
             </div>
 
             {/* Solution Navigation */}
-            <div className="flex space-x-2 mt-6 justify-center">
+            <div className="flex gap-4 mt-6 justify-center">
               {finalSolutions.map((_, index) => (
                 <button
+                  type="button"
+                  aria-label={`Show item ${index + 1}`}
+                  aria-current={activeSolution === index ? "true" : undefined}
                   key={index}
                   onClick={() => setActiveSolution(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`relative w-3 h-3 rounded-full after:absolute after:-inset-2 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all duration-300 ${
                     activeSolution === index ? "bg-blue-600" : "bg-gray-300"
                   }`}
                 />

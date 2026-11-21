@@ -1,6 +1,5 @@
 import React from "react";
 
-import SEO from "../../SEO";
 
 import PayrollStepper from "./PayrollStepper";
 
@@ -226,41 +225,6 @@ const PayrollWorkflow = ({ workflowData = {} }) => {
 
     <>
 
-      <SEO
-
-        title={`Bellatrix Payroll Workflow | ${
-
-          displayData.title || "Complete Payroll System"
-
-        }`}
-
-        description={`${
-
-          displayData.description ||
-
-          "Comprehensive Bellatrix payroll workflow"
-
-        } - Step-by-step payroll processing, automation, and ERP integration for streamlined operations.`}
-
-        keywords="Bellatrix payroll workflow, payroll system lifecycle, automated payroll steps, ERP payroll integration, NetSuite payroll management"
-
-        ogTitle={`NetSuite Payroll Workflow - ${
-
-          displayData.title || "Complete Payroll System"
-
-        }`}
-
-        ogDescription={`${(
-
-          displayData.description ||
-
-          "Bellatrix complete payroll workflow system"
-
-        ).substring(0, 120)}... Professional ERP payroll lifecycle management.`}
-
-        ogImage="/images/netsuite-payroll-workflow.jpg"
-
-      />
 
       
 

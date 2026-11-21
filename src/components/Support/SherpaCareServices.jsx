@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../SEO";
 
 const SherpaCareServices = ({
   data,
@@ -56,14 +55,6 @@ const SherpaCareServices = ({
 
   return (
     <>
-      <SEO
-        title="SherpaCare Services | Comprehensive Bellatrix ERP Support Solutions"
-        description="Comprehensive Bellatrix services including solution design, integrations, eCommerce, workflows, custom scripts, and advanced module implementation."
-        keywords="SherpaCare services, ERP solution design, NetSuite integrations, eCommerce applications, custom workflows, KPI development, portal design, advanced modules"
-        ogTitle="SherpaCare Services | Comprehensive Bellatrix ERP Support Solutions"
-        ogDescription="Expert Bellatrix services covering solution design, integrations, custom development, and advanced module implementation for your business."
-        ogImage="/images/Support/sherpacare-services.jpg"
-      />
       <section
         className="w-full py-16 relative overflow-hidden animate-background-glow"
         style={{

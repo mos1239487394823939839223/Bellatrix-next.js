@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../SEO";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
 
 const WhatWeOfferSection = ({
@@ -54,14 +53,6 @@ const WhatWeOfferSection = ({
 
   return (
     <>
-      <SEO
-        title="What We Offer | Bellatrix ERP Support Value Propositions"
-        description="Discover what Bellatrix offers: dedicated expert teams, flexible stop-anytime services, and certified ERP professionals for comprehensive support solutions."
-        keywords="dedicated ERP team, certified Bellatrix professionals, flexible support services, stop anytime, comprehensive ERP solutions, expert support"
-        ogTitle="What We Offer | Bellatrix ERP Support Value Propositions"
-        ogDescription="Get dedicated expert teams, flexible services, and certified Bellatrix professionals for comprehensive ERP support solutions."
-        ogImage="/supoortWhatWeOffer.png"
-      />
       <section className="w-full bg-gray-50 py-16 light-section">
         <div className="max-w-6xl mx-auto px-4">
           <header className="text-center mb-12">

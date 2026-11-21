@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 
 const UseCasesSection = (props) => {
   // Handle both { data: ... } usage and spread props usage from LivePreview
@@ -48,14 +47,6 @@ const UseCasesSection = (props) => {
   
   return (
     <>
-      <SEO
-        title={title}
-        description={description}
-        keywords="Bellatrix HR use cases, HR platform for small business, enterprise HR management, NetSuite HR for medium business, HR system benefits"
-        ogTitle={title}
-        ogDescription={description}
-        ogImage="/images/netsuite-hr-use-cases.jpg"
-      />
       <section className="py-20 bg-[var(--color-bg-secondary)] animate-fade-in-up light-section">
         <div className="max-w-6xl mx-auto px-4">
           <header className="text-center mb-10">

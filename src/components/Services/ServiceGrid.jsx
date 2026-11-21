@@ -125,7 +125,7 @@ const ServiceGrid = ({ data = {} }) => {
 
         {/* Phones: one swipeable row with the next card peeking in (instead of ~3000px of stacked cards).
             md+: regular grid. */}
-        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 max-w-7xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 -mx-4 px-4 md:mx-auto md:px-0 pb-4 md:pb-0 [scrollbar-width:thin]">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 md:auto-rows-fr gap-4 md:gap-8 max-w-7xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 -mx-4 px-4 md:mx-auto md:px-0 pb-4 md:pb-0 [scrollbar-width:thin]">
 
           {services.map((service, index) => (
 

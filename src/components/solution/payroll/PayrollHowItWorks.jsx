@@ -186,7 +186,7 @@ const PayrollHowItWorks = ({ data }) => {
 
               {steps.length > 0 && (
 
-                <div className="grid md:grid-cols-2 gap-8 mt-10">
+                <div className="grid md:grid-cols-2 md:auto-rows-fr gap-8 mt-10">
 
                   {steps.map((step, idx) => (
 

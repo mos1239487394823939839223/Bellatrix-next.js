@@ -104,7 +104,7 @@ const WhyChooseSection = ({
             {/* Features Grid - Left Side */}
 
             <div className="flex-1">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 md:auto-rows-fr gap-6">
                 {trainingFeatures.map((feature, index) => (
                   <FeatureCard
                     key={feature.id || feature.featureId || `feature-${index}`}

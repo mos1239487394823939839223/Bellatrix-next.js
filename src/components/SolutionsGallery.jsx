@@ -238,7 +238,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.28 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:auto-rows-fr gap-5"
           >
             {/* ── Featured Card (spans 2 cols on lg) ── */}
             {featured && (

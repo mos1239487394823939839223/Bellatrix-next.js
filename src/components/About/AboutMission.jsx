@@ -81,7 +81,7 @@ const AboutMission = ({ data }) => {
             )}
             {/* Stats Grid - Dynamic */}
             {missionData.stats && missionData.stats.length > 0 && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 auto-rows-fr gap-4">
                 {missionData.stats.map((stat, index) => (
                   <div
                     key={index}
@@ -106,7 +106,7 @@ const AboutMission = ({ data }) => {
             {missionData.missionPoints && missionData.missionPoints.length > 0 && (
               <div className="mt-8">
                 <h4 className="text-lg font-semibold mb-3 text-blue-900">{missionData.missionPointsTitle}</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 md:auto-rows-fr gap-4">
                   {missionData.missionPoints.map((point, index) => (
                     <div
                       key={index}

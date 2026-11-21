@@ -19,6 +19,10 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   const { openCTAModal } = useCTAModal();
   // Video only after hydration and not for Data Saver / reduced-motion visitors
   const allowVideo = useBackgroundVideo();
+  // Placeholder is part of the server HTML (visible from first paint); after
+  // hydration it stays only while a video is actually on its way.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   // Respect the OS "reduce motion" setting: no auto-advancing slides, no autoplay video
   useEffect(() => {
@@ -181,12 +185,21 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
               "radial-gradient(ellipse 120% 70% at 50% 110%, rgba(37, 99, 235, 0.45) 0%, transparent 60%), linear-gradient(135deg, var(--color-brand-dark, #001038) 0%, var(--color-brand-midnight, #191970) 55%, var(--color-blue-900, #1e3a8a) 100%)",
           }}
         />
-        {/* Loading shimmer: only until the first video frame is on screen */}
+        {/* Video placeholder (skeleton): planet-horizon glow where the globe video
+            appears, a light sweep, and a thin progress line. Purely decorative —
+            the headline and buttons above are real content. Fades out on the
+            video's first frame, or right after hydration when video is skipped. */}
         <div
-          className={`absolute inset-0 hero-loading-shimmer transition-opacity duration-500 ${
-            allowVideo && !isVideoReady ? "opacity-100" : "opacity-0"
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            !isVideoReady && (!hydrated || allowVideo) ? "opacity-100" : "opacity-0"
           }`}
-        />
+        >
+          <div className="absolute inset-0 hero-placeholder-horizon" />
+          <div className="absolute inset-0 hero-loading-shimmer" />
+          <div className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden bg-white/10">
+            <div className="h-full w-1/3 hero-loading-bar" />
+          </div>
+        </div>
       </div>
 
       {/* Background Video */}

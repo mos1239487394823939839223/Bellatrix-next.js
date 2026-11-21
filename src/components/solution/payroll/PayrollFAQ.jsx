@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import SEO from "../../SEO";
 
 
 
@@ -164,29 +163,6 @@ const PayrollFAQ = ({ faqData = {} }) => {
 
     <>
 
-      <SEO
-
-        title={`Bellatrix Payroll FAQ | ${
-
-          displayFaqData.title || "Frequently Asked Questions"
-
-        }`}
-
-        description="Get answers to common Bellatrix payroll questions: security, integration, compliance, pricing, and implementation. Expert payroll solution guidance and support."
-
-        keywords="Bellatrix payroll FAQ, payroll system questions, NetSuite payroll security, ERP payroll integration, payroll compliance answers"
-
-        ogTitle={`NetSuite Payroll FAQ - ${
-
-          displayFaqData.title || "Common Questions Answered"
-
-        }`}
-
-        ogDescription="Find answers to frequently asked questions about Bellatrix payroll solutions, security, integration, and implementation. Expert guidance available."
-
-        ogImage="/images/netsuite-payroll-faq.jpg"
-
-      />
 
       <section className="py-20 bg-[var(--color-bg-secondary)]">
 

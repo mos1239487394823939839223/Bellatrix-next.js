@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 
 const IndustryStats = ({
   data,
@@ -64,14 +63,6 @@ const IndustryStats = ({
 
   return (
     <section className="bg-white py-16">
-      <SEO
-        title="Retail Industry Statistics | Bellatrix Performance Metrics"
-        description="Discover proven retail industry statistics with Bellatrix ERP. Real performance metrics showing growth and efficiency in retail operations and e-commerce."
-        keywords="retail industry statistics, NetSuite retail metrics, e-commerce performance data, retail growth statistics, Bellatrix retail results"
-        ogTitle="Retail Industry Statistics | Bellatrix Performance Metrics"
-        ogDescription="Real retail performance data and industry statistics with Bellatrix retail solutions."
-        ogImage="/images/retail-stats.jpg"
-      />
 
       <div className="container mx-auto px-6">
         {(finalTitle || finalSubtitle || finalDescription) && (

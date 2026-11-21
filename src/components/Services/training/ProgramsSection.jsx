@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import SEO from "../../SEO";
 
 import TrainingProgramCard from "./TrainingProgramCard";
 
@@ -39,14 +38,6 @@ const ProgramsSection = ({
 
   return (
     <>
-      <SEO
-        title="Bellatrix Training Programs | Comprehensive ERP Education Courses"
-        description="Explore comprehensive Bellatrix training programs including implementation, customization, advanced modules, and certification courses designed for business professionals."
-        keywords="NetSuite training programs, Oracle ERP training courses, NetSuite education, ERP certification programs, NetSuite learning paths, Oracle training modules"
-        ogTitle="NetSuite Training Programs - Comprehensive Oracle ERP Education"
-        ogDescription="Master Bellatrix with specialized training programs. Comprehensive courses for implementation, customization, and advanced ERP management skills."
-        ogImage="/images/netsuite-training-programs.jpg"
-      />
 
       <section className="bg-gray-50 py-12 my-12 light-section">
         {/* DEBUG: Show actual image URL being used */}

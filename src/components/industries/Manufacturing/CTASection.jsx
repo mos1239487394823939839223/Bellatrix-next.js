@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 
 import { useComponentData } from "../../../utils/useComponentData";
@@ -93,21 +92,6 @@ const CTASection = ({
 
     <section className="py-20 bg-[var(--color-brand-dark-navy)]">
 
-      <SEO
-
-        title="Get Started with Bellatrix Manufacturing | Contact Manufacturing ERP Experts"
-
-        description="Transform your manufacturing operations with Bellatrix ERP. Contact our manufacturing experts for consultation and implementation services. Get started today."
-
-        keywords="Bellatrix manufacturing contact, manufacturing ERP consultation, NetSuite manufacturing implementation, manufacturing software experts, ERP manufacturing services"
-
-        ogTitle="Get Started with Bellatrix Manufacturing | Contact Manufacturing ERP Experts"
-
-        ogDescription="Ready to transform your manufacturing operations? Contact our Bellatrix manufacturing experts for personalized consultation and implementation."
-
-        ogImage="/images/manufacturing-cta.jpg"
-
-      />
 
 
 

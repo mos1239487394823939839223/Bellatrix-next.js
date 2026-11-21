@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 
 const CaseStudiesSection = ({
   data,
@@ -69,14 +68,6 @@ const CaseStudiesSection = ({
 
   return (
     <section className="py-20 relative overflow-hidden theme-bg-primary bg-[var(--color-brand-dark-navy)]">
-      <SEO
-        title="Retail Success Stories | Bellatrix E-commerce Case Studies"
-        description="Real retail success stories with Bellatrix e-commerce solutions. Discover how retail companies achieved remarkable growth with NetSuite implementations."
-        keywords="retail case studies, Bellatrix success stories, e-commerce success stories, retail transformation, NetSuite retail implementations, retail growth stories"
-        ogTitle="Retail Success Stories | Bellatrix E-commerce Case Studies"
-        ogDescription="Proven retail success stories and case studies showcasing Bellatrix e-commerce transformations in retail operations."
-        ogImage="/images/retail-case-studies.jpg"
-      />
 
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full">

@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 
 const HeroSection = ({
@@ -39,7 +38,6 @@ const HeroSection = ({
       className="relative overflow-hidden animate-background-glow theme-bg-animated text-white py-20 md:py-32 lg:py-48"
       style={{
         width: "100%",
-        fontFamily: '"Gotham A", "Gotham B"',
         backgroundImage: data.backgroundImage
           ? `url(${data.backgroundImage})`
           : undefined,
@@ -47,14 +45,6 @@ const HeroSection = ({
         backgroundPosition: "center",
       }}
     >
-      <SEO
-        title="Bellatrix Retail Platform | E-commerce & Omnichannel Solutions"
-        description="Modern Bellatrix retail platform for e-commerce, POS, inventory management, and omnichannel retail operations. Transform your retail business today."
-        keywords="Bellatrix retail platform, e-commerce solutions, omnichannel retail, NetSuite POS, retail inventory management, retail ERP system"
-        ogTitle="Bellatrix Retail Platform | E-commerce & Omnichannel Solutions"
-        ogDescription="Comprehensive Bellatrix retail platform for modern e-commerce and omnichannel retail operations."
-        ogImage="/images/retail-hero.jpg"
-      />
       {/* Dark overlay for better text contrast over background image */}
       <div
         className="absolute inset-0 z-0"

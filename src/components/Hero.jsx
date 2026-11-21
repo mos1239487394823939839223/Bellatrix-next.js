@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef, useCallback, memo } from "react";
+import { useCTAModal } from "../contexts/CTAModalContext";
+import { useBackgroundVideo } from "../hooks/useBackgroundVideo";
+import { VideoSources } from "../utils/videoSources";
 
 const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) => {
 
@@ -11,6 +14,23 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   const [isVideoReady, setIsVideoReady] = useState(false);
 
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const sectionRef = useRef(null);
+  const { openCTAModal } = useCTAModal();
+  // Video only after hydration and not for Data Saver / reduced-motion visitors
+  const allowVideo = useBackgroundVideo();
+
+  // Respect the OS "reduce motion" setting: no auto-advancing slides, no autoplay video
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      setReduceMotion(mq.matches);
+      if (mq.matches) setIsPlaying(false);
+    };
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
 
 
@@ -103,16 +123,22 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   // Auto-advance slides
 
   useEffect(() => {
-
+    if (reduceMotion || slides.length < 2) return undefined;
     const interval = setInterval(() => {
-
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-
     }, 8000);
-
     return () => clearInterval(interval);
+  }, [slides.length, reduceMotion]);
 
-  }, [slides.length]);
+  // CTA copy can be overridden per slide or for the whole hero from the CMS
+  const slide = slides[currentSlide] || {};
+  const primaryCta = slide.ctaText || data?.ctaText || "Book a free consultation";
+  const secondaryCta = slide.secondaryCtaText || data?.secondaryCtaText || "Explore our services";
+  const scrollPastHero = () => {
+    const next = sectionRef.current?.closest("section[data-theme]")?.nextElementSibling || sectionRef.current?.nextElementSibling;
+    if (next) next.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    else window.scrollBy({ top: window.innerHeight, behavior: reduceMotion ? "auto" : "smooth" });
+  };
 
 
 
@@ -135,12 +161,14 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
   return (
 
-    <section className="min-h-[100dvh] relative overflow-hidden" aria-label="Homepage hero">
+    <section ref={sectionRef} className="min-h-[100dvh] relative overflow-hidden" aria-label="Homepage hero">
 
       {/* Initial loading skeleton until the first video frame is ready */}
       <div
         aria-hidden="true"
-        className={`absolute inset-0 z-20 pointer-events-none transition-opacity duration-700 ${
+        // Background layer (below the headline): branded gradient while the video
+        // loads, and the permanent backdrop when video is skipped
+        className={`absolute inset-0 z-0 pointer-events-none transition-opacity duration-700 ${
           isVideoReady ? "opacity-0" : "opacity-100"
         }`}
       >
@@ -153,21 +181,16 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
         />
         <div className="absolute inset-0 animate-pulse bg-[linear-gradient(110deg,rgba(255,255,255,0.03),rgba(255,255,255,0.1),rgba(255,255,255,0.03))]" />
 
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6">
-          <div className="mx-auto max-w-6xl space-y-5">
-            <div className="h-8 w-48 rounded-full bg-[var(--tw-gray-300)]/40" />
-            <div className="h-14 w-full max-w-3xl rounded-xl bg-[var(--tw-gray-200)]/35" />
-            <div className="h-6 w-full max-w-2xl rounded-lg bg-[var(--tw-gray-300)]/25" />
-          </div>
-        </div>
       </div>
 
       {/* Background Video */}
 
+      {allowVideo && (
       <video
 
         ref={videoRef}
-        src={currentVideoSrc}
+        // key: remount (and load the new file) when the slide's video changes
+        key={currentVideoSrc}
 
         autoPlay
 
@@ -178,27 +201,26 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
         playsInline
 
         preload="auto"
-        fetchPriority="high"
         aria-hidden="true"
 
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 z-0 w-full h-full object-cover"
 
         onLoadedData={() => {
           setIsVideoReady(true);
-          tryPlayVideo(videoRef.current);
+          if (!reduceMotion) tryPlayVideo(videoRef.current);
         }}
         onCanPlay={() => setIsVideoReady(true)}
         onError={() => setIsVideoReady(true)}
 
-      />
+      >
+        <VideoSources src={currentVideoSrc} />
+      </video>
+      )}
 
       {/* Content */}
       <div
-        className="relative z-10 min-h-[100dvh] flex items-center justify-center cursor-pointer"
-        onClick={handleUserInteraction}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleUserInteraction()}
+        className="relative z-10 min-h-[100dvh] flex items-center justify-center pt-20 pb-12"
+        onPointerDown={reduceMotion ? undefined : handleUserInteraction}
       >
 
         <div className="w-full max-w-6xl mx-auto px-6">
@@ -241,7 +263,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
               {/* Description */}
 
-              <div className="text-center mb-12">
+              <div className="text-center mb-10">
 
                 <p
                   className="text-[var(--color-text-light)] leading-relaxed max-w-4xl mx-auto"
@@ -255,6 +277,29 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
 
                 </p>
 
+              </div>
+
+              {/* Calls to action */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
+                <button
+                  type="button"
+                  data-no-cta-intercept
+                  onClick={() => openCTAModal({ title: "Book a free consultation", subtitle: "Tell us about your business and an ERP consultant will get back to you within 24 hours." })}
+                  className="btn-primary inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-black/30 transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
+                  style={{ minHeight: 48 }}
+                >
+                  {primaryCta}
+                  <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </button>
+                <button
+                  type="button"
+                  data-no-cta-intercept
+                  onClick={scrollPastHero}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-white border border-white/60 bg-black/45 backdrop-blur-md transition-colors duration-200 hover:bg-black/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  style={{ minHeight: 48 }}
+                >
+                  {secondaryCta}
+                </button>
               </div>
 
             </article>

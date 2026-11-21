@@ -1,6 +1,5 @@
 // components/Implementation/ProcessSection.jsx
 import React, { useState, useEffect } from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 import { loadImplementationData } from "../../../data/implementationDataLoader";
 
@@ -77,14 +76,6 @@ const ProcessSection = (props) => {
 
   return (
     <>
-      <SEO
-        title="Bellatrix ERP Implementation Process | Proven Technology Consulting Methodology"
-        description="Our proven Bellatrix ERP implementation methodology ensures seamless business transformation. Expert-guided process with certified consultants for successful enterprise technology deployment."
-        keywords="Bellatrix implementation process, ERP methodology, enterprise technology consulting, implementation steps, Oracle deployment, IT project management, business process optimization, CRM integration"
-        ogTitle="Bellatrix ERP Implementation Process | Proven Technology Consulting Methodology"
-        ogDescription="Expert Bellatrix ERP implementation methodology with certified consultants and proven steps for successful enterprise technology transformation."
-        ogImage="/Videos/implementation/implementProcess.jpg"
-      />
       <section className="bg-gray-50 py-12 light-section">
         <div className="container mx-auto px-6">
           {/* Section Header */}

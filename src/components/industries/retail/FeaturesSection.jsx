@@ -1,4 +1,3 @@
-import SEO from "../../SEO";
 
 const FeaturesSection = ({
   data,
@@ -71,14 +70,6 @@ const FeaturesSection = ({
   // Show default content even without data
   return (
     <section className="py-20 relative overflow-hidden theme-bg-primary bg-[var(--color-brand-dark-navy)]">
-      <SEO
-        title="Retail Features | Bellatrix E-commerce & POS Capabilities"
-        description="Explore comprehensive Bellatrix retail features for e-commerce, POS, inventory management, customer experience, and omnichannel retail operations."
-        keywords="Bellatrix retail features, e-commerce features, POS system features, retail inventory features, omnichannel retail capabilities, NetSuite commerce features"
-        ogTitle="Retail Features | Bellatrix E-commerce & POS Capabilities"
-        ogDescription="Comprehensive Bellatrix retail features designed for modern e-commerce and retail operations optimization."
-        ogImage="/images/retail-features.jpg"
-      />
 
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full">
@@ -133,6 +124,7 @@ const FeaturesSection = ({
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 theme-feature-icon bg-gradient-to-br from-[var(--color-brand-accent)] to-[var(--color-brand-variant)] transition-all duration-600 ease-in-out">
                   <svg
+                    aria-hidden="true"
                     className="w-6 h-6 text-white"
                     fill="none"
                     stroke="currentColor"
@@ -142,7 +134,13 @@ const FeaturesSection = ({
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d={feature.icon}
+                      // CMS items often have no icon (or a non-SVG value) — show a check badge
+                      // instead of an empty square
+                      d={
+                        typeof feature.icon === "string" && /^[Mm][\d\s.,\-a-zA-Z]*$/.test(feature.icon.trim())
+                          ? feature.icon
+                          : "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                      }
                     />
                   </svg>
                 </div>

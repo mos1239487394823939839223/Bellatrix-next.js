@@ -24,7 +24,7 @@ const ContactModal = ({ isOpen, onClose, title = "Contact Us", subtitle = "Let's
 
     >
 
-      <ContactForm />
+      <ContactForm onDone={onClose} />
 
     </Modal>
 

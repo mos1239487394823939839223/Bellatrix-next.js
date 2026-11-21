@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 import CTAButton from "../../CTAButton";
 
 const CTASection = ({
@@ -33,24 +32,6 @@ const CTASection = ({
   console.log(" [HRCTASection Fixed] Final data:", finalData);
   return (
     <>
-      <SEO
-        title={`Get Started with Bellatrix HR | ${
-          finalData.title || "Ready to Transform Your HR Operations?"
-        }`}
-        description={`${
-          finalData.description ||
-          "Ready to transform your HR operations with Bellatrix? Join thousands of companies automating HR processes"
-        } - Start now.`}
-        keywords="Bellatrix HR, get started NetSuite HR, HR platform demo, ERP HR implementation, NetSuite HR pricing, HR automation"
-        ogTitle={`Get Started with NetSuite HR - ${
-          finalData.title || "Transform Your HR Today"
-        }`}
-        ogDescription={`${(
-          finalData.description ||
-          "Start your Bellatrix HR transformation today"
-        ).substring(0, 120)}... Professional ERP HR solutions and support.`}
-        ogImage="/images/netsuite-hr-cta.jpg"
-      />
       <section className="py-16 bg-[var(--color-bg-secondary)] text-center animate-fade-in-up light-section">
         <div className="max-w-2xl mx-auto px-4">
           <header className="mb-8">

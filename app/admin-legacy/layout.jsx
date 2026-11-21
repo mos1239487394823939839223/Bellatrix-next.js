@@ -1,15 +1,11 @@
-'use client'
-import { useEffect, useState } from 'react'
-import ProtectedRoute from '../../src/components/ProtectedRoute'
-import AdminLayout from '../../src/components/Admin/AdminLayout'
+// Server layout: keeps these private pages out of search results.
+// (robots.txt only blocks crawling; noindex is what prevents indexing.)
+import AdminLegacyShell from './AdminLegacyShell'
 
-export default function AdminLegacyLayout({ children }) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  if (!mounted) return null
-  return (
-    <ProtectedRoute>
-      <AdminLayout>{children}</AdminLayout>
-    </ProtectedRoute>
-  )
+export const metadata = {
+  robots: { index: false, follow: false, nocache: true },
+}
+
+export default function Layout({ children }) {
+  return <AdminLegacyShell>{children}</AdminLegacyShell>
 }

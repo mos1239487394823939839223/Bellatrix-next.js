@@ -96,7 +96,7 @@
   --color-blue-15: rgba(59, 130, 246, 0.15); /* 3x - 15% blue overlay */
   --color-blue-20: rgba(59, 130, 246, 0.2); /* Various blue overlays */
   --color-blue-40: rgba(59, 130, 246, 0.4); /* 6x - 40% blue overlay */
-  --color-blue-50: rgba(59, 130, 246, 0.5); /* 4x - 50% blue overlay */
+  /* --color-blue-50 overlay removed: it overrode Tailwind's bg-blue-50 shade (line 31) site-wide, turning light-blue surfaces into saturated 50% blue. */
   --color-blue-60: rgba(59, 130, 246, 0.6); /* 2x - 60% blue overlay */
 
   /* Cyan with Opacity */

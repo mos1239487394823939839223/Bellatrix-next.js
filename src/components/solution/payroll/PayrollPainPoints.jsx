@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 
 const PayrollPainPoints = ({ painPoints, image }) => {
   // اعتمد فقط على البيانات القادمة من props
@@ -25,14 +24,6 @@ const PayrollPainPoints = ({ painPoints, image }) => {
 
   return (
     <>
-      <SEO
-        title={title.replace(/<[^>]+>/g, "")}
-        description={description}
-        keywords="NetSuite payroll challenges, payroll problems solutions, Oracle ERP payroll issues, automated payroll benefits, payroll compliance solutions"
-        ogTitle={title.replace(/<[^>]+>/g, "")}
-        ogDescription={description}
-        ogImage="/images/netsuite-payroll-challenges.jpg"
-      />
       <section className="bg-[var(--color-bg-secondary)] py-20 light-section">
         <div className="container mx-auto px-6 max-w-6xl">
           <header className="text-center mb-12">

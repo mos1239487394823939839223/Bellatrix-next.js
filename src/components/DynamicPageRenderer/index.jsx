@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { usePageData } from "../../hooks/usePageData";
-import { useComponentLoader } from "../../hooks/useComponentLoader";
+import { getSsrComponent } from "../ssrComponentMap";
 import LoadingState from "./LoadingState";
 import ErrorState from "./ErrorState";
 import EmptyState from "./EmptyState";
@@ -33,21 +33,23 @@ const DynamicPageRenderer = ({ slug: slugProp, initialData = null }) => {
 
   // Stable reference: avoids new [] on every render when pageData is null/undefined
   const components = pageData?.components || pageData?.sections || EMPTY;
-  const { loadedComponents } = useComponentLoader(components);
-
   const isNewFormat = !!pageData?.components;
 
   // Memoize filtered+mapped sections so PageSection props are stable references
-  // across the incremental loadedComponents updates from useComponentLoader
   const filteredSections = useMemo(() => {
     if (!components.length) return EMPTY;
     return components
       .filter(isSectionVisible)
-      .map((section, index) => ({
-        section,
-        index,
-        sectionId: isNewFormat ? `component-${index}` : section.uid,
-      }));
+      .map((section, index) => {
+        // Resolved synchronously so the section renders on the server (SEO + LCP)
+        const Component = getSsrComponent(section.componentType);
+        return {
+          section,
+          index,
+          sectionId: isNewFormat ? `component-${index}` : section.uid,
+          componentData: Component ? { Component } : null,
+        };
+      });
   }, [components, isNewFormat]);
 
   const pageType = slug === "home" || !slug ? "home" : "generic";
@@ -63,12 +65,12 @@ const DynamicPageRenderer = ({ slug: slugProp, initialData = null }) => {
 
   return (
     <div>
-      {filteredSections.map(({ section, index, sectionId }) => (
+      {filteredSections.map(({ section, index, sectionId, componentData }) => (
         <PageSection
           key={sectionId}
           section={section}
           index={index}
-          componentData={loadedComponents[sectionId]}
+          componentData={componentData}
           isNewFormat={isNewFormat}
         />
       ))}

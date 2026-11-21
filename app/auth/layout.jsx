@@ -1,9 +1,11 @@
-'use client'
-import { useEffect, useState } from 'react'
+// Server layout: keeps these private pages out of search results.
+// (robots.txt only blocks crawling; noindex is what prevents indexing.)
+import AuthShell from './AuthShell'
 
-export default function AuthLayout({ children }) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  if (!mounted) return null
-  return children
+export const metadata = {
+  robots: { index: false, follow: false, nocache: true },
+}
+
+export default function Layout({ children }) {
+  return <AuthShell>{children}</AuthShell>
 }

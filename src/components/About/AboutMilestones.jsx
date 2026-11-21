@@ -63,6 +63,7 @@ const AboutMilestones = ({ milestones = [], data = {} }) => {
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ delay: index * 0.1 }}
                 className="text-center p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300"
               >

@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import SEO from "../../SEO";
 
 import {
   validateVariant,
@@ -96,14 +95,6 @@ const CtaSection = ({
 
   return (
     <>
-      <SEO
-        title="Get Started Today | NetSuite Implementation CTA"
-        description="Ready for seamless NetSuite implementation? Transform your business operations with expert services. Get detailed proposal within 24 hours with 99.9% success rate."
-        keywords="NetSuite implementation CTA, get started today, ERP transformation, quick response, implementation success rate, expert support"
-        ogTitle="Get Started Today | NetSuite Implementation CTA"
-        ogDescription="Transform your business with seamless NetSuite implementation. Expert support, proven success, quick response - start your ERP journey today."
-        ogImage="/images/implementation-cta.jpg"
-      />
 
       <section
         className="relative py-16 overflow-hidden"

@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../../SEO";
 import ImplementationStepper from "./ImplementationStepper";
 import { useComponentData } from "../../../utils/useComponentData";
 import manufacturingData from "../../../data/manufacturing-data.json";
@@ -24,14 +23,6 @@ const ImplementationProcess = (props) => {
 
   return (
     <section className="py-20 bg-white light-section">
-      <SEO
-        title="Manufacturing Implementation Process | Bellatrix ERP Methodology"
-        description="Proven Bellatrix manufacturing implementation process from discovery to go-live. Secure methodology for manufacturing ERP implementation success."
-        keywords="NetSuite manufacturing implementation, ERP implementation process, manufacturing implementation methodology, NetSuite manufacturing setup, Oracle ERP implementation"
-        ogTitle="Manufacturing Implementation Process | Bellatrix ERP Methodology"
-        ogDescription="Comprehensive Bellatrix manufacturing implementation process designed for manufacturing industry success."
-        ogImage="/images/manufacturing-implementation.jpg"
-      />
 
       <div className="container mx-auto px-6 max-w-6xl">
         <header className="text-center max-w-3xl mx-auto mb-16">

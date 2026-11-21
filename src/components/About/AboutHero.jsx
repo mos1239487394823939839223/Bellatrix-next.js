@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useBackgroundVideo } from "../../hooks/useBackgroundVideo";
+import { VideoSources } from "../../utils/videoSources";
 
 const AboutHero = ({ 
   data,
@@ -13,6 +15,8 @@ const AboutHero = ({
   backgroundImage: propBackgroundImage,
   stats: propStats,
 }) => {
+  // Decorative hero video only when the visitor hasn't asked for less data/motion
+  const allowVideo = useBackgroundVideo();
   const videoRef = useRef(null);
   const [videoReady, setVideoReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -83,6 +87,7 @@ const AboutHero = ({
       className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-br from-[var(--color-brand-midnight,#0a0a2e)] via-black to-[var(--color-primary,#C41E3A)]"
     >
       {/* Background Video — fades in only after it's ready (mirrors Home Hero) */}
+      {allowVideo && (
       <video
         ref={videoRef}
         autoPlay
@@ -102,26 +107,24 @@ const AboutHero = ({
         }}
         onError={(e) => console.log("About Hero video error:", e.target.error)}
       >
-        <source
-          src={heroData.backgroundVideo || "/Videos/about-hero.mp4"}
-          type="video/mp4"
-        />
+        <VideoSources src={heroData.backgroundVideo || "/Videos/about-hero.mp4"} />
       </video>
+      )}
       {/* Overlay - theme-aware */}
       <div
-        className="absolute inset-0 bg-[linear-gradient(135deg,var(--color-primary-dark)/0.8_0%,var(--color-gray-900)/0.6_50%,var(--color-cyan-900)/0.8_100%)] transition-all duration-600 ease-in-out"
+        className="absolute inset-0 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-primary-dark)_80%,transparent)_0%,color-mix(in_srgb,var(--color-gray-900)_60%,transparent)_50%,color-mix(in_srgb,var(--color-cyan-900)_80%,transparent)_100%)] transition-all duration-600 ease-in-out"
       ></div>
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
           transition={{ duration: 6, repeat: Infinity }}
-          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full blur-xl bg-[linear-gradient(90deg,var(--color-primary)/0.2,var(--color-cyan-400)/0.2)] transition-all duration-600 ease-in-out"
+          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full blur-xl bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-primary)_20%,transparent),color-mix(in_srgb,var(--color-cyan-400)_20%,transparent))] transition-all duration-600 ease-in-out"
         />
         <motion.div
           animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute bottom-1/4 right-1/4 w-24 h-24 rounded-full blur-lg bg-[linear-gradient(90deg,var(--color-primary-dark)/0.2,var(--color-cyan-500)/0.2)] transition-all duration-600 ease-in-out"
+          className="absolute bottom-1/4 right-1/4 w-24 h-24 rounded-full blur-lg bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-primary-dark)_20%,transparent),color-mix(in_srgb,var(--color-cyan-500)_20%,transparent))] transition-all duration-600 ease-in-out"
         />
       </div>
       {/* Content */}

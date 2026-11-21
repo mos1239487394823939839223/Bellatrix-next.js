@@ -1,6 +1,5 @@
 import React from "react";
 
-import SEO from "../../SEO";
 
 
 
@@ -44,21 +43,6 @@ const ModulesSection = ({ data = {} }) => {
 
     <>
 
-      <SEO
-
-        title={title}
-
-        description={description}
-
-        keywords="Bellatrix HR modules, HR platform components, employee management module, payroll processing, HR compliance, NetSuite HR features"
-
-        ogTitle={title}
-
-        ogDescription={description}
-
-        ogImage="/images/netsuite-hr-modules.jpg"
-
-      />
 
       <section
 

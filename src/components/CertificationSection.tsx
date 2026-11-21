@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useMemo, useRef } from "react";
 
 interface Certification {
   id: string;
@@ -15,37 +15,27 @@ interface CertificationSectionProps {
   certifications?: Certification[];
 }
 
-const isLikelyImageSrc = (src?: string): boolean => {
-  if (!src || typeof src !== "string") return false;
-
-  const value = src.trim().toLowerCase();
-  if (!value) return false;
-  if (value.startsWith("data:image")) return true;
-
-  const hasAllowedBase =
-    value.startsWith("/") ||
-    value.startsWith("http://") ||
-    value.startsWith("https://");
-
-  const hasImageLikePath =
-    /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)(\?.*)?(#.*)?$/.test(value) ||
-    value.includes("/uploads/");
-
-  return hasAllowedBase && hasImageLikePath;
-};
-
-const getSafeLogoSrc = (src?: string): string | null =>
-  isLikelyImageSrc(src) ? src!.trim() : null;
-
-const shouldBypassOptimization = (src: string): boolean =>
-  src.startsWith("http://") || src.startsWith("https://") || src.startsWith("/uploads/");
-
-// Default certifications show text tiles — upload real logos via the admin panel.
 const defaultCertifications: Certification[] = [
-  { id: "cert-1", logoUrl: "", title: "ISO 9001 Certification" },
-  { id: "cert-2", logoUrl: "", title: "ISO 27001 Certification" },
-  { id: "cert-3", logoUrl: "", title: "SOC 2 Type II" },
-  { id: "cert-4", logoUrl: "", title: "GDPR Compliant" },
+  {
+    id: "cert-1",
+    logoUrl: "/images/certifications/cert-1.png",
+    title: "ISO 9001 Certification",
+  },
+  {
+    id: "cert-2",
+    logoUrl: "/images/certifications/cert-2.png",
+    title: "ISO 27001 Certification",
+  },
+  {
+    id: "cert-3",
+    logoUrl: "/images/certifications/cert-3.png",
+    title: "SOC 2 Type II",
+  },
+  {
+    id: "cert-4",
+    logoUrl: "/images/certifications/cert-4.png",
+    title: "GDPR Compliant",
+  },
 ];
 
 const titleVariants = {
@@ -65,37 +55,19 @@ export default function CertificationSection({
   certifications = defaultCertifications,
 }: CertificationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    const syncTheme = () => {
-      const theme = root.getAttribute("data-theme");
-      setIsDarkTheme(theme === "purple" || theme === "dark");
-    };
-
-    syncTheme();
-
-    const observer = new MutationObserver(syncTheme);
-    observer.observe(root, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
+  const prefersReducedMotion = useReducedMotion();
+  // Scroll only when there are enough logos to loop and the user allows motion
+  const shouldScroll = certifications.length > 1 && !prefersReducedMotion;
   const marqueeItems = useMemo(() => {
     if (!certifications.length) {
       return [];
     }
 
-    return [...certifications, ...certifications];
-  }, [certifications]);
+    return shouldScroll ? [...certifications, ...certifications] : certifications;
+  }, [certifications, shouldScroll]);
 
-  const marqueeDuration = Math.max(certifications.length * 8, 32);
+  const marqueeDuration = Math.max(certifications.length * 4, 16);
 
   return (
     <section
@@ -110,9 +82,7 @@ export default function CertificationSection({
           variants={titleVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className={`text-3xl font-bold tracking-tight text-center mb-10 ${
-            isDarkTheme ? "text-white" : "text-black"
-          }`}
+          className="text-3xl font-bold tracking-tight text-center text-zinc-900 dark:text-zinc-50 mb-10"
         >
           {sectionTitle}
         </motion.h2>
@@ -122,13 +92,22 @@ export default function CertificationSection({
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="overflow-hidden"
+          className={shouldScroll ? "overflow-hidden" : ""}
+          // Fade the edges so logos glide in/out instead of being chopped at the border
+          style={
+            shouldScroll
+              ? {
+                  maskImage: "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
+                  WebkitMaskImage: "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
+                }
+              : undefined
+          }
         >
           <motion.div
-            className="flex w-max gap-6"
-            animate={certifications.length > 1 ? { x: ["0%", "-50%"] } : { x: "0%" }}
+            className={shouldScroll ? "flex w-max gap-6 py-2" : "flex flex-wrap justify-center gap-6 py-2"}
+            animate={shouldScroll ? { x: ["0%", "-50%"] } : { x: "0%" }}
             transition={
-              certifications.length > 1
+              shouldScroll
                 ? {
                     duration: marqueeDuration,
                     ease: "linear",
@@ -137,46 +116,36 @@ export default function CertificationSection({
                 : { duration: 0 }
             }
           >
-            {marqueeItems.map((cert, index) => {
-              const safeLogoSrc = getSafeLogoSrc(cert.logoUrl);
-
-              return (
-                <motion.div
-                  key={`${cert.id}-${index}`}
-                  whileHover={{ scale: 1.03, y: -4 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                  className="
-                    group relative flex-shrink-0
-                    w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]
-                    aspect-video
-                    bg-white
-                    rounded-2xl
-                    border border-zinc-100
-                    shadow-sm hover:shadow-lg
-                    overflow-hidden
-                    transition-shadow duration-300
-                  "
-                >
-                  {safeLogoSrc ? (
-                    <Image
-                      src={safeLogoSrc}
-                      alt={cert.title}
-                      fill
-                      sizes="(max-width: 640px) 260px, (max-width: 768px) 280px, (max-width: 1024px) 300px, 320px"
-                      className="h-full w-full object-contain p-4 transition-transform duration-300"
-                      loading="lazy"
-                      unoptimized={shouldBypassOptimization(safeLogoSrc)}
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center p-4">
-                      <span className="text-center text-sm font-semibold text-zinc-600 leading-snug">
-                        {cert.title}
-                      </span>
-                    </div>
-                  )}
-                </motion.div>
-              );
-            })}
+            {marqueeItems.map((cert, index) => (
+              <motion.div
+                key={`${cert.id}-${index}`}
+                // Second copy exists only to make the loop seamless
+                aria-hidden={index >= certifications.length ? true : undefined}
+                whileHover={{ scale: 1.03, y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="
+                  group relative flex-shrink-0
+                  w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]
+                  aspect-video
+                  bg-white
+                  rounded-2xl
+                  border border-zinc-100 dark:border-zinc-800
+                  shadow-sm hover:shadow-lg dark:shadow-zinc-950/40
+                  overflow-hidden
+                  transition-shadow duration-300
+                "
+              >
+                <Image
+                  src={cert.logoUrl}
+                  alt={index >= certifications.length ? "" : cert.title}
+                  fill
+                  sizes="(max-width: 640px) 260px, (max-width: 768px) 280px, (max-width: 1024px) 300px, 320px"
+                  // contain + padding: certification logos must never be cropped
+                  className="object-contain p-5 sm:p-6 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </motion.div>
+            ))}
           </motion.div>
         </motion.div>
       </div>

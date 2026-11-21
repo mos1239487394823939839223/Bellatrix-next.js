@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../SEO";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
 
 // Normalize upload URLs to HTTPS domain to match DedicatedTeamSection behavior
@@ -61,14 +60,6 @@ const PayPerUseSection = ({
 
   return (
     <>
-      <SEO
-        title="Pay Per Use Support | Cost-Effective Bellatrix ERP Support Hours"
-        description="Only pay for the support hours you actually use with Bellatrix. Flexible ERP support pricing with monthly reviews and hour optimization strategies."
-        keywords="pay per use support, flexible ERP pricing, hourly support rates, cost-effective support, support hour optimization, Bellatrix pricing model"
-        ogTitle="Pay Per Use Support | Cost-Effective Bellatrix ERP Support Hours"
-        ogDescription="Flexible support pricing model - only pay for hours you use with monthly reviews and optimization strategies for your Bellatrix system."
-        ogImage="/images/Support/pay2.jpeg"
-      />
       <section className="w-full bg-white py-16 light-section">
         <div className="max-w-6xl mx-auto px-4">
           <header className="mb-10">

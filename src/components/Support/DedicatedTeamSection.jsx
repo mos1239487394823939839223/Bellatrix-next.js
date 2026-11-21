@@ -61,7 +61,6 @@ const DedicatedTeamSection = ({
       style={{
         backgroundColor: "var(--color-brand-dark-navy)",
         padding: "60px 0",
-        fontFamily: '"Gotham A", "Gotham B"',
         color: "white",
         position: "relative",
         overflow: "hidden",
@@ -138,16 +137,10 @@ const DedicatedTeamSection = ({
         </h2>
 
         {/* Content Layout */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "50px",
-            justifyContent: "space-between",
-          }}
-        >
+        {/* Stacks on phones/tablets, side by side from md up */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-12">
           {/* Text Content with Bullet Points */}
-          <div style={{ flex: "1", maxWidth: "50%" }}>
+          <div className="w-full md:flex-1 md:max-w-[50%]">
             <ul
               style={{
                 listStyle: "none",
@@ -192,7 +185,7 @@ const DedicatedTeamSection = ({
           </div>
 
           {/* Image */}
-          <div style={{ flex: "1", maxWidth: "50%", textAlign: "center" }}>
+          <div className="w-full md:flex-1 md:max-w-[50%] text-center">
             <div
               style={{
                 position: "relative",

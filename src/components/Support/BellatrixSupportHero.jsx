@@ -1,5 +1,4 @@
 import React from "react";
-import SEO from "../SEO";
 import CTAButton from "../CTAButton";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
 
@@ -39,14 +38,6 @@ const BellatrixSupportHero = ({
 
   return (
     <>
-      <SEO
-        title="Bellatrix Support Hero | Bellatrix Expert Support Services"
-        description="Get access to expert Bellatrix support knowledge and ongoing assistance after your go-live. Professional ERP implementation support from certified consultants."
-        keywords="Bellatrix support, ERP support services, NetSuite consultants, post-implementation support, Bellatrix experts, business system support"
-        ogTitle="Bellatrix Support Hero | Bellatrix Expert Support Services"
-        ogDescription="Professional Bellatrix support services with expert consultants for ongoing ERP system assistance and optimization."
-        ogImage={addMediaVersionToBust(heroData.backgroundImage, cacheVersion)}
-      />
       <header
         className="py-12 relative overflow-hidden animate-background-glow theme-bg-animated text-white"
         style={{
@@ -54,7 +45,6 @@ const BellatrixSupportHero = ({
           width: "100%",
           fontSize: "15px",
           lineHeight: "24px",
-          fontFamily: '"Gotham A", "Gotham B"',
         }}
       >
         {/* Decorative Background Elements */}

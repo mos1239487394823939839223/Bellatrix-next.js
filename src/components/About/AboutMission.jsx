@@ -47,14 +47,14 @@ const AboutMission = ({ data }) => {
         <div className="text-center mb-14">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-3 text-blue-900 tracking-tight">{missionData.title || "About Bellatrix"}</h2>
           {missionData.subtitle && (
-            <p className="text-lg max-w-2xl mx-auto mb-3 text-blue-700/80">{missionData.subtitle}</p>
+            <p className="text-lg max-w-2xl mx-auto mb-3 text-blue-700">{missionData.subtitle}</p>
           )}
           <p className="text-base max-w-2xl mx-auto text-gray-600">{missionData.description || "We are a leading Bellatrix consultancy dedicated to transforming businesses through innovative technology solutions and strategic digital transformation initiatives."}</p>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+        <div className="flex flex-col md:flex-row md:items-start gap-10 md:gap-16">
           {/* Image - Left Side */}
-          <div className="flex-1 flex justify-center">
-            <div className="relative max-w-md w-full bg-blue-50 rounded-2xl shadow-md p-6 flex flex-col items-center border border-blue-100">
+          <div className="flex-1 flex justify-center md:sticky md:top-28">
+            <div className="relative max-w-md w-full bg-slate-50 rounded-2xl shadow-md p-5 flex flex-col items-center border border-slate-200">
               <Image
                 src={missionData.image || "/images/ourProServices.png"}
                 alt={missionData.imageAlt || "About Bellatrix - Professional Services"}
@@ -63,20 +63,20 @@ const AboutMission = ({ data }) => {
                 className="w-full h-auto rounded-xl shadow-sm mb-3 object-cover"
                 style={{ maxHeight: 320 }}
               />
-              <span className="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full mt-2">{missionData.badgeText}</span>
+              <span className="inline-block bg-white text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-1 rounded-full mt-2">{missionData.badgeText}</span>
             </div>
           </div>
           {/* Content - Right Side */}
           <div className="flex-1 space-y-6">
             {missionData.vision && (
-              <div className="mb-4 p-4 rounded-xl bg-white border border-blue-100 shadow-sm">
+              <div className="mb-4 p-5 rounded-xl bg-white border border-slate-200 shadow-sm">
                 <h4 className="text-lg font-semibold mb-1 text-blue-900">{missionData.visionTitle}</h4>
-                <p className="text-sm text-blue-700/80">{missionData.vision}</p>
+                <p className="text-sm leading-relaxed text-slate-600">{missionData.vision}</p>
               </div>
             )}
             {missionData.additionalContent && (
-              <div className="mb-4 p-4 rounded-xl bg-blue-50 border border-blue-100">
-                <p className="text-sm text-blue-800">{missionData.additionalContent}</p>
+              <div className="mb-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+                <p className="text-sm leading-relaxed text-slate-700">{missionData.additionalContent}</p>
               </div>
             )}
             {/* Stats Grid - Dynamic */}
@@ -85,10 +85,19 @@ const AboutMission = ({ data }) => {
                 {missionData.stats.map((stat, index) => (
                   <div
                     key={index}
-                    className="p-4 rounded-xl bg-white border border-blue-100 flex flex-col items-center shadow-sm"
+                    className="p-5 rounded-xl bg-white border border-slate-200 flex flex-col shadow-sm"
                   >
-                    <div className="text-2xl font-bold text-blue-700">{stat.value || stat.number || "0"}</div>
-                    <div className="text-xs text-gray-500 mt-1">{stat.label || stat.text || stat.description || "Statistic"}</div>
+                    {(() => {
+                      const value = String(stat.value || stat.number || "0");
+                      // Numbers ("500+", "98%") read as big stats; words read as a card heading
+                      const isNumeric = /^[\s\d$€£+.,%xX/-]+$/.test(value);
+                      return (
+                        <div className={isNumeric ? "text-3xl font-bold text-blue-700" : "text-base font-semibold leading-snug text-slate-900"}>
+                          {value}
+                        </div>
+                      );
+                    })()}
+                    <div className="text-sm leading-relaxed text-slate-600 mt-1.5">{stat.label || stat.text || stat.description || "Statistic"}</div>
                   </div>
                 ))}
               </div>
@@ -101,16 +110,16 @@ const AboutMission = ({ data }) => {
                   {missionData.missionPoints.map((point, index) => (
                     <div
                       key={index}
-                      className="p-4 rounded-xl bg-blue-50 border border-blue-100 flex items-start gap-3"
+                      className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex items-start gap-3"
                     >
-                      <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center mt-1">
+                      <div className="w-7 h-7 shrink-0 rounded-full bg-blue-600 flex items-center justify-center" aria-hidden="true">
                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
                       <div>
-                        <h5 className="font-semibold text-sm mb-1 text-blue-900">{point.title || point.label || `Point ${index + 1}`}</h5>
-                        <p className="text-xs text-blue-700/80">{point.description || point.text || point.content || "Mission point description"}</p>
+                        <h5 className="font-semibold text-sm mb-1 text-slate-900">{point.title || point.label || `Point ${index + 1}`}</h5>
+                        <p className="text-sm leading-relaxed text-slate-600">{point.description || point.text || point.content || "Mission point description"}</p>
                       </div>
                     </div>
                   ))}

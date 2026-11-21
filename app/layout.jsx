@@ -45,9 +45,8 @@ export const metadata = {
       'max-video-preview': -1,
     },
   },
-  alternates: {
-    canonical: 'https://bellatrixinc.com',
-  },
+  // No site-wide canonical here: an inherited canonical would point every page
+  // without its own (404s, auth) at the homepage. Each page sets its own.
   openGraph: {
     type:        'website',
     url:         'https://bellatrixinc.com',
@@ -55,14 +54,7 @@ export const metadata = {
     title:       'Bellatrix | Expert ERP Solutions & Consultancy',
     description: 'Certified Oracle NetSuite partner — ERP consulting, implementation, HR, payroll, retail & manufacturing solutions.',
     locale:      'en_US',
-    images: [
-      {
-        url:    '/images/logoTwo.png',
-        width:  1200,
-        height: 630,
-        alt:    'Bellatrix ERP Consulting',
-      },
-    ],
+    // Share image comes from app/opengraph-image.jsx (real 1200×630 card)
   },
   twitter: {
     card:        'summary_large_image',
@@ -70,7 +62,6 @@ export const metadata = {
     creator:     '@BellatrixERP',
     title:       'Bellatrix | Expert ERP Solutions & Consultancy',
     description: 'Certified Oracle NetSuite partner — ERP consulting, implementation, HR, payroll, retail & manufacturing solutions.',
-    images:      ['/images/logoTwo.png'],
   },
 };
 
@@ -99,16 +90,13 @@ const jsonLd = {
   },
 };
 
+// No SearchAction: the site has no search results page, so advertising one is invalid markup.
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Bellatrix',
   url: 'https://bellatrixinc.com',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: 'https://bellatrixinc.com/?q={search_term_string}',
-    'query-input': 'required name=search_term_string',
-  },
+  publisher: { '@type': 'Organization', name: 'Bellatrix', url: 'https://bellatrixinc.com' },
 };
 
 export default function RootLayout({ children }) {

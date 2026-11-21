@@ -47,7 +47,6 @@ const WhyChoeseBellatrix = ({
         color: "rgb(31, 41, 55)", // text-gray-800
         fontSize: "15px",
         lineHeight: "24px",
-        fontFamily: '"Gotham A", "Gotham B"',
         width: "100%",
         padding: "60px 0",
         margin: "0px",

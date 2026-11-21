@@ -34,7 +34,6 @@ const LOCATION_ICON_MAP = {
 
 import { useState, useEffect } from "react";
 
-import SEO from "./SEO";
 
 import { getPublicDictionary } from "../services/settingsApi";
 
@@ -298,24 +297,15 @@ const Footer = ({ initialCategories = [] }) => {
 
   return (
     <footer
-      className="relative text-white pt-0 pb-8 px-0 overflow-hidden border-t-4 shadow-inner"
+      className="relative text-white pt-0 pb-8 px-0 overflow-hidden border-t"
       style={{
         backgroundColor: "var(--color-brand-dark-navy)",
 
-        borderTopColor: "var(--color-border-secondary)",
+        borderTopColor: "rgba(255, 255, 255, 0.08)",
       }}
     >
       <style>{footerStyles}</style>
 
-      <SEO
-        title="Contact Bellatrix | Bellatrix Consulting & Support Information"
-        description="Get in touch with Bellatrix for Bellatrix consulting, implementation, and support services. Contact information and company details."
-        keywords="contact Bellatrix, NetSuite support contact, Oracle consulting contact, business hours, company information, get in touch"
-        ogTitle="Contact Bellatrix | Bellatrix Consulting Company"
-        ogDescription="Contact Bellatrix for expert Bellatrix consulting and implementation services. Get in touch with our team of specialists."
-        ogImage="/images/bellatrix-contact-footer.jpg"
-        twitterCard="summary_large_image"
-      />
 
       {/* Top border glow */}
 
@@ -559,8 +549,16 @@ const Footer = ({ initialCategories = [] }) => {
           }}
         >
           <p>
-            {footerSettings.copyrightText ||
-              `© ${new Date().getFullYear()} ${footerSettings.companyName}. All rights reserved.`}
+            {footerSettings.copyrightText
+              ? // Keep the CMS start year but never show a stale one: "© 2020" → "© 2020–<this year>"
+                footerSettings.copyrightText.replace(
+                  /©\s*(\d{4})(?!\s*[-–]\s*\d{4})/,
+                  (match, year) => {
+                    const now = new Date().getFullYear();
+                    return Number(year) < now ? `© ${year}–${now}` : match;
+                  }
+                )
+              : `© ${new Date().getFullYear()} ${footerSettings.companyName}. All rights reserved.`}
           </p>
         </div>
 
@@ -569,7 +567,8 @@ const Footer = ({ initialCategories = [] }) => {
         {showTop && (
           <button
             onClick={handleScrollTop}
-            className="footer-scroll-btn fixed bottom-8 right-8 z-50 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform animate-bounce"
+            type="button"
+            className="footer-scroll-btn fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-primary)]"
             style={{
               backgroundColor: "var(--color-primary)",
             }}

@@ -68,7 +68,9 @@ export default function CertificationSection({
     return () => mq.removeEventListener("change", onChange);
   }, []);
   // Scroll only when there are enough logos to loop and the user allows motion
-  const shouldScroll = certifications.length > 1 && !prefersReducedMotion;
+  // Always a single scrolling row (never stacked), including for visitors with
+  // "reduce motion" — for them it simply moves at a slower, calmer pace.
+  const shouldScroll = certifications.length > 1;
   const marqueeItems = useMemo(() => {
     if (!certifications.length) {
       return [];
@@ -77,7 +79,7 @@ export default function CertificationSection({
     return shouldScroll ? [...certifications, ...certifications] : certifications;
   }, [certifications, shouldScroll]);
 
-  const marqueeDuration = Math.max(certifications.length * 4, 16);
+  const marqueeDuration = Math.max(certifications.length * 4, 16) * (prefersReducedMotion ? 1.8 : 1);
 
   return (
     <section
@@ -114,6 +116,8 @@ export default function CertificationSection({
           }
         >
           <motion.div
+            // restart the loop when the pace changes (reduce-motion is read after mount)
+            key={marqueeDuration}
             className={shouldScroll ? "flex w-max gap-6 py-2" : "flex flex-wrap justify-center gap-6 py-2"}
             animate={shouldScroll ? { x: ["0%", "-50%"] } : { x: "0%" }}
             transition={

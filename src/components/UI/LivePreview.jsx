@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
 
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,7 +7,7 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 
 import Card, { CardContent, CardHeader, CardTitle } from "../UI/Card";
 
-import { componentRegistry } from "../../config/previewComponentRegistry";
+import { getComponentByType } from "../../config/previewComponentRegistry";
 
 import PreviewError from "./LivePreview/PreviewError";
 
@@ -2402,41 +2402,8 @@ const ComponentPreview = ({
     }
   }, [componentType, componentDataString, componentData]);
 
-  // Get component from registry with tolerant alias resolution
-
-  const resolveComponentFromRegistry = (type) => {
-    // direct match
-
-    if (componentRegistry[type]) return componentRegistry[type];
-
-    // common alias fixes
-
-    const candidates = [];
-
-    // normalize CTA casing differences
-
-    candidates.push(type.replace(/CTA/g, "Cta"));
-
-    candidates.push(type.replace(/Cta/g, "CTA"));
-
-    // strip trailing 'Section'
-
-    candidates.push(type.replace(/Section$/, ""));
-
-    // try singular/plural fallback
-
-    candidates.push(type.replace(/sSection$/, "Section"));
-
-    // lowercase key
-
-    candidates.push(type.charAt(0).toUpperCase() + type.slice(1));
-
-    for (const c of candidates) {
-      if (componentRegistry[c]) return componentRegistry[c];
-    }
-
-    return null;
-  };
+  // Section component from the single registry (handles aliases and naming variants)
+  const resolveComponentFromRegistry = (type) => getComponentByType(type);
 
   const Component = resolveComponentFromRegistry(componentType);
 
@@ -2471,7 +2438,15 @@ const ComponentPreview = ({
             {/* Wrap component in section with theme attribute for proper styling */}
 
             <section data-theme={theme === 1 ? "light" : "dark"}>
-              <Component {...transformedProps} />
+              <Suspense
+                fallback={
+                  <div className="flex h-40 items-center justify-center text-sm text-gray-400" role="status">
+                    Loading section…
+                  </div>
+                }
+              >
+                <Component {...transformedProps} />
+              </Suspense>
             </section>
           </ErrorBoundaryWrapper>
         </motion.div>

@@ -194,7 +194,7 @@ const ChallengesSection = ({
             </div>
 
             {/* Challenge Navigation */}
-            <div className="flex gap-4 mt-6 justify-center">
+            <div className="flex gap-5 mt-6 justify-center">
               {finalChallenges.map((_, index) => (
                 <button
                   type="button"
@@ -202,7 +202,7 @@ const ChallengesSection = ({
                   aria-current={activeChallenge === index ? "true" : undefined}
                   key={index}
                   onClick={() => setActiveChallenge(index)}
-                  className={`relative w-3 h-3 rounded-full after:absolute after:-inset-2 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-colors duration-600 ease-in-out theme-nav-dot ${
+                  className={`relative w-3 h-3 rounded-full after:absolute after:-inset-[10px] after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-colors duration-600 ease-in-out theme-nav-dot ${
                     activeChallenge === index
                       ? "bg-[var(--color-brand-accent)]"
                       : "bg-[var(--color-gray-500)]"

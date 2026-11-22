@@ -248,14 +248,14 @@ const ChallengesSection = (props) => {
             {/* Challenge Navigation */}
 
             {finalChallenges.length > 1 && (
-              <div className="flex gap-4 mt-6 justify-center">
+              <div className="flex gap-5 mt-6 justify-center">
                 {finalChallenges.map((_, index) => (
                   <button
                   type="button"
                   aria-current={activeChallenge === index ? "true" : undefined}
                     key={index}
                     onClick={() => handlePaginationClick(index)}
-                    className={`relative w-3 h-3 rounded-full after:absolute after:-inset-2 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all duration-300 ${
+                    className={`relative w-3 h-3 rounded-full after:absolute after:-inset-[10px] after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all duration-300 ${
                       activeChallenge === index ? "bg-blue-400" : "bg-gray-500"
                     }`}
                     aria-label={`Go to challenge ${index + 1}`}

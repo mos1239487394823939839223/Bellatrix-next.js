@@ -238,7 +238,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.28 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:auto-rows-fr gap-5"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-fr gap-5"
           >
             {/* ── Featured Card (spans 2 cols on lg) ── */}
             {featured && (
@@ -268,11 +268,11 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
                 onClick={() => (window.location.href = featured.href)}
               >
-                {/* Image + text side by side on md+ */}
-                <div className="flex flex-col md:flex-row flex-1">
+                {/* Image + text side by side on lg+ (where the card spans two columns) */}
+                <div className="flex flex-col lg:flex-row flex-1">
 
                   {/* Image pane */}
-                  <div className="relative md:w-1/2 h-56 md:h-auto overflow-hidden flex-shrink-0">
+                  <div className="relative lg:w-1/2 h-56 lg:h-auto overflow-hidden flex-shrink-0">
                     {getSafeImageSrc(featured.image) ? (
                       <Image
                         src={toImageSrc(getSafeImageSrc(featured.image))}
@@ -318,7 +318,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
                   <div className="flex-1 p-7 flex flex-col justify-between">
                     <div>
                       <h3
-                        className="text-2xl md:text-3xl font-bold mb-1 text-white leading-tight"
+                        className="text-2xl lg:text-3xl font-bold mb-1 text-white leading-tight"
                       >
                         {featured.title}
                       </h3>
@@ -355,7 +355,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
 
                     <a
                       href={featured.href}
-                      className="inline-flex items-center gap-2 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
+                      className="inline-flex items-center gap-2 py-2 -my-2 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
                       style={{ color: accentText(featured.accentColor) }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -477,7 +477,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
 
                   <a
                     href={solution.href}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
+                    className="inline-flex items-center gap-1.5 py-2 -my-2 text-sm font-semibold group-hover:gap-3 transition-all duration-300"
                     style={{ color: accentText(solution.accentColor) }}
                     onClick={(e) => e.stopPropagation()}
                   >

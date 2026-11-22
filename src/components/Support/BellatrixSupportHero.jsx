@@ -105,8 +105,9 @@ const BellatrixSupportHero = ({
             <h1
               style={{
                 fontWeight: "700",
-                fontSize: "50px",
-                lineHeight: "50px",
+                fontSize: "clamp(34px, 8.5vw, 50px)",
+                lineHeight: 1.08,
+                textWrap: "balance",
                 textAlign: "center",
                 letterSpacing: "-1px",
                 margin: "0 0 13px",

@@ -9,6 +9,7 @@ import {
   HomeIcon,
   DocumentTextIcon,
   ViewColumnsIcon,
+  PhotoIcon,
   Cog6ToothIcon,
   PowerIcon,
   InboxIcon,
@@ -35,6 +36,7 @@ const NAV_SECTIONS = [
     items: [
       { id: "pages", name: "Pages", path: "/admin/pages", icon: DocumentTextIcon, description: "Create and manage website pages" },
       { id: "categories", name: "Categories", path: "/admin/categories", icon: ViewColumnsIcon, description: "Group pages in the site navigation" },
+      { id: "media", name: "Media", path: "/admin/media", icon: PhotoIcon, description: "Images and videos used on your pages" },
     ],
   },
   {

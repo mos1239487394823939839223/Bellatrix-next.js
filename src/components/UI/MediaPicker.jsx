@@ -23,6 +23,8 @@ import axios from "axios";
 
 import mediaAPI from "../../lib/mediaAPI";
 
+import { MEDIA_MAX_MB, uploadFile as uploadWithProgress, validateFile } from "../../lib/mediaService";
+
 import { getApiBaseUrlWithApi, getAbsoluteBaseUrl } from "../../config/api.js";
 
 // API Constants
@@ -121,23 +123,6 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString();
 }
 
-function getMediaType(contentType) {
-  if (!contentType) return "file";
-
-  if (contentType.startsWith("image/")) return "image";
-
-  if (contentType.startsWith("video/")) return "video";
-
-  return "file";
-}
-
-function validateFileType(file, accept) {
-  if (accept === "all") return true;
-
-  const mediaType = getMediaType(file.type);
-
-  return accept === mediaType;
-}
 
 // Fetch media from API
 
@@ -205,71 +190,6 @@ async function fetchMedia({
   }
 }
 
-// Upload media function (if needed)
-
-async function uploadMedia(files, token = null) {
-  const formData = new FormData();
-
-  // Handle single file upload
-
-  if (files.length === 1) {
-    const file = files[0];
-
-    formData.append("File", file);
-
-    formData.append("Role", "12"); // 12 = General role
-
-    formData.append("AlternateText", file.name);
-
-    formData.append("Caption", "Uploaded media");
-
-    formData.append("SortOrder", "1");
-  } else {
-    // Handle multiple files upload
-
-    files.forEach((file) => {
-      formData.append("Files", file);
-    });
-
-    formData.append("Role", "12"); // 12 = General role
-
-    formData.append("SortOrder", "1");
-  }
-
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-  try {
-    const endpoint =
-      files.length === 1 ? "/Media/upload" : "/Media/upload-multiple";
-
-    const res = await axios.post(`${BASE_API}${endpoint}`, formData, {
-      headers: {
-        ...headers,
-
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    if (!res?.data) throw new Error("No response");
-
-    const payload = res.data;
-
-    if (!payload.success && payload.message) throw new Error(payload.message);
-
-    console.log(" Upload response:", payload);
-
-    return payload.data || [];
-  } catch (error) {
-    console.error("Error uploading media:", error);
-
-    throw new Error(
-      error.response?.data?.message ||
-        error.message ||
-        "Failed to upload media",
-    );
-  }
-}
-
 const MediaPicker = ({
   isOpen,
 
@@ -288,6 +208,8 @@ const MediaPicker = ({
   const [loading, setLoading] = useState(false);
 
   const [uploading, setUploading] = useState(false);
+
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const [error, setError] = useState(null);
 
@@ -314,7 +236,8 @@ const MediaPicker = ({
   const showToast = useCallback((message, type = "info") => {
     setToast({ message, type });
 
-    setTimeout(() => setToast(null), 3000);
+    // errors stay longer so they can actually be read
+    setTimeout(() => setToast(null), type === "error" ? 8000 : 4000);
   }, []);
 
   // Fetch media from API using new fetch function
@@ -386,95 +309,54 @@ const MediaPicker = ({
     [showToast],
   );
 
-  // Upload new media using new upload function
-
+  // Upload: validate (type + 50 MB server limit), send with progress, then
+  // refresh the grid and pre-select the uploaded file so "Select" is one click.
   const uploadMediaFiles = useCallback(
     async (files) => {
       if (!files || files.length === 0) return;
+      const list = Array.from(files);
+      const problems = list.map((f) => validateFile(f, accept)).filter(Boolean);
+      const valid = list.filter((f) => !validateFile(f, accept));
+      if (problems.length) showToast(problems.join(" "), "error");
+      if (!valid.length) return;
 
+      setUploading(true);
+      setUploadProgress(0);
+      const uploaded = [];
       try {
-        setUploading(true);
-
-        // Validate files
-
-        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
-
-        const validFiles = Array.from(files).filter((file) => {
-          // Check file size
-          if (file.size > MAX_FILE_SIZE) {
-            showToast(
-              `File too large: ${file.name} (${formatFileSize(file.size)}). Maximum size allowed is 10MB.`,
-              "error"
-            );
-            return false;
-          }
-
-          // Check file type
-          if (!validateFileType(file, accept)) {
-            showToast(
-              `Invalid file type: ${file.name}. Accepted: ${accept}`,
-              "error"
-            );
-            return false;
-          }
-
-          return true;
-        });
-
-        if (validFiles.length === 0) {
-          setUploading(false);
-
-          return;
+        for (let i = 0; i < valid.length; i += 1) {
+          const item = await uploadWithProgress(valid[i], {
+            onProgress: (p) => setUploadProgress(Math.round(((i + p / 100) / valid.length) * 100)),
+          });
+          uploaded.push(item);
         }
-
-        console.log(
-          " Uploading files:",
-          validFiles.map((f) => f.name),
-        );
-
-        // Get auth token from localStorage
-
-        const token = localStorage.getItem("authToken");
-
-        // Upload files with token
-
-        const uploadResults = await uploadMedia(validFiles, token);
-
-        console.log(" Upload results:", uploadResults);
-
-        showToast(
-          `Successfully uploaded ${
-            uploadResults.length || validFiles.length
-          } file(s)`,
-
-          "success",
-        );
-
-        // Refresh media list to show newly uploaded files
-
-        console.log(" Refreshing media list after upload...");
-
+        showToast(`Uploaded ${uploaded.length} file${uploaded.length > 1 ? "s" : ""}`, "success");
         setCurrentPage(1);
-
         await fetchMediaData({
           page: 1,
-
           type: currentFilter === "all" ? undefined : currentFilter,
-
           searchTerm,
         });
-
-        console.log(" Media list refreshed");
+        const picks = uploaded
+          .filter((it) => it && it.fileUrl)
+          .map((it) => ({ ...it, fileLink: toFullUrl(it.fileUrl) }))
+          .slice(0, maxSelection);
+        if (picks.length === 1 && maxSelection === 1 && valid.length === 1) {
+          // Single-file field (e.g. Browse in the page editor): use it right away
+          onSelect(picks[0].fileLink, picks[0]);
+          onClose();
+          return;
+        }
+        if (picks.length) setSelectedItems(picks);
       } catch (err) {
         console.error(" Error uploading media:", err);
-
-        showToast(`Upload error: ${err.message}`, "error");
+        showToast(`Upload failed: ${err.message}`, "error");
       } finally {
         setUploading(false);
+        setUploadProgress(0);
       }
     },
-
-    [accept, currentFilter, searchTerm, showToast, fetchMediaData],
+    [accept, currentFilter, searchTerm, showToast, fetchMediaData, maxSelection, onSelect, onClose],
   );
 
   // Handle file input change
@@ -933,7 +815,7 @@ const MediaPicker = ({
                   >
                     <CloudArrowUpIcon className="h-5 w-5" />
 
-                    {uploading ? "Uploading..." : "Upload"}
+                    {uploading ? `Uploading… ${uploadProgress}%` : `Upload (max ${MEDIA_MAX_MB} MB)`}
                   </Button>
 
                   <Button

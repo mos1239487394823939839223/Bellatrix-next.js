@@ -12,7 +12,8 @@ const Toast = ({
   type = "info",
   title,
   message,
-  isVisible = false,
+  // Callers render <Toast> only when there is a message, so show by default
+  isVisible = true,
   onClose,
   autoClose = true,
   duration = 5000,
@@ -86,7 +87,7 @@ const Toast = ({
     <AnimatePresence>
       {isShowing && (
         <MotionDiv
-          className={`fixed z-50 ${positionClasses[position] || positionClasses["top-right"]} max-w-sm w-full`}
+          className={`fixed z-[1000] ${positionClasses[position] || positionClasses["top-right"]} max-w-sm w-full`}
           initial={{ opacity: 0, y: -50, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}

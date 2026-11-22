@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 
 import {
 
@@ -39,6 +39,52 @@ import { useComponentCategories } from "../../../hooks/useComponentCategories";
 import { useFilteredComponents } from "../../../hooks/useFilteredComponents";
 
 import SolutionsGalleryConfig from "../EnhancedPageBuilder/SectionsStep/SolutionsGalleryConfig";
+
+import DynamicFormGenerator from "../../UI/DynamicFormGenerator";
+
+import { LivePreview } from "../../UI/LivePreview";
+
+import { generalComponentSchemas } from "../../../data/generalComponentSchemas";
+
+import { supportComponentSchemas } from "../../../data/supportComponentSchemas";
+
+import { aboutComponentSchemas } from "../../../data/aboutComponentSchemas";
+
+// Same schema lookup as the Edit window, so a section's form (dropdowns, media
+// pickers, lists) is identical whether you add it or edit it later.
+const allComponentSchemas = {
+  ...generalComponentSchemas,
+  ...supportComponentSchemas,
+  ...aboutComponentSchemas,
+};
+
+// Renders children at desktop width (1280px) scaled down to fit the column,
+// so the preview shows the real desktop layout of the section.
+const ScaledPreview = ({ children }) => {
+  const boxRef = useRef(null);
+  const [scale, setScale] = useState(0.3);
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return undefined;
+    const update = () => setScale(el.clientWidth / 1280 || 0.3);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <div ref={boxRef} className="overflow-hidden rounded-lg border border-white/10 bg-white">
+      <div style={{ width: 1280, zoom: scale }}>{children}</div>
+    </div>
+  );
+};
+
+const findSchema = (componentType) =>
+  allComponentSchemas[componentType] ||
+  (componentType?.endsWith("Section")
+    ? allComponentSchemas[componentType.replace(/Section$/, "")]
+    : null) ||
+  null;
 
 
 
@@ -95,6 +141,19 @@ const AddComponentModal = ({
   );
 
 
+
+  const currentSchema = useMemo(
+    () => findSchema(formData.componentType),
+    [formData.componentType]
+  );
+
+  const handleSchemaDataChange = (newData) => {
+    setJsonData(newData);
+    setFormData((prev) => ({
+      ...prev,
+      contentJson: JSON.stringify(newData, null, 2),
+    }));
+  };
 
   const handleJsonFieldChange = (path, value) => {
 
@@ -535,6 +594,18 @@ const AddComponentModal = ({
                         try { setJsonData(JSON.parse(value)); } catch {}
                       }}
                     />
+                  ) : currentSchema?.schema ? (
+
+                    <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                      <DynamicFormGenerator
+                        schema={currentSchema.schema}
+                        data={jsonData}
+                        onChange={handleSchemaDataChange}
+                        componentType={formData.componentType}
+                        className="edit-modal-form"
+                      />
+                    </div>
+
                   ) : dynamicFields.length > 0 ? (
 
                     <div className="space-y-4">
@@ -574,6 +645,28 @@ const AddComponentModal = ({
                 </div>
 
 
+
+                {/* Live preview of the section as configured (desktop layout, scaled to fit) */}
+                {formData.componentType && (
+                  <div className="space-y-2">
+                    <h4 className="text-md font-semibold text-white">Preview</h4>
+                    <ScaledPreview>
+                        <LivePreview
+                          key={formData.componentType}
+                          components={[{
+                            id: "add-preview",
+                            componentType: formData.componentType,
+                            componentName: formData.componentName,
+                            contentJson: formData.contentJson,
+                            isVisible: true,
+                            orderIndex: 0,
+                          }]}
+                          previewMode="desktop"
+                          showDebugInfo={false}
+                        />
+                    </ScaledPreview>
+                  </div>
+                )}
 
                 {/* Raw JSON View */}
 

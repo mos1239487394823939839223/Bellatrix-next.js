@@ -106,6 +106,7 @@ export const idToPathMap = {
   // ===========================================
   SolutionsGallery: "SolutionsGallery",
   CertificationSection: "CertificationSection",
+  SolutionShowcase: "solution/SolutionShowcase",
   // CTAButton removed from builder component map
 };
 
@@ -268,6 +269,7 @@ export const loadComponent = async (componentPath) => {
       // ===========================================
       SolutionsGallery: () => import("./SolutionsGallery"),
       CertificationSection: () => import("./CertificationSection"),
+      "solution/SolutionShowcase": () => import("./solution/SolutionShowcase"),
       // CTAButton loader removed so CTAButton is not available in the builder
     };
 

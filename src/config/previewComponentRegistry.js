@@ -83,6 +83,7 @@ import WhyChoeseBellatrix from "../components/Support/WhyChoeseBellatrix";
 import CTAButton from "../components/CTAButton";
 import SolutionsGallery from "../components/SolutionsGallery";
 import CertificationSection from "../components/CertificationSection";
+import SolutionShowcase from "../components/solution/SolutionShowcase";
 
 /**
  * Component Registry - Maps component type strings to actual components
@@ -197,6 +198,7 @@ export const componentRegistry = {
   CTAButton: CTAButton,
   SolutionsGallery: SolutionsGallery,
   CertificationSection: CertificationSection,
+  SolutionShowcase: SolutionShowcase,
 };
 
 /**

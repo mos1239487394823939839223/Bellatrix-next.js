@@ -2408,6 +2408,38 @@ export const normalizeProps = (componentType, contentJson) => {
 
 
 
+    // Solution showcase: presentation video or a tour of product screens
+    SolutionShowcase: (data) => {
+      const rawScreens = data.screens || data.items || data.images || [];
+      const video = data.video && typeof data.video === "object" ? data.video : {};
+      return {
+        eyebrow: data.eyebrow || "",
+        title: data.title || "",
+        description: data.description || "",
+        mode: data.mode || "",
+        background: data.background || "dark",
+        frameLabel: data.frameLabel || "",
+        video: {
+          url: rewriteUploadsUrl(video.url || data.videoUrl || ""),
+          poster: rewriteUploadsUrl(video.poster || data.videoPoster || ""),
+          title: video.title || "",
+          buttonLabel: video.buttonLabel || "",
+        },
+        screens: Array.isArray(rawScreens)
+          ? rawScreens
+              .map((s) => (typeof s === "string" ? { image: s } : s || {}))
+              .map((s) => ({
+                image: rewriteUploadsUrl(s.image || s.imageUrl || s.src || ""),
+                title: s.title || "",
+                caption: s.caption || s.description || "",
+              }))
+          : [],
+        ctaText: data.ctaText || "",
+        ctaModalTitle: data.ctaModalTitle || "",
+        ctaModalSubtitle: data.ctaModalSubtitle || "",
+      };
+    },
+
     // Certification marquee
     CertificationSection: (data) => {
       const certs =

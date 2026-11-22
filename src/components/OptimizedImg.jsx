@@ -45,12 +45,10 @@ export default function OptimizedImg({
   const url = !srcSet && !failed ? optimizableUrl(src) : null;
 
   if (!url) {
-    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} srcSet={srcSet} sizes={srcSet ? sizes : undefined} alt={alt} onError={onError} {...rest} />;
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={optimized(url, 1080)}
       srcSet={WIDTHS.map((w) => `${optimized(url, w)} ${w}w`).join(", ")}

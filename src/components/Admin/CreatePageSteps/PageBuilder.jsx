@@ -25,6 +25,10 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import {
+  getComponentPathFromId as getSharedComponentPath,
+  loadComponent as loadSharedComponent,
+} from "../../componentMap";
 
 const PageBuilder = ({ category, selectedPage, sections, onSectionsUpdate }) => {
   const [availableComponents, setAvailableComponents] = useState([]);
@@ -267,6 +271,11 @@ const PageBuilder = ({ category, selectedPage, sections, onSectionsUpdate }) => 
         return module;
 
       }
+
+      // Not in this builder's own list: use the shared section registry, so
+      // every section the site can render (incl. newly added ones) previews here.
+      const shared = await loadSharedComponent(componentPath);
+      if (shared) return { default: shared };
 
       throw new Error(`Component not found: ${componentPath}`);
 
@@ -546,7 +555,7 @@ const PageBuilder = ({ category, selectedPage, sections, onSectionsUpdate }) => 
 
     };
 
-    return idToPathMap[componentId] || null;
+    return idToPathMap[componentId] || getSharedComponentPath(componentId) || null;
 
   };
 

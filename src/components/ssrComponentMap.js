@@ -70,6 +70,7 @@ const ssrComponents = {
   "Support/WhyChoeseBellatrix": dynamic(() => import('./Support/WhyChoeseBellatrix')),
   SolutionsGallery: dynamic(() => import('./SolutionsGallery')),
   CertificationSection: dynamic(() => import('./CertificationSection')),
+  "solution/SolutionShowcase": dynamic(() => import('./solution/SolutionShowcase')),
 }
 
 export const getSsrComponent = (componentType) => {

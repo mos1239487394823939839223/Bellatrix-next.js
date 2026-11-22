@@ -8411,6 +8411,122 @@ generalComponentSchemas.CertificationSection = {
   },
 };
 
+generalComponentSchemas.SolutionShowcase = {
+  componentName: "SolutionShowcase",
+  category: "general",
+  icon: "",
+  displayName: "Solution Showcase (Video / Screens)",
+  description:
+    "Closing section for a solution page: a presentation video, or a tour of product screens with full-screen view",
+  schema: {
+    type: "object",
+    properties: {
+      mode: {
+        type: "string",
+        label: "Show",
+        formField: "select",
+        options: [
+          { value: "video", label: "Presentation video" },
+          { value: "screens", label: "Product screens" },
+        ],
+      },
+      background: {
+        type: "string",
+        label: "Background",
+        formField: "select",
+        options: [
+          { value: "dark", label: "Dark (navy)" },
+          { value: "light", label: "Light" },
+        ],
+      },
+      eyebrow: { type: "string", label: "Small label above title", placeholder: "See it in action", formField: "text" },
+      title: { type: "string", label: "Title", placeholder: "Bellatrix HR in action", formField: "text" },
+      description: {
+        type: "string",
+        label: "Description",
+        placeholder: "A short walkthrough of the main workflows.",
+        formField: "textarea",
+      },
+      frameLabel: {
+        type: "string",
+        label: "Window label (top bar of the frame)",
+        placeholder: "Bellatrix HR — Oracle NetSuite",
+        formField: "text",
+      },
+      video: {
+        type: "object",
+        label: "Video (used when Show = Presentation video)",
+        formField: "object",
+        properties: {
+          url: {
+            type: "string",
+            label: "Video file, or a YouTube / Vimeo link",
+            placeholder: "/Videos/hr-demo.mp4",
+            formField: "media",
+            mediaType: "video",
+          },
+          poster: {
+            type: "string",
+            label: "Cover image (shown before playing)",
+            placeholder: "/images/hr-demo-cover.jpg",
+            formField: "media",
+            mediaType: "image",
+          },
+          title: { type: "string", label: "Video title (for screen readers)", formField: "text" },
+          buttonLabel: { type: "string", label: "Play button text", placeholder: "Watch the demo", formField: "text" },
+        },
+      },
+      screens: {
+        type: "array",
+        label: "Screens (used when Show = Product screens)",
+        formField: "array",
+        items: {
+          type: "object",
+          properties: {
+            image: {
+              type: "string",
+              label: "Screenshot",
+              placeholder: "/images/hr-dashboard.png",
+              formField: "media",
+              mediaType: "image",
+            },
+            title: { type: "string", label: "Screen title", placeholder: "Employee dashboard", formField: "text" },
+            caption: {
+              type: "string",
+              label: "Caption",
+              placeholder: "Headcount, leave and payroll status at a glance.",
+              formField: "textarea",
+            },
+          },
+        },
+      },
+      ctaText: {
+        type: "string",
+        label: "Button text (optional — leave empty to hide)",
+        placeholder: "Book a live demo",
+        formField: "text",
+      },
+    },
+  },
+  // Starts with sample HR screens already on the site so the section previews
+  // immediately; editors replace them (or switch to a video).
+  defaultData: {
+    mode: "screens",
+    background: "dark",
+    eyebrow: "See it in action",
+    title: "Every screen your team will use",
+    description: "A quick tour of the main workflows. Click any screen to view it full size.",
+    frameLabel: "",
+    video: { url: "", poster: "", title: "", buttonLabel: "Watch the demo" },
+    screens: [
+      { image: "/images/hrDemo.jpg", title: "Employee dashboard", caption: "Headcount, KPIs and pending tasks for the whole team at a glance." },
+      { image: "/images/Hr/hrS1.png", title: "Employee records", caption: "Every employee's details, documents and history in one place." },
+      { image: "/images/Hr/hrS2.jpeg", title: "Self-service", caption: "Employees request leave and update their details themselves." },
+    ],
+    ctaText: "Book a live demo",
+  },
+};
+
 /**
 
  * Get schema for a specific general component

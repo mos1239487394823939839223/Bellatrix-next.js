@@ -559,6 +559,10 @@ const Footer = ({ initialCategories = [] }) => {
                   }
                 )
               : `© ${new Date().getFullYear()} ${footerSettings.companyName}. All rights reserved.`}
+            <span aria-hidden="true" className="mx-2">·</span>
+            <a href="/privacy" className="underline-offset-2 hover:underline" style={{ color: "inherit" }}>
+              Privacy Policy
+            </a>
           </p>
         </div>
 

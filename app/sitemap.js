@@ -33,9 +33,12 @@ export default async function sitemap() {
     }
   }
 
-  return [...bySlug.entries()].map(([slug, lastModified]) => ({
+  const pages = [...bySlug.entries()].map(([slug, lastModified]) => ({
     url: pageUrl(slug),
     ...(lastModified ? { lastModified } : {}),
     priority: slug === 'home' ? 1 : 0.8,
   }))
+  // Static (non-CMS) pages
+  pages.push({ url: pageUrl('privacy'), lastModified: new Date('2026-11-23'), priority: 0.3 })
+  return pages
 }

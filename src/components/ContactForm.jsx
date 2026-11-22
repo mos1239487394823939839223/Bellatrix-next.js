@@ -38,6 +38,10 @@ const ContactForm = ({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  // Spam protection: a field people never see (bots fill it) and the time the
+  // form was opened (bots submit instantly). Either one → pretend success, send nothing.
+  const [trap, setTrap] = useState("");
+  const openedAt = useRef(Date.now());
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -70,6 +74,8 @@ const ContactForm = ({
     setSuccess(false);
     if (onSubmit) return onSubmit(e);
 
+    const looksLikeBot = trap.trim() !== "" || Date.now() - openedAt.current < 3000;
+
     const currentErrors = validate(formData);
     if (Object.keys(currentErrors).length > 0) {
       setTouched(Object.fromEntries(FIELD_ORDER.map((f) => [f, true])));
@@ -94,6 +100,17 @@ const ContactForm = ({
       return;
     }
 
+    if (looksLikeBot) {
+      // Look identical to a real success so bots don't adapt
+      setSubmitting(true);
+      await new Promise((r) => setTimeout(r, 800));
+      setSubmitting(false);
+      setSuccess(true);
+      setFormData(EMPTY_FORM);
+      setTouched({});
+      return;
+    }
+
     try {
       setSubmitting(true);
       await postJson("/ContactMessages/submit", payload);
@@ -102,8 +119,11 @@ const ContactForm = ({
       setFormData(EMPTY_FORM);
       setTouched({});
     } catch (err) {
+      const status = err?.response?.status || err?.status;
       setError(
-        err?.message && !/^(Request failed|Network Error|Failed to fetch)/i.test(err.message)
+        status === 429 || /429|too many/i.test(err?.message || "")
+          ? "You've sent several messages in a short time. Please wait a few minutes and try again, or email info@bellatrixinc.com."
+          : err?.message && !/^(Request failed|Network Error|Failed to fetch)/i.test(err.message)
           ? err.message
           : "We couldn't send your message. Please check your connection and try again."
       );
@@ -156,6 +176,19 @@ const ContactForm = ({
   return (
     <>
       <form ref={formRef} className="space-y-5" onSubmit={handleSubmit} noValidate>
+        {/* Honeypot: hidden from people and screen readers; bots tend to fill every field */}
+        <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+          <label htmlFor={fid("website")}>Leave this field empty</label>
+          <input
+            id={fid("website")}
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={trap}
+            onChange={(e) => setTrap(e.target.value)}
+          />
+        </div>
         {/* Messages */}
         {error && (
           <div role="alert" className="cf-error-box border rounded-xl p-4 text-sm flex items-center gap-3">
@@ -274,9 +307,14 @@ const ContactForm = ({
 
         {/* Submit */}
         <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t cf-divider">
-          <p className="cf-muted text-sm">
-            Prefer email? <a href="mailto:info@bellatrixinc.com" className="cf-link">info@bellatrixinc.com</a>
-          </p>
+          <div className="cf-muted text-sm space-y-1">
+            <p>
+              Prefer email? <a href="mailto:info@bellatrixinc.com" className="cf-link">info@bellatrixinc.com</a>
+            </p>
+            <p className="text-xs">
+              We use your details only to reply. See our <a href="/privacy" target="_blank" rel="noopener" className="cf-link">Privacy Policy</a>.
+            </p>
+          </div>
           <button
             type="submit"
             disabled={submitting}

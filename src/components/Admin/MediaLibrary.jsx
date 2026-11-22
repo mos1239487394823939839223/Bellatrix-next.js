@@ -31,10 +31,12 @@ import OptimizedImg from "../OptimizedImg";
 import {
   MEDIA_MAX_MB,
   deleteMedia,
+  fileNameOf,
   formatBytes,
   listMedia,
   mediaKind,
   mediaUrl,
+  referencedFileNames,
   updateMedia,
   uploadFile,
   validateFile,
@@ -45,6 +47,7 @@ const FILTERS = [
   { value: "all", label: "All" },
   { value: "image", label: "Images" },
   { value: "video", label: "Videos" },
+  { value: "unused", label: "Not used" },
 ];
 
 const absoluteUrl = (url) =>
@@ -106,7 +109,12 @@ export default function MediaLibrary() {
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [usedNames, setUsedNames] = useState(null); // Set of file names used by published pages
 
+  useEffect(() => {
+    referencedFileNames().then(({ names }) => setUsedNames(names)).catch(() => setUsedNames(null));
+  }, []);
+  const isUnused = (item) => usedNames && !usedNames.has(fileNameOf(item));
   useEffect(() => {
     const t = setTimeout(() => setDebounced(search.trim()), 350);
     return () => clearTimeout(t);
@@ -117,7 +125,14 @@ export default function MediaLibrary() {
       p === 1 ? setLoading(true) : setLoadingMore(true);
       setError(null);
       try {
-        const res = await listMedia({ page: p, pageSize: PAGE_SIZE, type: filter, searchTerm: debounced });
+        // "Not used" lists everything and filters on this page (needs all files)
+        const unusedView = filter === "unused";
+        const res = await listMedia({
+          page: unusedView ? 1 : p,
+          pageSize: unusedView ? 1000 : PAGE_SIZE,
+          type: unusedView ? "all" : filter,
+          searchTerm: debounced,
+        });
         setItems((prev) => (p === 1 ? res.items : [...prev, ...res.items]));
         setHasMore(res.hasMore);
         setPage(p);
@@ -214,6 +229,7 @@ export default function MediaLibrary() {
   const copyUrl = (item) => copyText(absoluteUrl(mediaUrl(item.fileUrl)), "Link copied");
 
   const pendingUploads = uploads.filter((u) => !u.done || u.error);
+  const visible = filter === "unused" ? items.filter(isUnused) : items;
 
   return (
     <div className="space-y-6">
@@ -279,8 +295,9 @@ export default function MediaLibrary() {
           <SearchInput value={search} onChange={setSearch} placeholder="Search by name…" className="w-full sm:w-72" />
           {!loading && (
             <span className="ml-auto text-xs text-[var(--adm-text-muted)]">
-              {items.length}
-              {hasMore ? "+" : ""} {items.length === 1 ? "file" : "files"} · drop files here to upload
+              {visible.length}
+              {hasMore && filter !== "unused" ? "+" : ""} {visible.length === 1 ? "file" : "files"}
+              {filter === "unused" ? " not used on any published page" : " · drop files here to upload"}
             </span>
           )}
         </div>
@@ -291,17 +308,17 @@ export default function MediaLibrary() {
           </div>
         ) : loading ? (
           <Spinner label="Loading media…" />
-        ) : items.length === 0 ? (
+        ) : visible.length === 0 ? (
           <EmptyState
             icon={PhotoIcon}
-            title={debounced || filter !== "all" ? "No media matches" : "No media yet"}
+            title={filter === "unused" ? (usedNames ? "Every file is used on a page" : "Checking which files are used…") : debounced || filter !== "all" ? "No media matches" : "No media yet"}
             description={debounced || filter !== "all" ? "Try another search or filter." : "Upload images and videos, or drag them onto this panel."}
             action={<Btn variant="primary" icon={ArrowUpTrayIcon} onClick={() => fileInput.current?.click()}>Upload</Btn>}
           />
         ) : (
           <div className="p-4">
-            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-              {items.map((item) => (
+            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {visible.map((item) => (
                 <li key={item.id} className="group overflow-hidden rounded-lg border border-[var(--adm-border)] bg-[var(--adm-surface)]">
                   <button
                     type="button"
@@ -310,14 +327,19 @@ export default function MediaLibrary() {
                     aria-label={`Open ${displayName(item)}`}
                   >
                     <Thumb item={item} />
+                    {isUnused(item) && (
+                      <span className="absolute right-2 top-2 rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-medium text-amber-800">
+                        Not used
+                      </span>
+                    )}
                   </button>
-                  <div className="flex items-center gap-1 px-2.5 py-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs font-medium text-[var(--adm-text)]" title={displayName(item)}>
-                        {displayName(item)}
-                      </p>
-                      <p className="text-[11px] text-[var(--adm-text-subtle)]">{formatBytes(item.fileSizeInBytes)}</p>
-                    </div>
+                  <div className="px-2.5 pt-2">
+                    <p className="truncate text-xs font-medium text-[var(--adm-text)]" title={displayName(item)}>
+                      {displayName(item)}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-0.5 px-2.5 pb-1.5">
+                    <span className="flex-1 text-[11px] text-[var(--adm-text-subtle)]">{formatBytes(item.fileSizeInBytes)}</span>
                     <IconBtn icon={LinkIcon} label="Copy link" onClick={() => copyUrl(item)} />
                     <IconBtn icon={PencilIcon} label="Edit details" onClick={() => openEdit(item)} />
                     <IconBtn icon={TrashIcon} label="Delete" variant="danger" onClick={() => setDeleteTarget(item)} />
@@ -325,7 +347,7 @@ export default function MediaLibrary() {
                 </li>
               ))}
             </ul>
-            {hasMore && (
+            {hasMore && filter !== "unused" && (
               <div className="mt-6 flex justify-center">
                 <Btn onClick={() => load(page + 1)} loading={loadingMore}>
                   Load more
@@ -406,7 +428,9 @@ export default function MediaLibrary() {
         title="Delete this file?"
         description={
           deleteTarget
-            ? `"${displayName(deleteTarget)}" will be removed from the server. Any page section still using it will show an empty image or video until you pick another file.`
+            ? usedNames && !isUnused(deleteTarget)
+              ? `Warning: "${displayName(deleteTarget)}" is used on a published page. Deleting it will leave an empty image or video there until you pick another file.`
+              : `"${displayName(deleteTarget)}" will be permanently removed from the server.`
             : ""
         }
       />

@@ -53,11 +53,17 @@ export function mediaUrl(fileUrl) {
 const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogv|avi|mkv)(\?|#|$)/i;
 const IMAGE_EXT = /\.(png|jpe?g|gif|webp|avif|svg|bmp|ico)(\?|#|$)/i;
 
+// Decide from the file itself (extension / upload folder). The API's "type" is
+// a numeric enum, so it's only used when it's a readable MIME-like string.
 export function mediaKind(item = {}) {
-  const t = String(item.type ?? item.contentType ?? "").toLowerCase();
-  const url = item.fileUrl || item.fileName || item.originalName || "";
-  if (t.startsWith("video") || t === "1" || VIDEO_EXT.test(url) || url.includes("/video/")) return "video";
-  if (t.startsWith("image") || t === "0" || IMAGE_EXT.test(url) || url.includes("/image/")) return "image";
+  for (const name of [item.fileUrl, item.fileName, item.originalName]) {
+    if (!name) continue;
+    if (VIDEO_EXT.test(name) || name.includes("/video/")) return "video";
+    if (IMAGE_EXT.test(name) || name.includes("/image/")) return "image";
+  }
+  const t = String(item.contentType ?? item.type ?? "").toLowerCase();
+  if (t.startsWith("video")) return "video";
+  if (t.startsWith("image")) return "image";
   return "file";
 }
 
@@ -193,4 +199,55 @@ export async function deleteMedia(id) {
   const payload = await readJson(res);
   if (!res.ok || payload.success === false) throw new Error(errorFor(res.status, payload));
   return true;
+}
+
+/**
+ * File names referenced by any published page or the public site settings.
+ * Used to flag media that no page uses (pages store /uploads/… paths in
+ * their section content).
+ */
+export async function referencedFileNames() {
+  const get = async (path) => {
+    try {
+      const res = await fetch(`${api()}${path}`);
+      return res.ok ? await res.text() : "";
+    } catch {
+      return "";
+    }
+  };
+  const navbar = await get("/Categories/navbar");
+  const slugs = new Set();
+  try {
+    const data = JSON.parse(navbar);
+    for (const cat of data.data || data || []) {
+      for (const page of cat.pages || cat.Pages || []) {
+        const slug = page.slug || page.Slug;
+        if (slug) slugs.add(slug);
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+  slugs.add("home");
+  const bodies = await Promise.all([...slugs].map((slug) => get(`/Pages/public/${encodeURIComponent(slug)}`)));
+  bodies.push(await get("/Settings/public"));
+  let text = bodies.join(" ").replace(/\\\//g, "/");
+  try {
+    text = decodeURIComponent(text);
+  } catch {
+    /* keep raw text if it has a stray % */
+  }
+  const names = new Set();
+  for (const m of text.matchAll(/uploads\/(?:image|video|file)s?\/([^"'\\\s?#)]+)/gi)) names.add(m[1].toLowerCase());
+  return { names, pageCount: slugs.size };
+}
+
+export function fileNameOf(item = {}) {
+  const url = item.fileUrl || "";
+  const last = url.split(/[?#]/)[0].split("/").pop() || item.fileName || "";
+  try {
+    return decodeURIComponent(last).toLowerCase();
+  } catch {
+    return last.toLowerCase();
+  }
 }

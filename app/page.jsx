@@ -3,7 +3,7 @@ import { getPublicPage, getNavbarCategories, SITE_URL, SITE_NAME } from '../src/
 
 const TITLE = 'Bellatrix | ERP Consulting — NetSuite, Odoo & Oracle Solutions'
 const DESCRIPTION =
-  'Bellatrix is a certified ERP consulting firm specializing in NetSuite, Odoo, and Oracle implementations. We help businesses streamline operations, automate processes, and scale.'
+  'Certified ERP consultants for Oracle NetSuite and Odoo: implementation, customization, training and support that help businesses streamline and scale.'
 
 export const metadata = {
   title: { absolute: TITLE },

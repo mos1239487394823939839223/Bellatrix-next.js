@@ -233,7 +233,10 @@ const ImplementationStepper = ({ implementationProcess, labels = {} }) => {
           {steps.map((step, idx) => (
             <div key={idx} className="z-10 flex flex-col items-center relative">
               <button
+                type="button"
                 onClick={() => setCurrent(idx)}
+                aria-label={`Step ${idx + 1}: ${typeof step.title === "string" ? step.title : step.title?.title || step.title?.name || ""}`.trim()}
+                aria-current={idx === current ? "step" : undefined}
                 className={`w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-all duration-300 border-2 shadow-lg hover:scale-105
                   ${
                     idx <= current

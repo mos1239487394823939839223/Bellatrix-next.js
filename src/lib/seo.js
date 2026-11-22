@@ -56,3 +56,16 @@ export function clampDescription(text, max = 160) {
   const cut = clean.slice(0, max - 1)
   return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[,.;:\-–—\s]+$/, '')}…`
 }
+
+// Public company settings (email, phones, locations…) as { key: value }, cached for an hour.
+export const getPublicSettings = cache(async () => {
+  try {
+    const res = await fetch(`${API_URL}/Settings/public`, { next: { revalidate: 3600 } })
+    if (!res.ok) return {}
+    const json = await res.json()
+    const list = Array.isArray(json?.data) ? json.data : []
+    return Object.fromEntries(list.map((s) => [s.key, s.value]))
+  } catch {
+    return {}
+  }
+})

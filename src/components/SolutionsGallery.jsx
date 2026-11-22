@@ -491,7 +491,7 @@ const SolutionsGallery = ({ title, subtitle, solutions: propSolutions, ctaButton
 
         {/* ── Bottom CTA ── */}
         <div className="text-center mt-16">
-          <p className="text-sm mb-5" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <p className="text-sm mb-5" style={{ color: "rgba(255,255,255,0.72)" }}>
             Not sure which solution fits your needs?
           </p>
           <button

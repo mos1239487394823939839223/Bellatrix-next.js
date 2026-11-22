@@ -609,7 +609,7 @@ const PayrollStepper = ({ steps = [], title, description }) => {
 
                   <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
 
-                    <div className="flex items-center text-green-600 mb-2">
+                    <div className="flex items-center text-green-700 mb-2">
 
                       <svg
 

@@ -39,6 +39,7 @@ export default async function sitemap() {
     priority: slug === 'home' ? 1 : 0.8,
   }))
   // Static (non-CMS) pages
+  pages.push({ url: pageUrl('contact'), lastModified: new Date('2026-11-23'), priority: 0.6 })
   pages.push({ url: pageUrl('privacy'), lastModified: new Date('2026-11-23'), priority: 0.3 })
   return pages
 }

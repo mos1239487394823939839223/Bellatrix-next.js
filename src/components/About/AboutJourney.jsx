@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImg from "../OptimizedImg";
 
 const AboutJourney = ({ data = {} }) => {
   // Static fallback data (CMS data comes via props)
@@ -96,7 +97,7 @@ const AboutJourney = ({ data = {} }) => {
           <div className="flex-1 flex justify-center">
             <div className="relative group">
               <div className="relative bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-4 backdrop-blur-sm border border-white/20 shadow-2xl">
-                <img
+                <OptimizedImg
                   src={displayData.imageUrl || "/images/solution.jpg"}
                   alt="Our Journey - Digital Innovation"
                   className="w-full h-auto lg:max-w-md rounded-xl shadow-lg brightness-110 contrast-110 saturate-110 group-hover:scale-105 transition-all duration-500"

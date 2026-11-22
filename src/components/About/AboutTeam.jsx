@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImg from "../OptimizedImg";
 
 const AboutTeam = ({
   teamMembers = [],
@@ -104,7 +105,7 @@ const AboutTeam = ({
                     onMouseLeave={() => setIsHovering(false)}
                   >
                     <div className="relative overflow-hidden">
-                      <img
+                      <OptimizedImg
                         src={member.image || "/images/team/default-avatar.jpg"}
                         alt={member.name || "Team Member"}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"

@@ -1,5 +1,6 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
+import OptimizedImg from "../OptimizedImg";
 
 const SupportSecondSec = ({
   data,
@@ -41,7 +42,7 @@ const SupportSecondSec = ({
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           {/* Image Section */}
           <div className="order-2 md:order-1">
-            <img
+            <OptimizedImg
               src={addMediaVersionToBust(sectionData.image, cacheVersion)}
               alt="Bellatrix Support Services - Professional ERP implementation and customization expertise"
               className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"

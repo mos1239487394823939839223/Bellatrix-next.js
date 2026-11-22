@@ -1,5 +1,6 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
+import OptimizedImg from "../OptimizedImg";
 
 // Normalize upload URLs to HTTPS domain to match DedicatedTeamSection behavior
 const rewriteUploadsUrl = (url) => {
@@ -81,7 +82,7 @@ const PayPerUseSection = ({
 
             {/* Image Section */}
             <div className="order-2 md:order-2">
-              <img
+              <OptimizedImg
                 alt="Bellatrix dashboard"
                 src={addMediaVersionToBust(sectionData.image, cacheVersion)}
                 className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"

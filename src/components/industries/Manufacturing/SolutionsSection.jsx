@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import OptimizedImg from "../../OptimizedImg";
 
 const SolutionsSection = (props) => {
   console.log(" [SolutionsSection] ALL PROPS:", props);
@@ -110,7 +111,7 @@ const SolutionsSection = (props) => {
           <div className="flex-1 flex justify-center">
             <div className="max-w-2xl w-full">
               <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-lg">
-                <img
+                <OptimizedImg
                   src={finalImage}
                   alt="NetSuite Manufacturing Solutions"
                   className="w-full h-96 object-cover rounded-xl"

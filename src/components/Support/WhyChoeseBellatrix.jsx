@@ -1,5 +1,6 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
+import OptimizedImg from "../OptimizedImg";
 
 const WhyChoeseBellatrix = ({
   data,
@@ -289,7 +290,7 @@ const WhyChoeseBellatrix = ({
                         "background 0.6s ease, border-color 0.6s ease",
                     }}
                   >
-                    <img
+                    <OptimizedImg
                       src={addMediaVersionToBust(sectionData.image, cacheVersion)}
                       alt="Industry Leaders - Strategic NetSuite Solutions"
                       style={{

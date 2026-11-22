@@ -1,5 +1,6 @@
 import React from "react";
 import CTAButton from "../../CTAButton";
+import { optimizedBgUrl } from "../../OptimizedImg";
 
 const HeroSection = ({
   data: propsData,
@@ -39,7 +40,7 @@ const HeroSection = ({
       style={{
         width: "100%",
         backgroundImage: data.backgroundImage
-          ? `url(${data.backgroundImage})`
+          ? `url("${optimizedBgUrl(data.backgroundImage)}")`
           : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",

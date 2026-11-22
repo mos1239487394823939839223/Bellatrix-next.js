@@ -1,6 +1,7 @@
 import React from "react";
 import CTAButton from "../../CTAButton";
 import { motion } from "framer-motion";
+import { optimizedBgUrl } from "../../OptimizedImg";
 
 const HeroSection = (props) => {
   // PRIORITIZE props data over default data for real-time preview
@@ -40,7 +41,7 @@ const HeroSection = (props) => {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${finalData.backgroundImage})`,
+          backgroundImage: `url("${optimizedBgUrl(finalData.backgroundImage)}")`,
         }}
       />
 

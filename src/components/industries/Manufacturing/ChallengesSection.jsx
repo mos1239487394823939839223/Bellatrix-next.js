@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import OptimizedImg from "../../OptimizedImg";
 
 
 const ChallengesSection = (props) => {
@@ -278,7 +279,7 @@ const ChallengesSection = (props) => {
           <div className="flex-1 flex justify-center">
             <div className="relative group max-w-xl">
               <div className="relative bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-4 backdrop-blur-sm border border-white/20 shadow-2xl">
-                <img
+                <OptimizedImg
                   src={finalImage}
                   alt="Manufacturing Challenges"
                   className="w-full h-auto rounded-xl shadow-lg brightness-110 contrast-110 saturate-110 group-hover:scale-105 transition-all duration-500"

@@ -21,7 +21,7 @@ import {
 
   TrendingUp,
 
-} from "@mui/icons-material";
+} from "./icons/materialIcons";
 
 import ContactForm from "./ContactForm";
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
+import OptimizedImg from "../OptimizedImg";
 
 const DedicatedTeamSection = ({
   data,
@@ -198,7 +199,7 @@ const DedicatedTeamSection = ({
                 boxShadow: "0 25px 50px -12px rgba(0,0,0,0.4)",
               }}
             >
-              <img
+              <OptimizedImg
                 src={addMediaVersionToBust(sectionData.image, cacheVersion)}
                 alt="ERP Implementation Team"
                 loading="lazy"

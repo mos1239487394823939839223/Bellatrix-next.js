@@ -4,6 +4,7 @@ import React from "react";
 
 
 import TrainingProgramCard from "./TrainingProgramCard";
+import OptimizedImg from "../../OptimizedImg";
 
 const ProgramsSection = ({
   programsSection,
@@ -111,7 +112,7 @@ const ProgramsSection = ({
                   {/* Inner glow container */}
 
                   <div className="relative bg-gradient-to-br from-white/5 via-transparent to-blue-500/5 rounded-2xl p-4 border border-white/20">
-                    <img
+                    <OptimizedImg
                       src={sectionData?.image || "/images/training.jpg"}
                       alt="Bellatrix Training Programs - Advanced ERP Learning Solutions"
                       className="w-full h-auto rounded-xl shadow-2xl brightness-105 contrast-110 saturate-105 group-hover:brightness-110 group-hover:contrast-115 group-hover:saturate-110 transition-all duration-500 filter drop-shadow-xl"

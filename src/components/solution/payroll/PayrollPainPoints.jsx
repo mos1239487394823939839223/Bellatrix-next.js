@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImg from "../../OptimizedImg";
 
 const PayrollPainPoints = ({ painPoints, image }) => {
   // اعتمد فقط على البيانات القادمة من props
@@ -64,7 +65,7 @@ const PayrollPainPoints = ({ painPoints, image }) => {
 
                 <div className="relative bg-[var(--color-bg-primary)] rounded-3xl p-6 backdrop-blur-md border border-[var(--color-border-primary)] shadow-2xl">
                   <div className="bg-gradient-to-br from-[var(--color-primary)]/5 to-[var(--color-primary)]/10 rounded-2xl p-4 border border-[var(--color-primary)]/20">
-                    <img
+                    <OptimizedImg
                       src={sectionImage}
                       alt="Bellatrix Payroll Management Dashboard - Professional ERP payroll automation interface"
                       className="w-full h-auto rounded-xl shadow-lg"

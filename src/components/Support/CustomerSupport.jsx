@@ -1,5 +1,6 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
+import OptimizedImg from "../OptimizedImg";
 
 const CustomerSupport = ({
   data,
@@ -107,7 +108,7 @@ const CustomerSupport = ({
             <div className="order-2 lg:order-1">
               <div className="relative group">
                 <div className="relative bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-4 backdrop-blur-sm border border-white/20 shadow-2xl">
-                  <img
+                  <OptimizedImg
                     alt="Bellatrix Customer Support"
                     src={addMediaVersionToBust(sectionData.image, cacheVersion)}
                     className="w-full h-64 lg:h-80 object-cover rounded-xl shadow-lg brightness-110 contrast-110 saturate-110 group-hover:scale-105 transition-all duration-500"

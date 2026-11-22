@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import OptimizedImg from "./OptimizedImg";
 
 // Only treat a value as an image URL if it looks like a real path/URL
 const isValidImageSrc = (src) => {
@@ -173,7 +174,7 @@ const Testimonials = ({
           <div className="flex-1 flex justify-center w-full">
             <div className="relative group">
               <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                <img
+                <OptimizedImg
                   src={sideImage}
                   alt="Industry Leaders - Digital Innovation & Technology"
                   className="w-full h-auto lg:max-w-md object-cover group-hover:scale-[1.03] transition-transform duration-500"

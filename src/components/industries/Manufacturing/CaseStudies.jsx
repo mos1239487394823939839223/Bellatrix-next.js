@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useComponentData } from "../../../utils/useComponentData";
 
 import manufacturingData from "../../../data/manufacturing-data.json";
+import OptimizedImg from "../../OptimizedImg";
 
 const CaseStudies = (props) => {
   // Handle both flat props and data object
@@ -120,7 +121,7 @@ const CaseStudies = (props) => {
               className="bg-white/5 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-white/10"
             >
               <div className="relative h-48">
-                <img
+                <OptimizedImg
                   src={study.image}
                   alt={study.company}
                   className="w-full h-full object-cover"

@@ -17,7 +17,7 @@ import {
   Store,
   Factory,
   Map,
-} from "@mui/icons-material";
+} from "./icons/materialIcons";
 
 const LOCATION_ICON_MAP = {
   LocationOn,

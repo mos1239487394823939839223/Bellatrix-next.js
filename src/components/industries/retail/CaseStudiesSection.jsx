@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImg from "../../OptimizedImg";
 
 const CaseStudiesSection = ({
   data,
@@ -120,7 +121,7 @@ const CaseStudiesSection = ({
               className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10"
             >
               <div className="relative h-48">
-                <img
+                <OptimizedImg
                   src={study.image}
                   alt={study.company}
                   className="w-full h-full object-cover"

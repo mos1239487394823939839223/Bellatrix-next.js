@@ -20,7 +20,8 @@ import {
 
   ExpandLess,
 
-} from "@mui/icons-material";
+} from "./icons/materialIcons";
+import OptimizedImg from "./OptimizedImg";
 
 
 
@@ -191,7 +192,7 @@ const Industries = ({ industries: propsIndustries = [], sectionHeader: propsSect
 
                 <div className="relative bg-gradient-to-br from-white/5 via-transparent to-blue-500/5 rounded-2xl p-4 border border-white/20">
 
-                  <img
+                  <OptimizedImg
 
                     src="/images/solution.jpg"
 

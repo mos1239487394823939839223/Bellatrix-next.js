@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 
 import { loadImplementationData } from "../../../data/implementationDataLoader";
+import OptimizedImg from "../../OptimizedImg";
 
 const WhyChooseSection = (props) => {
   const [defaultData, setDefaultData] = useState(null);
@@ -164,7 +165,7 @@ const WhyChooseSection = (props) => {
                     border: "1px solid rgba(255, 255, 255, 0.2)",
                   }}
                 >
-                  <img
+                  <OptimizedImg
                     src={displayData.image}
                     alt="Why Choose Bellatrix - Digital Innovation & Technology"
                     className="w-full h-auto lg:max-w-md rounded-xl shadow-lg brightness-110 contrast-110 saturate-110 group-hover:scale-105 transition-all duration-500"

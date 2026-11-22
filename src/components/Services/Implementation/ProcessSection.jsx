@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import CTAButton from "../../CTAButton";
 import { loadImplementationData } from "../../../data/implementationDataLoader";
+import OptimizedImg from "../../OptimizedImg";
 
 const ProcessSection = (props) => {
   const [defaultData, setDefaultData] = useState(null);
@@ -104,7 +105,7 @@ const ProcessSection = (props) => {
                 <div className="relative bg-gradient-to-br from-gray-900/10 via-blue-900/5 to-gray-900/10 rounded-3xl p-6 backdrop-blur-md border border-white/30 shadow-2xl group-hover:shadow-blue-500/20 transition-all duration-500">
                   {/* Inner glow container */}
                   <div className="relative bg-gradient-to-br from-white/5 via-transparent to-blue-500/5 rounded-2xl p-4 border border-white/20">
-                    <img
+                    <OptimizedImg
                       src={displayData.image}
                       alt="NetSuite Implementation Process Flow - Strategic business transformation methodology with step-by-step ERP deployment and configuration guidance"
                       className="w-full h-auto rounded-xl shadow-2xl brightness-105 contrast-110 saturate-105 group-hover:brightness-110 group-hover:contrast-115 group-hover:saturate-110 transition-all duration-500 filter drop-shadow-xl"

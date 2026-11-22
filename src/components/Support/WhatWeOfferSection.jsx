@@ -1,5 +1,6 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
+import OptimizedImg from "../OptimizedImg";
 
 const WhatWeOfferSection = ({
   data,
@@ -81,7 +82,7 @@ const WhatWeOfferSection = ({
                 className="flex flex-col items-center text-center bg-white rounded-xl border-2 border-blue-100 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 hover:shadow-lg p-8"
               >
                 <div className="flex items-center justify-center mb-6">
-                  <img
+                  <OptimizedImg
                     src={addMediaVersionToBust(
                       card.image ||
                       `/supoortWhatWeOffer${index > 0 ? index + 1 : ""}.png`,

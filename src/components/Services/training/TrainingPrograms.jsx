@@ -1,4 +1,5 @@
 import React from "react";
+import OptimizedImg from "../../OptimizedImg";
 
 const TrainingPrograms = ({
   programsSection = {},
@@ -56,7 +57,7 @@ const TrainingPrograms = ({
               {/* Inner glow container */}
 
               <div className="relative bg-gradient-to-br from-white/5 via-transparent to-blue-500/5 rounded-2xl p-4 border border-white/20">
-                <img
+                <OptimizedImg
                   src={programsSection.image || "/images/training.jpg"}
                   alt={
                     programsSection.title ||

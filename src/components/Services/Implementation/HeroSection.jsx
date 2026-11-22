@@ -11,6 +11,7 @@ import {
 } from "../../../utils/variantSystem";
 
 import CTAButton from "../../CTAButton";
+import { optimizedBgUrl } from "../../OptimizedImg";
 
 const HeroSection = (props) => {
   // Decorative hero video only when the visitor hasn't asked for less data/motion
@@ -170,7 +171,7 @@ const HeroSection = (props) => {
           return image ? (
             <div
               className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${image})` }}
+              style={{ backgroundImage: `url("${optimizedBgUrl(image)}")` }}
             />
           ) : null;
         })()}

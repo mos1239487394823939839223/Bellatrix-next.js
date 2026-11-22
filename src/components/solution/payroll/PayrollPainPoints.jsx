@@ -1,5 +1,6 @@
 import React from "react";
 import OptimizedImg from "../../OptimizedImg";
+import { renderSafeHTML } from "../../../utils/htmlSanitizer";
 
 const PayrollPainPoints = ({ painPoints, image }) => {
   // اعتمد فقط على البيانات القادمة من props
@@ -30,7 +31,7 @@ const PayrollPainPoints = ({ painPoints, image }) => {
           <header className="text-center mb-12">
             <h2
               className="text-3xl md:text-4xl font-bold text-[var(--color-text-primary)]"
-              dangerouslySetInnerHTML={{ __html: title }}
+              dangerouslySetInnerHTML={renderSafeHTML(title)}
             ></h2>
           </header>
           <div className="flex flex-col md:flex-row gap-12 items-center">

@@ -79,7 +79,8 @@ const Navbar = ({ initialCategories = [] }) => {
       }
     };
     fetchCategories();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps — intentionally run once; initialCategories is stable
+  // Runs once: initialCategories comes from the server and never changes
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const { theme, toggleTheme } = useTheme();
   const [navbarTheme, setNavbarTheme] = useState("dark");
   const themeRef = useRef(theme); // read by the scroll-driven section detection

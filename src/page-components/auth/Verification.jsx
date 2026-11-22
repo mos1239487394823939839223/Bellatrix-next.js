@@ -178,7 +178,7 @@ const Verification = () => {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
-                  disabled={!!emailFromState}
+                  disabled={!!searchParams.get("email")}
                   className={`w-full px-4 py-3 bg-white/5 border ${
                     errors.email ? 'border-red-500/50' : 'border-white/10'
                   } rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed`}

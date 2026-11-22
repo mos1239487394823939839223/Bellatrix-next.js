@@ -1,6 +1,7 @@
 // Server Component — generateMetadata + SSR data pre-fetch
 import { notFound, permanentRedirect } from 'next/navigation'
 import Layout from '../../src/components/Layout'
+import { safeJsonLd } from '../../src/utils/htmlSanitizer'
 import DynamicPageRenderer from '../../src/components/DynamicPageRenderer/index'
 import {
   SITE_URL,
@@ -143,7 +144,7 @@ export default async function SlugPage({ params }) {
       {page && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(slug, page)) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd(slug, page)) }}
         />
       )}
       <DynamicPageRenderer slug={slug} initialData={page} />

@@ -4,12 +4,13 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 
 export default [
-  { ignores: ["dist"] },
+  { ignores: ["dist", ".next", "node_modules", "public", "backups"] },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      // Next.js inlines process.env.* at build time, so it is valid in client code
+      globals: { ...globals.browser, process: "readonly" },
       parserOptions: {
         ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },

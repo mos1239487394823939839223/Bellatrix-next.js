@@ -299,58 +299,6 @@ export const generalComponentSchemas = {
     },
   },
 
-  Hero: {
-    componentName: "Hero",
-    category: "hero",
-    icon: "",
-    displayName: "Home Hero",
-    description: "Main Home Hero with video slides",
-    schema: {
-      type: "object",
-      properties: {
-        slides: {
-          type: "array",
-          label: "Hero Slides",
-          items: {
-            type: "object",
-            properties: {
-              title: { type: "string", label: "Title", formField: "text" },
-              subtitle: { type: "string", label: "Subtitle", formField: "text" },
-              description: { type: "string", label: "Description", formField: "textarea" },
-              video: { type: "string", label: "Video URL", formField: "media", mediaType: "video" },
-            },
-          },
-          formField: "array",
-        },
-        stats: {
-          type: "array",
-          label: "Statistics",
-          items: {
-            type: "object",
-            properties: {
-              value: { type: "string", label: "Value", formField: "text" },
-              label: { type: "string", label: "Label", formField: "text" },
-            },
-          },
-          formField: "array",
-        },
-      },
-    },
-    defaultData: {
-      slides: [
-        {
-          title: "Strategic Business Transformation",
-          subtitle: "Oracle NetSuite Consultancy",
-          description: "Streamline operations and drive growth with our comprehensive NetSuite solutions.",
-          video: "/Videos/implementation/homepage_hero.mp4",
-        },
-      ],
-      stats: [
-        { value: "500+", label: "Projects Completed" },
-        { value: "15+", label: "Years Experience" },
-      ],
-    },
-  },
 
 
 

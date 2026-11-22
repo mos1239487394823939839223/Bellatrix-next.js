@@ -1,87 +1,71 @@
 /**
- * HTML Sanitization Utility
- * Provides safe HTML rendering for React components
+ * HTML sanitization for CMS text that may contain light formatting.
+ *
+ * Safe by construction: the whole string is escaped first, then only an
+ * allow-list of simple formatting tags is turned back into markup — with no
+ * attributes except a plain `class` (so CMS headings can keep a colored word,
+ * e.g. <span class="text-blue-600">). Event handlers, styles, links, scripts,
+ * images and any other tag/attribute stay escaped text.
  */
 
-/**
- * Sanitizes HTML content by escaping dangerous characters
- * @param {string} html - The HTML string to sanitize
- * @returns {string} - Sanitized HTML string
- */
-export const sanitizeHTML = (html) => {
-  if (!html) return '';
-  
-  // Basic sanitization - escape HTML characters
-  return html
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;');
-};
+const ALLOWED_TAGS = ["span", "strong", "em", "b", "i", "u", "br", "mark", "small", "sub", "sup"];
+const SAFE_CLASS = /^[\w\s\-:/[\].#%]*$/;
 
-/**
- * Prepares HTML content for React's dangerouslySetInnerHTML
- * @param {string} html - The HTML string to prepare
- * @returns {object} - Object with __html property for dangerouslySetInnerHTML
- */
-export const renderHTML = (html) => {
-  if (!html) return { __html: '' };
-  
-  // For now, we'll use basic sanitization
-  // In production, consider using DOMPurify for more robust sanitization
-  const sanitized = sanitizeHTML(html);
-  
-  return { __html: sanitized };
-};
+const escapeHTML = (s) =>
+  String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
 
-/**
- * Safely renders HTML content with basic sanitization
- * This is a simpler version that allows basic HTML tags like <span>, <strong>, <em>
- * @param {string} html - The HTML string to render
- * @returns {object} - Object with __html property for dangerouslySetInnerHTML
- */
-export const renderSafeHTML = (html) => {
-  if (!html) return { __html: '' };
-  
-  // Allow basic safe HTML tags
-  const allowedTags = ['span', 'strong', 'em', 'b', 'i', 'u', 'br'];
-  const tagRegex = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^<>]*>/g;
-  
-  let sanitized = html;
-  
-  // Remove any tags that aren't in our allowed list
-  sanitized = sanitized.replace(tagRegex, (match, tagName) => {
-    if (allowedTags.includes(tagName.toLowerCase())) {
-      return match; // Keep allowed tags
+// Matches an escaped tag: &lt;/span&gt;, &lt;br/&gt;, &lt;span class=&quot;x&quot;&gt;
+const ESCAPED_TAG = /&lt;(\/?)([a-zA-Z][a-zA-Z0-9]*)((?:\s+class=&quot;[^&]*&quot;)?)\s*(\/?)&gt;/g;
+
+/** Escape everything (plain text). */
+export const sanitizeHTML = (html) => (html ? escapeHTML(html) : "");
+
+/** Escaped text with an allow-list of formatting tags restored (no attributes but class). */
+export const sanitizeFormatting = (html) => {
+  if (!html) return "";
+  return escapeHTML(html).replace(ESCAPED_TAG, (match, close, tag, classAttr, selfClose) => {
+    const name = tag.toLowerCase();
+    if (!ALLOWED_TAGS.includes(name)) return match; // stays visible as text, harmless
+    if (close) return `</${name}>`;
+    if (name === "br") return "<br />";
+    let cls = "";
+    if (classAttr) {
+      const value = classAttr.replace(/^\s+class=&quot;/, "").replace(/&quot;$/, "");
+      if (SAFE_CLASS.test(value)) cls = ` class="${value}"`;
     }
-    return ''; // Remove disallowed tags
+    return `<${name}${cls}${selfClose ? " /" : ""}>`;
   });
-  
-  return { __html: sanitized };
 };
 
-/**
- * Checks if a string contains HTML tags
- * @param {string} text - The text to check
- * @returns {boolean} - True if HTML tags are present
- */
-export const containsHTML = (text) => {
-  if (!text) return false;
-  return /<[^>]*>/g.test(text);
-};
+/** For React's dangerouslySetInnerHTML — plain text, fully escaped. */
+export const renderHTML = (html) => ({ __html: sanitizeHTML(html) });
+
+/** For React's dangerouslySetInnerHTML — allows simple formatting tags only. */
+export const renderSafeHTML = (html) => ({ __html: sanitizeFormatting(html) });
+
+/** True if the string contains something that looks like a tag. */
+export const containsHTML = (text) => (text ? /<[^>]*>/.test(text) : false);
 
 /**
- * Renders text content, using HTML rendering if HTML tags are detected
- * @param {string} content - The content to render
- * @returns {object} - Object with __html property for dangerouslySetInnerHTML, or null for plain text
+ * Formatting-aware render: returns { __html } when the text contains tags,
+ * or null so the caller renders it as plain text.
  */
-export const smartRender = (content) => {
-  if (!content) return null;
-  
-  if (containsHTML(content)) {
-    return renderSafeHTML(content);
-  }
-  
-  return null; // Return null to indicate plain text should be used
-};
+export const smartRender = (content) => (content && containsHTML(content) ? renderSafeHTML(content) : null);
+
+/**
+ * JSON for <script type="application/ld+json">. JSON.stringify alone lets a
+ * CMS string containing "</script>" close the tag; escape <, > and & as
+ * unicode so the JSON stays valid and inert.
+ */
+export const safeJsonLd = (data) =>
+  JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(new RegExp(String.fromCharCode(0x2028), "g"), "\\u2028")
+    .replace(new RegExp(String.fromCharCode(0x2029), "g"), "\\u2029");

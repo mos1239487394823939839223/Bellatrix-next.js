@@ -96,19 +96,19 @@ const AuthDashboard = () => {
                       <h3 className="text-lg font-medium text-white">Quick Actions</h3>
                       <div className="mt-2 space-y-2 text-white/90">
                         <button
-                          onClick={() => navigate('/admin/pages')}
+                          onClick={() => router.push('/admin/pages')}
                           className="block w-full text-left text-sm hover:underline"
                         >
                           → Manage Pages
                         </button>
                         <button
-                          onClick={() => navigate('/admin/templates')}
+                          onClick={() => router.push('/admin/templates')}
                           className="block w-full text-left text-sm hover:underline"
                         >
                           → Manage Templates
                         </button>
                         <button
-                          onClick={() => navigate('/admin/settings')}
+                          onClick={() => router.push('/admin/settings')}
                           className="block w-full text-left text-sm hover:underline"
                         >
                           → Settings

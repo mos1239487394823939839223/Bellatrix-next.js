@@ -1,5 +1,6 @@
 import './globals.css'
 import Providers from './providers'
+import { safeJsonLd } from '../src/utils/htmlSanitizer'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({
@@ -115,11 +116,11 @@ export default function RootLayout({ children }) {
         {/* JSON-LD structured data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(websiteJsonLd) }}
         />
       </head>
       <body className={`${inter.variable} ${inter.className}`}>

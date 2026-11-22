@@ -18,7 +18,20 @@ const nextConfig = {
   // replaced files still appear within a day (images also carry a ?v= cache-buster).
   async headers() {
     const media = 'public, max-age=86400, stale-while-revalidate=604800'
+    // Browser security headers for every page. Deliberately no script-src CSP:
+    // the site relies on inline JSON-LD / theme scripts and CMS-chosen media
+    // hosts; these directives block framing, plugin content and base/form
+    // hijacking without risking broken pages.
+    const security = [
+      { key: 'Strict-Transport-Security', value: 'max-age=31536000' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()' },
+      { key: 'Content-Security-Policy', value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" },
+    ]
     return [
+      { source: '/:path*', headers: security },
       { source: '/Videos/:path*', headers: [{ key: 'Cache-Control', value: media }] },
       { source: '/images/:path*', headers: [{ key: 'Cache-Control', value: media }] },
     ]
@@ -36,6 +49,7 @@ const nextConfig = {
     // Cache optimized images on the CDN/server for 24 hours
     minimumCacheTTL: 86400,
   },
+  poweredByHeader: false, // don't advertise the framework
   // Remove console.log in production
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

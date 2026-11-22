@@ -30,11 +30,11 @@ const BellatrixSupportSection = ({
 }) => {
   // Default data
   const defaultAdminSupport = [
-    "Ongoing Bellatrix administration",
+    "Ongoing ERP administration",
     "Maintain secure access",
     "Data cleansing and upload",
     "Data administration & maintenance",
-    "Help with optimizing the usage of Bellatrix",
+    "Help getting more out of your ERP",
     "Monitor usage & transactions",
     "Provide support for your IT team on technical issues",
     "Create new users, roles",
@@ -69,9 +69,9 @@ const BellatrixSupportSection = ({
   const defaultData = {
     title: "Your One-Stop-Shop for Bellatrix Support",
     description1:
-      "Your business, and how you run it, is very unique. So is your Bellatrix instance and required support. Our consultants are well versed in a multitude of different areas to ensure that regardless of the level of support that you require, we can assist you.",
+      "Your business, and how you run it, is very unique. So is your ERP system and the support it needs. Our consultants are well versed in a multitude of different areas to ensure that regardless of the level of support that you require, we can assist you.",
     description2:
-      "Whether you're in need of functional support, administrator support, development support, or all the above, SherpaCare is the answer.",
+      "Whether you're in need of functional support, administrator support, development support, or all the above, Bellatrix Support has you covered.",
     adminSupportTitle: "Admin Support",
     functionalSupportTitle: "Functional Support",
     developmentSupportTitle: "Development Support",

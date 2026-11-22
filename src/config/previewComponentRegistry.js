@@ -70,7 +70,7 @@ import RetailCTA from "../components/industries/retail/CTASection";
 // Support Components
 import BellatrixSupportHero from "../components/Support/BellatrixSupportHero";
 import SupportSecondSec from "../components/Support/SupportSecondSec";
-import SherpaCareServices from "../components/Support/SherpaCareServices";
+import SupportServices from "../components/Support/SupportServices";
 import WhatWeOfferSection from "../components/Support/WhatWeOfferSection";
 import DedicatedTeamSection from "../components/Support/DedicatedTeamSection";
 import PrePackagedSection from "../components/Support/PrePackagedSection";
@@ -183,7 +183,7 @@ export const componentRegistry = {
   // ===========================================
   SupportHeroSection: BellatrixSupportHero,
   SupportSecondSection: SupportSecondSec,
-  SupportSherpaCareSection: SherpaCareServices,
+  SupportSherpaCareSection: SupportServices,
   SupportWhatWeOfferSection: WhatWeOfferSection,
   SupportDedicatedTeamSection: DedicatedTeamSection,
   SupportPrePackagedSection: PrePackagedSection,

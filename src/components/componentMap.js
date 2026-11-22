@@ -92,7 +92,8 @@ export const idToPathMap = {
   // ===========================================
   SupportHeroSection: "Support/BellatrixSupportHero",
   SupportSecondSection: "Support/SupportSecondSec",
-  SupportSherpaCareSection: "Support/SherpaCareServices",
+  // Type name kept for existing saved pages (renamed component file only)
+  SupportSherpaCareSection: "Support/SupportServices",
   SupportWhatWeOfferSection: "Support/WhatWeOfferSection",
   SupportDedicatedTeamSection: "Support/DedicatedTeamSection",
   SupportPrePackagedSection: "Support/PrePackagedSection",
@@ -247,8 +248,8 @@ export const loadComponent = async (componentPath) => {
         import("./Support/BellatrixSupportHero"),
       "Support/SupportSecondSec": () =>
         import("./Support/SupportSecondSec"),
-      "Support/SherpaCareServices": () =>
-        import("./Support/SherpaCareServices"),
+      "Support/SupportServices": () =>
+        import("./Support/SupportServices"),
       "Support/WhatWeOfferSection": () =>
         import("./Support/WhatWeOfferSection"),
       "Support/DedicatedTeamSection": () =>

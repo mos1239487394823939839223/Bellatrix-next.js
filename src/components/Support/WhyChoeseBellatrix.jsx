@@ -17,7 +17,7 @@ const WhyChoeseBellatrix = ({
     description:
       "At Bellatrix, we strive to offer the highest level of quality when it comes to our solutions. Over the years, we have mastered the ins and outs of NetSuite. We've worked with companies in multiple verticals and are familiar with their best practices.",
     items: [
-      "18 years of experience",
+      "Certified Oracle NetSuite & Odoo consultants",
       "85 NetSuite Consultants",
       "800 Active Customers",
       "2500+ Completed Projects",

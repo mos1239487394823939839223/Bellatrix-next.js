@@ -1,6 +1,6 @@
 import React from "react";
 
-const SherpaCareServices = ({
+const SupportServices = ({
   data,
   // Direct props for Page Builder
   title: propTitle,
@@ -18,7 +18,7 @@ const SherpaCareServices = ({
       "Ad hoc assistance",
       "Solution design",
       "Updates assistance",
-      "Integrating Bellatrix with different tools",
+      "Integrating your ERP with other tools",
       "Implementing eCommerce applications",
     ],
     column2: [
@@ -26,7 +26,7 @@ const SherpaCareServices = ({
       "Developing custom KPI",
       "Writing custom scripts",
       "Designing portals and their modification",
-      "Bellatrix Advanced Modules Implementation",
+      "Advanced module implementation",
     ],
     column3: [
       "Customizing Bellatrix dashboards",
@@ -144,4 +144,4 @@ const SherpaCareServices = ({
   );
 };
 
-export default SherpaCareServices;
+export default SupportServices;

@@ -26,13 +26,13 @@ const WhatWeOfferSection = ({
       {
         title: "Stop Anytime",
         description:
-          "SherpaCare offers you the ability to stop your services when you feel confident.",
+          "You can stop the service whenever your team feels confident running the system on its own.",
         image: "/supoortWhatWeOffer2.png",
       },
       {
-        title: "Certified Bellatrix Teams",
+        title: "Certified ERP Consultants",
         description:
-          "Trust a team with certified Bellatrix expertise you can rely on.",
+          "Work with certified Oracle NetSuite and Odoo consultants you can rely on.",
         image: "/supoortWhatWeOffer3.png",
       },
     ],

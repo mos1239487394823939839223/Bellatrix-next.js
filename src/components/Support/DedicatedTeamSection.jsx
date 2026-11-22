@@ -15,8 +15,8 @@ const DedicatedTeamSection = ({
   const defaultData = {
     title: "Your Own Dedicated Team of Bellatrix",
     items: [
-      "A team will be assigned to you that is familiar with your organization, how you do things, and most importantly, your goals for your Bellatrix system",
-      "A committed team familiar with your Bellatrix environment",
+      "A team will be assigned to you that is familiar with your organization, how you do things, and most importantly, your goals for your ERP system",
+      "A committed team familiar with your ERP environment",
       "Experienced professionals, including a project lead and solution consultants",
       "Structured collaboration to avoid knowledge silos",
       "Access to the collective expertise of a broad team of Bellatrix specialists",

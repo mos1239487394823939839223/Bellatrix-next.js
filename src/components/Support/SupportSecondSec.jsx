@@ -15,9 +15,9 @@ const SupportSecondSec = ({
   const defaultData = {
     title: "Empower Your Business with Bellatrix Support",
     description1:
-      "Our Bellatrix Support service was built to empower your organization to use Bellatrix with confidence. Our in-house team of 85+ Bellatrix certified professionals are ready to support you to maximize the return on your Bellatrix investment.",
+      "Our Bellatrix Support service was built to empower your organization to use your ERP with confidence. Our in-house team of certified Oracle NetSuite and Odoo consultants is ready to support you to maximize the return on your ERP investment.",
     description2:
-      "With our 18 years of implementation, customization, and development within Bellatrix, rest assured we have the expertise to not only answer your questions, but to proactively improve your Bellatrix instance.",
+      "With hands-on experience implementing, customizing and developing Oracle NetSuite and Odoo, we don't just answer your questions — we proactively improve your system.",
     image: "/images/Support/HeroSection.png",
   };
 

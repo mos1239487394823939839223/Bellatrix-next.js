@@ -96,7 +96,7 @@ export const supportComponentSchemas = {
                 description2: {
                     type: "string",
                     label: "Second Paragraph",
-                    placeholder: "With our 18 years of implementation...",
+                    placeholder: "With hands-on experience implementing...",
                     formField: "textarea"
                 },
                 image: {
@@ -110,8 +110,8 @@ export const supportComponentSchemas = {
         },
         defaultData: {
             title: "Empower Your Business with Bellatrix Support",
-            description1: "Our Bellatrix Support service was built to empower your organization to use Bellatrix with confidence. Our in-house team of 85+ Bellatrix certified professionals are ready to support you to maximize the return on your Bellatrix investment.",
-            description2: "With our 18 years of implementation, customization, and development within Bellatrix, rest assured we have the expertise to not only answer your questions, but to proactively improve your Bellatrix instance.",
+            description1: "Our Bellatrix Support service was built to empower your organization to use your ERP with confidence. Our in-house team of certified Oracle NetSuite and Odoo consultants is ready to support you to maximize the return on your ERP investment.",
+            description2: "With hands-on experience implementing, customizing and developing Oracle NetSuite and Odoo, we don't just answer your questions — we proactively improve your system.",
             image: "/images/Support/HeroSection.png"
         }
     },
@@ -123,8 +123,8 @@ export const supportComponentSchemas = {
         componentName: "SupportSherpaCareSection",
         category: "support",
         icon: "🛠️",
-        displayName: "SherpaCare Services Section",
-        description: "Section showcasing comprehensive SherpaCare services",
+        displayName: "Support Services Section",
+        description: "Section showcasing comprehensive support services",
         schema: {
             type: "object",
             properties: {
@@ -177,7 +177,7 @@ export const supportComponentSchemas = {
                 "Ad hoc assistance",
                 "Solution design",
                 "Updates assistance",
-                "Integrating Bellatrix with different tools",
+                "Integrating your ERP with other tools",
                 "Implementing eCommerce applications"
             ],
             column2: [
@@ -185,7 +185,7 @@ export const supportComponentSchemas = {
                 "Developing custom KPI",
                 "Writing custom scripts",
                 "Designing portals and their modification",
-                "Bellatrix Advanced Modules Implementation"
+                "Advanced module implementation"
             ],
             column3: [
                 "Customizing Bellatrix dashboards",
@@ -264,12 +264,12 @@ export const supportComponentSchemas = {
                 {
                     image: "/supoortWhatWeOffer2.png",
                     title: "Stop Anytime",
-                    description: "SherpaCare offers you the ability to stop your services when you feel confident."
+                    description: "You can stop the service whenever your team feels confident running the system on its own."
                 },
                 {
                     image: "/supoortWhatWeOffer3.png",
-                    title: "Certified Bellatrix Teams",
-                    description: "Trust a team with certified Bellatrix expertise you can rely on."
+                    title: "Certified ERP Consultants",
+                    description: "Work with certified Oracle NetSuite and Odoo consultants you can rely on."
                 }
             ]
         }
@@ -317,8 +317,8 @@ export const supportComponentSchemas = {
         defaultData: {
             title: "Your Own Dedicated Team of Bellatrix",
             items: [
-                "A team will be assigned to you that is familiar with your organization, how you do things, and most importantly, your goals for your Bellatrix system",
-                "A committed team familiar with your Bellatrix environment",
+                "A team will be assigned to you that is familiar with your organization, how you do things, and most importantly, your goals for your ERP system",
+                "A committed team familiar with your ERP environment",
                 "Experienced professionals, including a project lead and solution consultants",
                 "Structured collaboration to avoid knowledge silos",
                 "Access to the collective expertise of a broad team of Bellatrix specialists"
@@ -481,7 +481,7 @@ export const supportComponentSchemas = {
                 {
                     icon: "🚀",
                     title: "Expert Support",
-                    description: "Get help from certified Bellatrix professionals"
+                    description: "Get help from certified ERP consultants"
                 },
                 {
                     icon: "⚡",
@@ -717,7 +717,7 @@ export const supportComponentSchemas = {
                             description: {
                                 type: "string",
                                 label: "Reason Description",
-                                placeholder: "18 years of excellence in ERP support",
+                                placeholder: "Hands-on ERP support experience",
                                 formField: "textarea"
                             }
                         }
@@ -733,7 +733,7 @@ export const supportComponentSchemas = {
                             value: {
                                 type: "string",
                                 label: "Stat Value",
-                                placeholder: "85+",
+                                placeholder: "e.g. 50+",
                                 required: true,
                                 formField: "text"
                             },
@@ -755,12 +755,12 @@ export const supportComponentSchemas = {
                 {
                     icon: "🏆",
                     title: "Industry Leader",
-                    description: "18 years of excellence in ERP implementation and support"
+                    description: "Hands-on experience in ERP implementation and support"
                 },
                 {
                     icon: "👥",
                     title: "Expert Team",
-                    description: "85+ certified Bellatrix professionals at your service"
+                    description: "Certified ERP consultants at your service"
                 },
                 {
                     icon: "⚡",
@@ -774,7 +774,7 @@ export const supportComponentSchemas = {
                 }
             ],
             stats: [
-                { value: "85+", label: "Certified Professionals" },
+                { value: "24/7", label: "Support coverage" },
                 { value: "18", label: "Years Experience" },
                 { value: "500+", label: "Successful Projects" },
                 { value: "98%", label: "Client Satisfaction" }

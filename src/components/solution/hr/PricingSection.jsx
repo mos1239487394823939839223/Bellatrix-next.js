@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CTAButton from "../../CTAButton";
+import { staticContent } from "../../../services/StaticContentRepository";
 
 const PricingSection = ({ data = {} }) => {
   const [defaultData, setDefaultData] = useState(null);
@@ -7,8 +8,7 @@ const PricingSection = ({ data = {} }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/data/hr.json");
-        const jsonData = await response.json();
+        const jsonData = await staticContent.load("hr");
         setDefaultData(jsonData.pricing);
       } catch (error) {
         console.error("Failed to load HR data:", error);

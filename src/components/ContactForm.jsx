@@ -1,25 +1,15 @@
 'use client'
 import React, { useId, useRef, useState } from "react";
-import { postJson } from "../lib/api";
+import { services } from "../services";
+import { validate as validateSchema } from "../core/validation/Validator";
+import { contactMessageSchema } from "../core/validation/schemas";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_MESSAGE = 10;
 const EMPTY_FORM = { fullName: "", email: "", phone: "", companyName: "", industry: "", country: "", message: "" };
 const FIELD_ORDER = ["fullName", "email", "industry", "country", "message"];
 
-// Returns { field: "error message" } for every invalid field
-const validate = (data) => {
-  const errors = {};
-  if (!data.fullName.trim()) errors.fullName = "Please enter your name.";
-  if (!data.email.trim()) errors.email = "Please enter your email address.";
-  else if (!EMAIL_RE.test(data.email.trim())) errors.email = "Please enter a valid email, e.g. name@company.com.";
-  if (!data.industry) errors.industry = "Please choose your industry.";
-  if (!data.country) errors.country = "Please choose your country.";
-  const msg = data.message.trim();
-  if (!msg) errors.message = "Please tell us a little about your project.";
-  else if (msg.length < MIN_MESSAGE) errors.message = `Please write at least ${MIN_MESSAGE} characters (${MIN_MESSAGE - msg.length} more).`;
-  return errors;
-};
+// Same rules the messages service enforces (src/core/validation/schemas.js)
+const validate = (data) => validateSchema(contactMessageSchema, data).errors;
 
 const ContactForm = ({
   onSubmit,
@@ -113,7 +103,7 @@ const ContactForm = ({
 
     try {
       setSubmitting(true);
-      await postJson("/ContactMessages/submit", payload);
+      await services.messages.submit({ ...formData, industryId: payload.industry, countryId: payload.country });
       setSuccess(true);
       if (typeof onSuccess === "function") onSuccess();
       setFormData(EMPTY_FORM);

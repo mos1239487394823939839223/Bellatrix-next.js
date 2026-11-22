@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { staticContent } from "../../../services/StaticContentRepository";
 
 const FAQSection = ({ data, openFAQ, setOpenFAQ }) => {
   // استخدم useState داخلي إذا لم يتم تمرير setOpenFAQ
@@ -9,8 +10,7 @@ const FAQSection = ({ data, openFAQ, setOpenFAQ }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/data/hr.json");
-        const jsonData = await response.json();
+        const jsonData = await staticContent.load("hr");
         setDefaultData(jsonData.faq);
       } catch (error) {
         console.error("Failed to load HR data:", error);

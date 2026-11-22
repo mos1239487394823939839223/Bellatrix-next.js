@@ -1,22 +1,15 @@
-// Media service shared by the Media Library page and the media picker.
+// Media helpers for the Media Library page and the media picker.
 //
-// Talks to the .NET backend (/api/Media). Uploads use XMLHttpRequest so the UI
-// can show real progress for large videos.
+// Network calls delegate to MediaService (src/services) so they share the
+// HttpClient's auth, timeouts and errors; this module keeps the UI helpers
+// (URLs, file kinds, sizes, client-side checks).
 
-import { getApiBaseUrlWithApi } from "../config/api.js";
-import { getAuthToken } from "../utils/tokenManager.js";
+import { services } from "../services";
 
 // nginx in front of the API accepts request bodies up to 50 MB
 // (client_max_body_size 50M); the API itself allows more.
 export const MEDIA_MAX_MB = 50;
 export const MEDIA_MAX_BYTES = MEDIA_MAX_MB * 1024 * 1024;
-
-const api = () => getApiBaseUrlWithApi();
-
-const authHeader = () => {
-  const token = getAuthToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
 
 const isLocalhost = () =>
   typeof window !== "undefined" &&
@@ -80,40 +73,13 @@ export function formatBytes(bytes) {
   return `${v.toFixed(v >= 10 ? 0 : 1)} ${units[i]}`;
 }
 
-async function readJson(res) {
-  const text = await res.text();
-  try {
-    return text ? JSON.parse(text) : {};
-  } catch {
-    return { message: text };
-  }
-}
-
-function errorFor(status, payload) {
-  if (status === 401 || status === 403) return "Your session has expired — sign in again.";
-  if (status === 413) return `File is too large for the server (max ${MEDIA_MAX_MB} MB).`;
-  return payload?.message || payload?.title || `Request failed (${status})`;
-}
-
 /** List media. Returns { items, hasMore }. */
-export async function listMedia({ page = 1, pageSize = 48, type, searchTerm } = {}) {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
-  if (type && type !== "all") params.set("type", type);
-  if (searchTerm) params.set("searchTerm", searchTerm);
-  const res = await fetch(`${api()}/Media?${params}`, { headers: authHeader() });
-  const payload = await readJson(res);
-  if (!res.ok || payload.success === false) throw new Error(errorFor(res.status, payload));
-  const data = payload.data;
-  const items = Array.isArray(data) ? data : data?.items || data?.results || [];
-  return { items, hasMore: data?.hasMore ?? items.length === pageSize };
-}
+export const listMedia = (params = {}) => services.media.page(params);
 
 /** Totals for the header (best effort). */
 export async function mediaStats() {
   try {
-    const res = await fetch(`${api()}/Media/statistics`, { headers: authHeader() });
-    const payload = await readJson(res);
-    return res.ok ? payload.data || null : null;
+    return await services.media.statistics();
   } catch {
     return null;
   }
@@ -130,76 +96,17 @@ export function validateFile(file, accept = "all") {
   return null;
 }
 
-/**
- * Upload one file. onProgress(0..100). Resolves with the created media item.
- */
-export function uploadFile(file, { onProgress, altText, caption } = {}) {
-  return new Promise((resolve, reject) => {
-    const form = new FormData();
-    form.append("File", file);
-    form.append("Role", "12"); // 12 = General
-    form.append("AlternateText", altText || file.name.replace(/\.[^.]+$/, ""));
-    form.append("Caption", caption || "");
-    form.append("SortOrder", "1");
+/** Upload one file with progress (0..100). Resolves with the created media item. */
+export const uploadFile = (file, { onProgress, altText, caption } = {}) =>
+  services.media.upload(file, { onProgress, altText, caption });
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${api()}/Media/upload`);
-    const { Authorization } = authHeader();
-    if (Authorization) xhr.setRequestHeader("Authorization", Authorization);
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
-    };
-    xhr.onload = () => {
-      let payload = {};
-      try {
-        payload = JSON.parse(xhr.responseText || "{}");
-      } catch {
-        payload = { message: xhr.responseText };
-      }
-      if (xhr.status >= 200 && xhr.status < 300 && payload.success !== false) {
-        const item = Array.isArray(payload.data) ? payload.data[0] : payload.data;
-        resolve(item || {});
-      } else {
-        reject(new Error(errorFor(xhr.status, payload)));
-      }
-    };
-    xhr.onerror = () => reject(new Error("Network error — check your connection and try again."));
-    xhr.send(form);
-  });
-}
+/** Update alt text / caption (validated). */
+export const updateMedia = (id, details) => services.media.updateDetails(id, details);
 
-/** Update alt text / caption. Tries JSON first, then form data. */
-export async function updateMedia(id, { alternateText, caption, role, sortOrder }) {
-  const body = {
-    alternateText: alternateText ?? "",
-    caption: caption ?? "",
-    ...(role != null ? { role } : {}),
-    ...(sortOrder != null ? { sortOrder } : {}),
-  };
-  let res = await fetch(`${api()}/Media/${id}`, {
-    method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (res.status === 415 || res.status === 400) {
-    const form = new FormData();
-    form.append("AlternateText", body.alternateText);
-    form.append("Caption", body.caption);
-    if (role != null) form.append("Role", String(role));
-    if (sortOrder != null) form.append("SortOrder", String(sortOrder));
-    res = await fetch(`${api()}/Media/${id}`, { method: "PUT", headers: authHeader(), body: form });
-  }
-  const payload = await readJson(res);
-  if (!res.ok || payload.success === false) throw new Error(errorFor(res.status, payload));
-  return payload.data || body;
-}
-
-export async function deleteMedia(id) {
-  const res = await fetch(`${api()}/Media/${id}`, { method: "DELETE", headers: authHeader() });
-  const payload = await readJson(res);
-  if (!res.ok || payload.success === false) throw new Error(errorFor(res.status, payload));
+export const deleteMedia = async (id) => {
+  await services.media.remove(id);
   return true;
-}
+};
 
 /**
  * File names referenced by any published page or the public site settings.
@@ -207,19 +114,17 @@ export async function deleteMedia(id) {
  * their section content).
  */
 export async function referencedFileNames() {
-  const get = async (path) => {
+  const safe = async (promise) => {
     try {
-      const res = await fetch(`${api()}${path}`);
-      return res.ok ? await res.text() : "";
+      return await promise;
     } catch {
-      return "";
+      return null;
     }
   };
-  const navbar = await get("/Categories/navbar");
+  const navbar = (await safe(services.categories.navbar())) || [];
   const slugs = new Set();
   try {
-    const data = JSON.parse(navbar);
-    for (const cat of data.data || data || []) {
+    for (const cat of Array.isArray(navbar) ? navbar : []) {
       for (const page of cat.pages || cat.Pages || []) {
         const slug = page.slug || page.Slug;
         if (slug) slugs.add(slug);
@@ -229,8 +134,10 @@ export async function referencedFileNames() {
     /* ignore */
   }
   slugs.add("home");
-  const bodies = await Promise.all([...slugs].map((slug) => get(`/Pages/public/${encodeURIComponent(slug)}`)));
-  bodies.push(await get("/Settings/public"));
+  const bodies = (
+    await Promise.all([...slugs].map((slug) => safe(services.pages.getPublicBySlug(slug))))
+  ).map((page) => JSON.stringify(page || ""));
+  bodies.push(JSON.stringify((await safe(services.settings.publicList())) || ""));
   let text = bodies.join(" ").replace(/\\\//g, "/");
   try {
     text = decodeURIComponent(text);

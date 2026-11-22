@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useBackgroundVideo } from "../../../hooks/useBackgroundVideo";
 import { VideoSources, getPosterSrc } from "../../../utils/videoSources";
+import { staticContent } from "../../../services/StaticContentRepository";
 
 const HeroSection = ({ 
   data = {},
@@ -17,8 +18,7 @@ const HeroSection = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/data/hr.json");
-        const jsonData = await response.json();
+        const jsonData = await staticContent.load("hr");
         setDefaultData(jsonData.hero);
       } catch (error) {
         console.error("Failed to load HR data:", error);

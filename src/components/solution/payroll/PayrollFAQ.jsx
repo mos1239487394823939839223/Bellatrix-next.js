@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { staticContent } from "../../../services/StaticContentRepository";
 
 
 
@@ -85,9 +86,7 @@ const PayrollFAQ = ({ faqData = {} }) => {
 
         try {
 
-          const response = await fetch("/data/payroll.json");
-
-          const data = await response.json();
+          const data = await staticContent.load("payroll");
 
           setDefaultData(data.faqs);
 

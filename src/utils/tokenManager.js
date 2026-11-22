@@ -1,102 +1,24 @@
 /**
- * Token Manager Utility
- * Centralized token management to ensure consistency across different auth systems
+ * Legacy token helpers — thin wrappers over the single TokenStore
+ * (src/core/http/TokenStore.js), kept so existing imports keep working.
  */
+import { tokenStore } from "../core/http/TokenStore";
 
-const TOKEN_KEYS = {
-  AUTH_TOKEN: 'authToken',
-  ADMIN_TOKEN: 'adminToken',
-  ADMIN_USER: 'adminUser'
-};
+export const getAuthToken = () => tokenStore.getToken();
 
-const isBrowser = typeof window !== 'undefined';
+export const setAuthToken = (token) => tokenStore.setToken(token, { remember: true });
 
-/**
- * Get the current authentication token from localStorage
- * Checks both token storage keys for compatibility
- * @returns {string|null} The authentication token or null if not found
- */
-export const getAuthToken = () => {
-  if (!isBrowser) return null;
-  return localStorage.getItem(TOKEN_KEYS.AUTH_TOKEN) ||
-         localStorage.getItem(TOKEN_KEYS.ADMIN_TOKEN) ||
-         sessionStorage.getItem(TOKEN_KEYS.AUTH_TOKEN) ||
-         sessionStorage.getItem(TOKEN_KEYS.ADMIN_TOKEN);
-};
+export const setUserData = (userData) => tokenStore.setUser(userData);
 
-/**
- * Store authentication token in both localStorage keys for compatibility
- * @param {string} token - The authentication token to store
- */
-export const setAuthToken = (token) => {
-  if (!isBrowser || !token) return;
-  localStorage.setItem(TOKEN_KEYS.AUTH_TOKEN, token);
-  localStorage.setItem(TOKEN_KEYS.ADMIN_TOKEN, token);
-};
+export const getUserData = () => tokenStore.getUser();
 
-/**
- * Store user data in localStorage
- * @param {Object} userData - The user data to store
- */
-export const setUserData = (userData) => {
-  if (!isBrowser || !userData) return;
-  localStorage.setItem(TOKEN_KEYS.ADMIN_USER, JSON.stringify(userData));
-};
+export const clearAuthData = () => tokenStore.clear();
 
-/**
- * Get user data from localStorage
- * @returns {Object|null} The user data or null if not found
- */
-export const getUserData = () => {
-  if (!isBrowser) return null;
-  try {
-    const userData = localStorage.getItem(TOKEN_KEYS.ADMIN_USER);
-    return userData ? JSON.parse(userData) : null;
-  } catch (error) {
-    console.error('Error parsing user data:', error);
-    return null;
-  }
-};
+export const isAuthenticated = () => tokenStore.isAuthenticated();
 
-/**
- * Clear all authentication data from storage
- * Removes tokens and user data from both localStorage and sessionStorage
- */
-export const clearAuthData = () => {
-  if (!isBrowser) return;
-  // Clear localStorage
-  localStorage.removeItem(TOKEN_KEYS.AUTH_TOKEN);
-  localStorage.removeItem(TOKEN_KEYS.ADMIN_TOKEN);
-  localStorage.removeItem(TOKEN_KEYS.ADMIN_USER);
-
-  // Clear sessionStorage
-  sessionStorage.removeItem(TOKEN_KEYS.AUTH_TOKEN);
-  sessionStorage.removeItem(TOKEN_KEYS.ADMIN_TOKEN);
-};
-
-/**
- * Check if user is authenticated
- * @returns {boolean} True if user has a valid token
- */
-export const isAuthenticated = () => {
-  const token = getAuthToken();
-  if (!token) return false;
-
-  try {
-    // Basic JWT token validation (check if it has 3 parts)
-    const parts = token.split('.');
-    return parts.length === 3;
-  } catch (error) {
-    return false;
-  }
-};
-
-/**
- * Get Authorization header value
- * @returns {string|null} The Authorization header value or null if no token
- */
+/** "Bearer <token>" or null (string, as before). */
 export const getAuthHeader = () => {
-  const token = getAuthToken();
+  const token = tokenStore.getToken();
   return token ? `Bearer ${token}` : null;
 };
 
@@ -108,5 +30,4 @@ export default {
   clearAuthData,
   isAuthenticated,
   getAuthHeader,
-  TOKEN_KEYS
 };

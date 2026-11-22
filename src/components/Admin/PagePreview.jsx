@@ -19,6 +19,7 @@ import { normalizeProps, validateProps } from "../../utils/normalizeProps";
 import { validateVariant } from "../../utils/variantSystem";
 
 import { mapThemeValue } from "../../utils/sectionThemeDetection";
+import { staticContent } from "../../services/StaticContentRepository";
 
 // Default mock data for training components
 
@@ -228,13 +229,7 @@ const PagePreview = ({
 
   const loadTrainingData = async () => {
     try {
-      const response = await fetch("/data/training.json");
-
-      if (response.ok) {
-        const data = await response.json();
-
-        setTrainingData(data);
-      }
+      setTrainingData(await staticContent.load("training"));
     } catch (err) {
       console.warn("Failed to load training.json:", err);
     }

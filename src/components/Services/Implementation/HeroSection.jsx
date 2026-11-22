@@ -12,6 +12,7 @@ import {
 
 import CTAButton from "../../CTAButton";
 import { optimizedBgUrl } from "../../OptimizedImg";
+import { staticContent } from "../../../services/StaticContentRepository";
 
 const HeroSection = (props) => {
   // Decorative hero video only when the visitor hasn't asked for less data/motion
@@ -31,9 +32,7 @@ const HeroSection = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/data/Implementation.json");
-
-        const jsonData = await response.json();
+        const jsonData = await staticContent.load("Implementation");
 
         setDefaultData(jsonData.heroSection);
       } catch (error) {

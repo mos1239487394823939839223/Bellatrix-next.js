@@ -93,11 +93,6 @@ export const AuthProvider = ({ children }) => {
 
         // Try to get role from JWT token
         const derivedRole = deriveRoleFromToken(token);
-        console.log('Login Debug:', { 
-          userData, 
-          token: token.substring(0, 50) + '...', 
-          derivedRole 
-        });
         
         // For now, allow login if token exists and assume admin role
         // You can add more specific role validation based on your JWT claims

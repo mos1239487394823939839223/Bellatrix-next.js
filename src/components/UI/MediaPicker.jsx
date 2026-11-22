@@ -19,17 +19,17 @@ import Button from "./Button";
 
 import Toast from "./Toast";
 
-import axios from "axios";
 
 import mediaAPI from "../../lib/mediaAPI";
 
+import { services } from "../../services";
+
 import { MEDIA_MAX_MB, uploadFile as uploadWithProgress, validateFile } from "../../lib/mediaService";
 
-import { getApiBaseUrlWithApi, getAbsoluteBaseUrl } from "../../config/api.js";
+import { getAbsoluteBaseUrl } from "../../config/api.js";
 
 // API Constants
 
-const BASE_API = getApiBaseUrlWithApi();
 
 const BASE_HOST_ABSOLUTE = getAbsoluteBaseUrl();
 
@@ -126,68 +126,10 @@ function formatDate(dateString) {
 
 // Fetch media from API
 
-async function fetchMedia({
-  type = "",
-
-  page = 1,
-
-  pageSize = 40,
-
-  searchTerm = "",
-
-  token = null,
-}) {
-  const params = { page, pageSize };
-
-  if (type && type !== "all") params.type = type;
-
-  if (searchTerm) params.searchTerm = searchTerm;
-
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-  try {
-    const res = await axios.get(`${BASE_API}/Media`, { params, headers });
-
-    if (!res?.data) throw new Error("No response");
-
-    // Accept both: array or paged result
-
-    const payload = res.data;
-
-    if (!payload.success && payload.message) throw new Error(payload.message);
-
-    // Handle different response structures
-
-    let data = [];
-
-    let hasMore = false;
-
-    if (Array.isArray(payload.data)) {
-      data = payload.data;
-
-      hasMore = data.length === pageSize; // Estimate if there are more
-    } else if (payload.data?.items) {
-      data = payload.data.items;
-
-      hasMore = payload.data.hasMore || data.length === pageSize;
-    } else if (payload.data?.results) {
-      data = payload.data.results;
-
-      hasMore = payload.data.hasMore || data.length === pageSize;
-    } else {
-      data = payload.data || [];
-
-      hasMore = false;
-    }
-
-    return { data, hasMore };
-  } catch (error) {
-    console.error("Error fetching media:", error);
-
-    throw new Error(
-      error.response?.data?.message || error.message || "Failed to fetch media",
-    );
-  }
+// List media through MediaService (shared auth, timeout and error messages)
+async function fetchMedia({ type = "", page = 1, pageSize = 40, searchTerm = "" }) {
+  const { items, hasMore } = await services.media.page({ page, pageSize, type, searchTerm });
+  return { data: items, hasMore };
 }
 
 const MediaPicker = ({

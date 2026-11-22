@@ -37,7 +37,7 @@ import { useState, useEffect } from "react";
 
 import { getPublicDictionary } from "../services/settingsApi";
 
-import { getApiBaseUrlWithApi } from "../config/api.js";
+import { services } from "../services";
 
 // Add inline styles for hover effects
 
@@ -278,13 +278,8 @@ const Footer = ({ initialCategories = [] }) => {
       try {
         setLoading(true);
 
-        const res = await fetch(`${getApiBaseUrlWithApi()}/Categories/navbar`);
-
-        if (!res.ok) throw new Error("Failed to fetch categories");
-
-        const json = await res.json();
-
-        setCategories(Array.isArray(json.data) ? json.data : []);
+        const cats = await services.categories.navbar();
+        setCategories(Array.isArray(cats) ? cats : []);
       } catch {
         // categories unavailable — services column will show empty state
       } finally {

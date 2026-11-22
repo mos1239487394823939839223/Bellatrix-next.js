@@ -39,8 +39,8 @@ import { useTheme } from "../context/ThemeContext";
 
 import { setupSectionThemeDetection, detectCurrentSectionTheme } from "../utils/sectionThemeDetection";
 
-import { getApiBaseUrlWithApi } from "../config/api.js";
 import { cachedFetch } from "../lib/apiCache.js";
+import { services } from "../services";
 
 const Navbar = ({ initialCategories = [] }) => {
   // Dynamic navbar categories — use SSR-provided data if available
@@ -55,10 +55,7 @@ const Navbar = ({ initialCategories = [] }) => {
       try {
         const data = await cachedFetch(
           'navbar:categories',
-          async () => {
-            const res = await fetch(`${getApiBaseUrlWithApi()}/Categories/navbar`);
-            return res.json();
-          },
+          () => services.categories.navbar(),
           5 * 60 * 1000 // 5 minutes
         );
 

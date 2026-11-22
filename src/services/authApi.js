@@ -1,115 +1,71 @@
-import axios from "axios";
-import { clearAuthData } from "../utils/tokenManager";
+/**
+ * Auth endpoints used by useAuth. Runs on the shared HttpClient; returns the
+ * backend envelope ({ success, data, message }) exactly as callers expect.
+ */
+import { http } from "./index";
 
-// Determine base URL by the browser's hostname:
-// - localhost → use absolute backend URL directly (Turbopack dev rewrites redirect
-//   instead of proxy, which converts POST→GET; going direct avoids that)
-// - production domain → use relative path (nginx routes /api/ to the .NET backend)
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    const { hostname } = window.location;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return process.env.NEXT_PUBLIC_API_BASE_URL || "https://bellatrixinc.com";
-    }
-    return ""; // Same-origin: root-relative paths route via nginx
-  }
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "https://bellatrixinc.com";
-};
-
-const authApi = axios.create({
-  baseURL: getBaseUrl(),
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Request interceptor to add auth token
-authApi.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("adminToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
-
-// Response interceptor to handle token expiration
-authApi.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Clear all authentication data using centralized token manager
-      clearAuthData();
-      window.location.href = "/auth/login";
-    }
-    return Promise.reject(error);
-  },
-);
+const post = async (path, body) => (await http.request("POST", path, { body, unwrap: false })).raw;
 
 // Authentication API endpoints
 export const authService = {
   // Login
   login: async (credentials) => {
-    const response = await authApi.post("/api/Authentication/Login", {
+    const response = await post("/Authentication/Login", {
       emailOrUserName: credentials.email,
       password: credentials.password,
       rememberMe: credentials.rememberMe || false,
     });
-    return response.data;
+    return response;
   },
 
   // Registration
   register: async (userData) => {
-    const response = await authApi.post("/api/Authentication/Registration", {
+    const response = await post("/Authentication/Registration", {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
       username: userData.username,
     });
-    return response.data;
+    return response;
   },
 
   // Verification
   verify: async (verificationData) => {
-    const response = await authApi.post("/api/Authentication/Verification", {
+    const response = await post("/Authentication/Verification", {
       email: verificationData.email,
       verificationCode: verificationData.code,
     });
-    return response.data;
+    return response;
   },
 
   // Forgot Password
   forgotPassword: async (email) => {
-    const response = await authApi.post("/api/Authentication/Forgot-Password", {
+    const response = await post("/Authentication/Forgot-Password", {
       email: email,
     });
-    return response.data;
+    return response;
   },
 
   // Reset Password
   resetPassword: async (resetData) => {
-    const response = await authApi.post("/api/Authentication/Reset-Password", {
+    const response = await post("/Authentication/Reset-Password", {
       email: resetData.email,
       resetToken: resetData.resetToken,
       newPassword: resetData.newPassword,
       confirmPassword: resetData.confirmPassword,
     });
-    return response.data;
+    return response;
   },
 
   // Change Password (for authenticated users)
   changePassword: async (passwordData) => {
-    const response = await authApi.post("/api/Authentication/Change-Password", {
+    const response = await post("/Authentication/Change-Password", {
       currentPassword: passwordData.currentPassword,
       newPassword: passwordData.newPassword,
       confirmPassword: passwordData.confirmPassword,
     });
-    return response.data;
+    return response;
   },
 };
 
-export default authApi;
+export default authService;

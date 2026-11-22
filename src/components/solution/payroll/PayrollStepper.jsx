@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { staticContent } from "../../../services/StaticContentRepository";
 
 
 
@@ -201,9 +202,7 @@ const PayrollStepper = ({ steps = [], title, description }) => {
 
       try {
 
-        const response = await fetch("/data/payroll.json");
-
-        const data = await response.json();
+        const data = await staticContent.load("payroll");
 
         setDefaultData(data.coreWorkflow);
 

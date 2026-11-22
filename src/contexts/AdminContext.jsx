@@ -1,4 +1,5 @@
 import React, { createContext, useReducer, useEffect } from 'react';
+import { staticContent } from "../services/StaticContentRepository";
 
 // Action types
 const ACTIONS = {
@@ -121,9 +122,7 @@ export const AdminProvider = ({ children }) => {
 
     async fetchPageData(fileName) {
       try {
-        const response = await fetch(`/data/${fileName}`);
-        if (!response.ok) throw new Error('Failed to fetch page data');
-        return await response.json();
+        return await staticContent.load(fileName);
       } catch (error) {
         console.error('Error fetching page data:', error);
         return null;

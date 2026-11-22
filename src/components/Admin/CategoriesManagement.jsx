@@ -7,7 +7,7 @@ import {
   TrashIcon,
   ViewColumnsIcon,
 } from "@heroicons/react/24/outline";
-import { getApiBaseUrlWithApi } from "../../config/api.js";
+import { services, validate, schemas } from "../../services";
 import {
   Btn,
   ConfirmDialog,
@@ -21,16 +21,6 @@ import {
   Spinner,
   inputClass,
 } from "./ui";
-
-const API_BASE = `${getApiBaseUrlWithApi()}/Categories`;
-
-const authHeaders = () => {
-  const token = localStorage.getItem("adminToken");
-  return {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-};
 
 const extractList = (data) => {
   if (Array.isArray(data)) return data;
@@ -63,8 +53,7 @@ function CategoriesManagement() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await fetch(API_BASE, { headers: authHeaders() });
-      setCategories(extractList(await res.json()));
+      setCategories(extractList(await services.categories.list()));
     } catch {
       setCategories([]);
     } finally {
@@ -81,10 +70,7 @@ function CategoriesManagement() {
     const handler = setTimeout(async () => {
       setSearching(true);
       try {
-        const res = await fetch(`${API_BASE}/search?keyword=${encodeURIComponent(search)}`, {
-          headers: authHeaders(),
-        });
-        setCategories(extractList(await res.json()));
+        setCategories(extractList(await services.categories.search(search)));
       } catch {
         setCategories([]);
       } finally {
@@ -106,13 +92,12 @@ function CategoriesManagement() {
     setFormOpen(true);
     setFormLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/${cat.id}`, { headers: authHeaders() });
-      const data = await res.json();
-      if (data && data.data) {
+      const data = await services.categories.getById(cat.id);
+      if (data) {
         setForm({
-          name: data.data.name || "",
-          description: data.data.description || "",
-          sortOrder: data.data.sortOrder || 0,
+          name: data.name || "",
+          description: data.description || "",
+          sortOrder: data.sortOrder || 0,
         });
       }
     } catch {
@@ -126,8 +111,9 @@ function CategoriesManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = form.name.trim();
-    if (!name) {
-      toast.error("Category name is required");
+    const { valid, errors } = validate(schemas.categorySchema, { ...form, name });
+    if (!valid) {
+      toast.error(Object.values(errors)[0]);
       return;
     }
     const duplicate = categories.some(
@@ -141,24 +127,21 @@ function CategoriesManagement() {
     setSaving(true);
     const isEdit = editId !== null;
     try {
-      const res = await fetch(API_BASE, {
-        method: isEdit ? "PUT" : "POST",
-        headers: authHeaders(),
-        body: JSON.stringify(isEdit ? { id: editId, ...form, name } : { ...form, name }),
+      await services.categories.save({
+        ...(isEdit ? { id: editId } : {}),
+        ...form,
+        name,
+        sortOrder: Number(form.sortOrder) || 0,
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        toast.success(isEdit ? "Category updated successfully" : "Category added successfully");
-        setFormOpen(false);
-        fetchCategories();
-      } else if (isDuplicateError(data.message)) {
-        toast.error(`Category "${name}" already exists. Please choose a different name.`);
-      } else {
-        toast.error(data.message || `An error occurred while ${isEdit ? "updating" : "adding"} the category`);
-      }
+      toast.success(isEdit ? "Category updated successfully" : "Category added successfully");
+      setFormOpen(false);
+      fetchCategories();
     } catch (error) {
-      console.error("Save category error:", error);
-      toast.error(`Failed to ${isEdit ? "update" : "add"} category. Please try again.`);
+      toast.error(
+        isDuplicateError(error.message)
+          ? `Category "${name}" already exists. Please choose a different name.`
+          : error.message || `Failed to ${isEdit ? "update" : "add"} category. Please try again.`
+      );
     } finally {
       setSaving(false);
     }
@@ -168,20 +151,12 @@ function CategoriesManagement() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const res = await fetch(`${API_BASE}/${deleteTarget.id}`, {
-        method: "DELETE",
-        headers: authHeaders(),
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success("Category deleted successfully");
-        setDeleteTarget(null);
-        fetchCategories();
-      } else {
-        toast.error(data.message || "An error occurred while deleting");
-      }
-    } catch {
-      toast.error("Failed to delete category");
+      await services.categories.remove(deleteTarget.id);
+      toast.success("Category deleted successfully");
+      setDeleteTarget(null);
+      fetchCategories();
+    } catch (error) {
+      toast.error(error.message || "Failed to delete category");
     } finally {
       setDeleting(false);
     }

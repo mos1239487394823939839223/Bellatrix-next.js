@@ -1,4 +1,5 @@
 import { cachedFetch } from "../lib/apiCache";
+import { staticContent } from "../services/StaticContentRepository";
 
 const TEN_MINUTES = 10 * 60 * 1000;
 
@@ -10,7 +11,7 @@ const TEN_MINUTES = 10 * 60 * 1000;
 export function loadImplementationData() {
   return cachedFetch(
     "public:data:Implementation.json",
-    () => fetch("/data/Implementation.json").then((r) => r.json()),
+    () => staticContent.load("Implementation"),
     TEN_MINUTES
   );
 }

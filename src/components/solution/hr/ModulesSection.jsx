@@ -76,7 +76,7 @@ const ModulesSection = ({ data = {} }) => {
 
           </header>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 sm:auto-rows-fr gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-6 lg:gap-8">
 
             {modules.map((m, idx) => (
 
@@ -84,20 +84,20 @@ const ModulesSection = ({ data = {} }) => {
 
                 key={idx}
 
-                className="bg-[var(--color-text-inverse)]/5 backdrop-blur-sm rounded-2xl shadow-2xl p-10 flex flex-col items-center text-center border border-[var(--color-text-inverse)]/10 hover:border-[var(--color-primary)] hover:shadow-[var(--color-primary)]/20 hover:shadow-2xl transition-all duration-300 animate-fade-in-up"
+                className="bg-[var(--color-text-inverse)]/5 backdrop-blur-sm rounded-2xl shadow-2xl p-8 h-full flex flex-col items-center text-center border border-[var(--color-text-inverse)]/10 hover:border-[var(--color-primary)] hover:shadow-[var(--color-primary)]/20 hover:shadow-2xl transition-all duration-300 animate-fade-in-up"
 
                 role="article"
 
                 aria-label={`HR Module: ${m.title || "Module"}`}
 
               >
-                <h3 className="font-bold text-xl text-[var(--color-text-inverse)] mb-3">
+                <h3 className="font-bold text-xl leading-tight min-h-[2.5em] flex items-center justify-center text-[var(--color-text-inverse)] mb-3">
 
                   {m.title || "Module"}
 
                 </h3>
 
-                <p className="text-[var(--color-text-light)] text-base">
+                <p className="text-[var(--color-text-light)] text-base leading-relaxed">
 
                   {m.description}
 

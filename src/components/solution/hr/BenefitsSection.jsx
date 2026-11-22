@@ -56,11 +56,11 @@ const BenefitsSection = ({
               {displayData.description}
             </p>
           </header>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 sm:auto-rows-fr gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-6 lg:gap-8">
             {displayData.features.map((b, idx) => (
               <article
                 key={idx}
-                className={`bg-[var(--color-bg-primary)] rounded-2xl shadow-md p-8 flex flex-col items-center text-center border border-[var(--color-primary)]/20 hover:border-[var(--color-primary)] hover:shadow-xl transition-all duration-[2500ms] animate-fade-in-up ${
+                className={`bg-[var(--color-bg-primary)] rounded-2xl shadow-md p-8 h-full flex flex-col items-center text-center border border-[var(--color-primary)]/20 hover:border-[var(--color-primary)] hover:shadow-xl transition-all duration-[2500ms] animate-fade-in-up ${
                   activeBenefitIdx === idx
                     ? "scale-105 z-10 shadow-2xl border-[var(--color-primary)]"
                     : "scale-100"
@@ -72,10 +72,10 @@ const BenefitsSection = ({
                 role="article"
                 aria-label={`HR Benefit: ${b.title || "HR Feature"}`}
               >
-                <h3 className="font-bold text-2xl text-[var(--color-primary-dark)] mb-4">
+                <h3 className="font-bold text-xl lg:text-2xl leading-tight min-h-[2.5em] flex items-center justify-center text-[var(--color-primary-dark)] mb-3">
                   {b.title}
                 </h3>
-                <p className="text-[var(--color-text-secondary)] text-lg">
+                <p className="text-[var(--color-text-secondary)] text-base lg:text-lg leading-relaxed">
                   {b.desc || b.description}
                 </p>
               </article>

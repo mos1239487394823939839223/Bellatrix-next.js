@@ -60,20 +60,20 @@ const UseCasesSection = (props) => {
             )}
             <div className="mx-auto w-16 h-1 bg-[var(--color-primary)] rounded-full"></div>
           </header>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-fr gap-6">
             {useCases.length > 0 ? (
               useCases.map((u, idx) => (
                 <article
                   key={idx}
-                  className="bg-[var(--color-bg-primary)] rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-[var(--color-border-primary)] transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+                  className="bg-[var(--color-bg-primary)] rounded-2xl shadow-lg p-7 h-full flex flex-col items-center text-center border border-[var(--color-border-primary)] transition-shadow duration-300 hover:shadow-xl"
                   role="article"
                   aria-label={`HR Use Case: ${u.title}`}
                 >
-                  <h3 className="font-bold text-lg text-[var(--color-primary-dark)] mb-2">
+                  <h3 className="font-bold text-lg leading-tight min-h-[2.5em] flex items-center justify-center text-[var(--color-primary-dark)] mb-3">
                     {u.title}
                   </h3>
                   {u.description && (
-                    <p className="text-[var(--color-text-secondary)] text-sm">
+                    <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed">
                       {u.description}
                     </p>
                   )}

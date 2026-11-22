@@ -140,7 +140,7 @@ const HeroSection = (props) => {
           const media = displayData.backgroundVideo || "";
           const isVideo = /\.(mp4|webm)(\?|#|$)/i.test(media);
           if (isVideo) {
-            // Decorative video: skipped for Data Saver / reduced motion (section gradient shows instead)
+            // Decorative video: skipped for Data Saver / 2G (section gradient shows instead)
             const poster = getPosterSrc(media);
             return (
               <>

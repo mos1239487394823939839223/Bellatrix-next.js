@@ -17,19 +17,19 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   const [reduceMotion, setReduceMotion] = useState(false);
   const sectionRef = useRef(null);
   const { openCTAModal } = useCTAModal();
-  // Video only after hydration and not for Data Saver / reduced-motion visitors
+  // Video only after hydration and not for Data Saver / 2G visitors
   const allowVideo = useBackgroundVideo();
   // Placeholder is part of the server HTML (visible from first paint); after
   // hydration it stays only while a video is actually on its way.
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
-  // Respect the OS "reduce motion" setting: no auto-advancing slides, no autoplay video
+  // Respect the OS "reduce motion" setting: no auto-advancing slides or parallax
+  // (the muted ambient video still plays — see useBackgroundVideo)
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {
       setReduceMotion(mq.matches);
-      if (mq.matches) setIsPlaying(false);
     };
     update();
     mq.addEventListener("change", update);
@@ -90,7 +90,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
   const stats = propsStats.length > 0 ? propsStats : (data?.stats || []);
   const currentVideoSrc = slides[currentSlide]?.video || "/Videos/implementation/homepage_hero.mp4";
   // Still frame: shown while the video loads, when autoplay is blocked (iOS Low
-  // Power Mode) and instead of the video for reduce-motion / Data Saver visitors
+  // Power Mode) and instead of the video for Data Saver visitors
   const posterSrc = getPosterSrc(currentVideoSrc);
   const [posterReady, setPosterReady] = useState(false);
   useEffect(() => setPosterReady(false), [posterSrc]);
@@ -107,6 +107,20 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
     v.setAttribute("playsinline", "");
     const p = v.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
+
+    // iOS Low Power Mode blocks autoplay; a touch or scroll anywhere counts as a
+    // user gesture, so start the video then (the poster frame shows until it does).
+    const kick = () => {
+      const el = videoRef.current;
+      if (el && el.paused) el.play().catch(() => {});
+    };
+    const opts = { passive: true, once: true };
+    window.addEventListener("touchstart", kick, opts);
+    window.addEventListener("scroll", kick, opts);
+    return () => {
+      window.removeEventListener("touchstart", kick, opts);
+      window.removeEventListener("scroll", kick, opts);
+    };
   }, [allowVideo, currentVideoSrc]);
 
   // Play the current video with autoplay-restriction handling
@@ -284,7 +298,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
         }`}
 
         onLoadedData={() => {
-          if (!reduceMotion) tryPlayVideo(videoRef.current);
+          tryPlayVideo(videoRef.current);
         }}
         // "playing" = a real frame is being shown. Not "error": on desktop the phone
         // <source> is skipped with an error event, which used to fade out the backdrop
@@ -309,7 +323,7 @@ const Hero = memo(({ slides: propsSlides = [], stats: propsStats = [], data }) =
       {/* Content */}
       <div
         className="relative z-10 min-h-[100dvh] flex items-center justify-center pt-20 pb-12"
-        onPointerDown={reduceMotion ? undefined : handleUserInteraction}
+        onPointerDown={handleUserInteraction}
       >
 
         <div className="w-full max-w-6xl mx-auto px-6 hero-parallax-content">

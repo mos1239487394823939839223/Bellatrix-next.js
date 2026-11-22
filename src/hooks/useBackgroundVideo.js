@@ -6,9 +6,12 @@ import { useEffect, useState } from "react";
  *
  * Returns false on the server and on first render, so the <video> is not in the
  * server HTML and doesn't start downloading before the page is interactive.
- * After mount it returns true unless the visitor asked for less:
- *   - OS "reduce motion" setting
+ * After mount it returns true unless the visitor asked for less data:
  *   - Data Saver / Save-Data, or a 2G-class connection
+ *
+ * The OS "reduce motion" setting is intentionally not a gate: these are slow,
+ * muted, ambient loops (no flashing or parallax), and many phones have the
+ * setting on, which left them with a still image instead of the hero video.
  *
  * Hero videos on this site are 3–20 MB, so this matters on phones.
  */
@@ -16,20 +19,17 @@ export function useBackgroundVideo() {
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
     const evaluate = () => {
       const saveData = Boolean(connection?.saveData);
       const slow = /(^|-)2g$/.test(connection?.effectiveType || "");
-      setAllowed(!motion.matches && !saveData && !slow);
+      setAllowed(!saveData && !slow);
     };
 
     evaluate();
-    motion.addEventListener("change", evaluate);
     connection?.addEventListener?.("change", evaluate);
     return () => {
-      motion.removeEventListener("change", evaluate);
       connection?.removeEventListener?.("change", evaluate);
     };
   }, []);

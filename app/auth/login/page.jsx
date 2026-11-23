@@ -1,6 +1,6 @@
 'use client'
 import { Suspense } from 'react'
-import Login from '../../../src/page-components/auth/Login'
+import Login from '../../../src/views/auth/Login'
 
 export default function LoginPage() {
   return (

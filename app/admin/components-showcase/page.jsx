@@ -1,5 +1,5 @@
 'use client'
-import ComponentsShowcase from '../../../src/page-components/Admin/ComponentsShowcase'
+import ComponentsShowcase from '../../../src/views/Admin/ComponentsShowcase'
 
 export default function ComponentsShowcasePage() {
   return <ComponentsShowcase />

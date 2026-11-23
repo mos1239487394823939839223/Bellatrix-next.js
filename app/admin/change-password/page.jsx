@@ -1,5 +1,5 @@
 'use client'
-import ChangePassword from '../../../src/page-components/auth/ChangePassword'
+import ChangePassword from '../../../src/views/auth/ChangePassword'
 
 export default function ChangePasswordPage() {
   return <ChangePassword />

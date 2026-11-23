@@ -1,5 +1,5 @@
 'use client'
-import Register from '../../../src/page-components/auth/Register'
+import Register from '../../../src/views/auth/Register'
 
 export default function RegisterPage() {
   return <Register />

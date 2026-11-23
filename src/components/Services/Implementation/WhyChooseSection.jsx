@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { loadImplementationData } from "../../../data/implementationDataLoader";
 import OptimizedImg from "../../OptimizedImg";
+import { Section, SectionHeader } from "../../site";
 
 const WhyChooseSection = (props) => {
   const [defaultData, setDefaultData] = useState(null);
@@ -67,24 +68,23 @@ const WhyChooseSection = (props) => {
   return (
     <>
 
-      <section
-        className="py-12 relative overflow-hidden animate-background-glow"
-        style={{
-          backgroundColor: "#001038",
-        }}
+      <Section
+        tone="navy"
+        padding="sm"
+        width="container"
+        containerClassName="px-6 relative z-10"
+        className="relative overflow-hidden animate-background-glow"
+        style={{ backgroundColor: "#001038" }}
       >
-        <div className="container mx-auto px-6 relative z-10">
           {/* Section Header */}
 
-          <header className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              {displayData.title}
-            </h2>
-
-            <p className="text-lg leading-relaxed max-w-3xl mx-auto implementation-whychoose-subtitle">
-              {displayData.subtitle}
-            </p>
-          </header>
+          <SectionHeader
+            title={displayData.title}
+            description={displayData.subtitle}
+            tone="none"
+            titleClassName="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
+            descriptionClassName="text-lg leading-relaxed max-w-3xl mx-auto implementation-whychoose-subtitle"
+          />
 
           <div className="flex flex-col lg:flex-row items-center gap-8">
             {/* Features Content - Left Side */}
@@ -180,8 +180,7 @@ const WhyChooseSection = (props) => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+      </Section>
     </>
   );
 };

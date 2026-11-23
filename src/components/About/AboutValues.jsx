@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Section, SectionHeader, CardGrid } from "../site";
 
 const AboutValues = ({ values = [], data = {} }) => {
   // Static fallback data (CMS data comes via props)
@@ -54,10 +55,13 @@ const AboutValues = ({ values = [], data = {} }) => {
       : defaultValues;
 
   return (
-    <section
-      className="py-20 relative overflow-hidden animate-background-glow theme-bg-animated bg-[var(--color-brand-dark-navy)]"
-    >
-      <div className="absolute inset-0 opacity-10">
+    <Section
+      tone="navy"
+      width="container"
+      containerClassName="px-6"
+      className="overflow-hidden animate-background-glow theme-bg-animated bg-[var(--color-brand-dark-navy)]"
+      backdrop={
+        <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full">
           <svg
             width="100%"
@@ -79,16 +83,17 @@ const AboutValues = ({ values = [], data = {} }) => {
           </svg>
         </div>
       </div>
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            {displayData.title}
-          </h2>
-          <p className="text-lg leading-relaxed max-w-3xl mx-auto about-values-description">
-            {displayData.description}
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-8">
+      }
+    >
+      <SectionHeader
+        title={displayData.title}
+        description={displayData.description}
+        tone="none"
+        className="mb-16"
+        titleClassName="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
+        descriptionClassName="text-lg leading-relaxed max-w-3xl mx-auto about-values-description"
+      />
+      <CardGrid columns={{ base: null, md: 2 }} gap="gap-8" equalHeight={false}>
           {displayValues.map((value, index) => (
             <motion.div
               key={index}
@@ -112,9 +117,8 @@ const AboutValues = ({ values = [], data = {} }) => {
               </div>
             </motion.div>
           ))}
-        </div>
-      </div>
-    </section>
+        </CardGrid>
+    </Section>
   );
 };
 

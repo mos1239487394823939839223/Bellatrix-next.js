@@ -14,7 +14,7 @@ arranges.
 | `src/services` | `index.js` container; `domain.js` service classes (Pages, Components, Media, Messages, Categories, Settings, Auth, Dashboard); `StaticContentRepository` | Components use `services.*`, never `fetch` directly |
 | `src/services/legacy` | Older API modules (`pagesAPI`, `settingsApi`, `mediaAPI`…) kept for existing screens | Thin wrappers over the HttpClient; move screens to `services.*` over time |
 | `src/sections` | `sections.js` (the one list of sections), `registry.js` (lookup and loading), renderer adapters (`componentMap`, `ssrComponentMap`, `previewRegistry`), `schemas/` (admin form fields per section) | A section is registered **once**, in `sections.js` |
-| `src/components/site` | **Reusable section kit**: `Section`, `SectionHeader`, `CardGrid`, `FeatureCard`, `Accordion`, `CtaBanner` | Build new sections from these |
+| `src/components/site` | **Reusable section kit**: `Section`, `SectionHeader`, `CardGrid`, `FeatureCard`, `Accordion`, `CtaBanner`, `GlowImageFrame` | Build new sections from these |
 | `src/components` | UI: site sections (About/, solution/, industries/, Services/, Support/…), admin-form UI (`UI/`), admin screens (`Admin/`) | Presentational; data comes from props or services |
 | `src/views` | Screen-level components used by `app/` routes (admin screens, auth screens) | |
 | `src/contexts` | React contexts and providers (theme, CTA modal, admin, data) | |
@@ -48,7 +48,9 @@ import { Section, SectionHeader, CardGrid, FeatureCard, Accordion, CtaBanner } f
 - `SectionHeader highlight="last"` colours the title's last word (`"rest"` colours every word after the first). For sections that set their own colours, use `tone="none"` with your own `titleClassName`.
 - `Section` also takes `tone="plain"` (set the background yourself), `width="container"`, `padding="sm"` and a `backdrop` for decorative layers.
 
-Sections already built on the kit: HR Modules (also used on Payroll), HR Use Cases, HR Why Choose, HR FAQ, HR CTA, the Payroll FAQ, Retail Features (also used on Professional Services), Support What We Offer, About What Sets Us Apart, and Training Key Modules.
+Sections already built on the kit: HR Modules (also used on Payroll), HR Use Cases, HR Why Choose, HR FAQ, HR CTA, the Payroll FAQ, Retail Features (also used on Professional Services), Support What We Offer, About What Sets Us Apart / Mission / Values, Training Key Modules / Programs / Why Choose, Implementation Why Choose, and How It Works (HR, Payroll, E-Invoicing).
+
+`GlowImageFrame` is the decorative image frame used by the Training sections (`src`, `alt`, `fallbackSrc`, optional `badge`).
 
 ## Adding a page section
 

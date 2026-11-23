@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { Section, SectionHeader } from "../site";
 
 const AboutMission = ({ data }) => {
   // Static fallback data (CMS data comes via props)
@@ -42,15 +43,17 @@ const AboutMission = ({ data }) => {
 
 
   return (
-    <section id="about-section" className="bg-white py-20">
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="text-center mb-14">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-3 text-blue-900 tracking-tight">{missionData.title || "About Bellatrix"}</h2>
-          {missionData.subtitle && (
-            <p className="text-lg max-w-2xl mx-auto mb-3 text-blue-700">{missionData.subtitle}</p>
-          )}
-          <p className="text-base max-w-2xl mx-auto text-gray-600">{missionData.description || "We are a leading Bellatrix consultancy dedicated to transforming businesses through innovative technology solutions and strategic digital transformation initiatives."}</p>
-        </div>
+    <Section id="about-section" tone="plain" band={false} width="container" containerClassName="px-4 md:px-8" className="bg-white">
+        <SectionHeader
+          title={missionData.title || "About Bellatrix"}
+          description={missionData.subtitle}
+          tone="none"
+          className="mb-14"
+          titleClassName="text-4xl md:text-5xl font-extrabold mb-3 text-blue-900 tracking-tight"
+          descriptionClassName="text-lg max-w-2xl mx-auto mb-3 text-blue-700"
+        >
+          <p className="text-base max-w-2xl mx-auto text-gray-600">{missionData.description || "We are a leading Bellatrix consultancy dedicated to transforming businesses through innovative technology solutions."}</p>
+        </SectionHeader>
         <div className="flex flex-col md:flex-row md:items-start gap-10 md:gap-16">
           {/* Image - Left Side */}
           <div className="flex-1 flex justify-center md:sticky md:top-28">
@@ -128,8 +131,7 @@ const AboutMission = ({ data }) => {
             )}
           </div>
         </div>
-      </div>
-    </section>
+    </Section>
   );
 };
 

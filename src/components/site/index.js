@@ -8,4 +8,5 @@ export { default as CardGrid } from "./CardGrid";
 export { default as FeatureCard } from "./FeatureCard";
 export { default as Accordion } from "./Accordion";
 export { default as CtaBanner } from "./CtaBanner";
+export { default as GlowImageFrame } from "./GlowImageFrame";
 export { cn } from "./cn";

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { staticContent } from "../../../services/StaticContentRepository";
+import { Section, SectionHeader } from "../../site";
 
 
 
@@ -75,45 +76,11 @@ const PayrollHowItWorks = ({ data }) => {
     <>
 
 
-      <section
-
-        className="py-20 relative overflow-hidden animate-background-glow"
-
-        style={{
-
-          backgroundColor: "var(--color-brand-dark-navy)",
-
-        }}
-
-      >
-
-        {/* Decorative Background */}
-
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary-dark)]/10 via-transparent to-[var(--color-primary)]/10"></div>
-
-        </div>
-
-
-
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
+      <Section tone="navy" glow containerClassName="container px-4 sm:px-6" className="overflow-hidden animate-background-glow">
 
           {/* Title */}
 
-          {sectionData.title && (
-
-            <header className="text-center mb-10">
-
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text-inverse)]">
-
-                {sectionData.title}
-
-              </h2>
-
-            </header>
-
-          )}
+          <SectionHeader title={sectionData.title} tone="dark" titleClassName="text-3xl md:text-4xl font-bold" />
 
 
 
@@ -229,9 +196,7 @@ const PayrollHowItWorks = ({ data }) => {
 
           </div>
 
-        </div>
-
-      </section>
+        </Section>
 
     </>
 

@@ -14,7 +14,8 @@ arranges.
 | `src/services` | `index.js` container; `domain.js` service classes (Pages, Components, Media, Messages, Categories, Settings, Auth, Dashboard); `StaticContentRepository` | Components use `services.*`, never `fetch` directly |
 | `src/services/legacy` | Older API modules (`pagesAPI`, `settingsApi`, `mediaAPI`…) kept for existing screens | Thin wrappers over the HttpClient; move screens to `services.*` over time |
 | `src/sections` | `sections.js` (the one list of sections), `registry.js` (lookup and loading), renderer adapters (`componentMap`, `ssrComponentMap`, `previewRegistry`), `schemas/` (admin form fields per section) | A section is registered **once**, in `sections.js` |
-| `src/components` | UI: site sections (About/, solution/, industries/, Services/, Support/…), shared UI (`UI/`), admin UI (`Admin/`) | Presentational; data comes from props or services |
+| `src/components/site` | **Reusable section kit**: `Section`, `SectionHeader`, `CardGrid`, `FeatureCard`, `Accordion`, `CtaBanner` | Build new sections from these |
+| `src/components` | UI: site sections (About/, solution/, industries/, Services/, Support/…), admin-form UI (`UI/`), admin screens (`Admin/`) | Presentational; data comes from props or services |
 | `src/views` | Screen-level components used by `app/` routes (admin screens, auth screens) | |
 | `src/contexts` | React contexts and providers (theme, CTA modal, admin, data) | |
 | `src/hooks` | Reusable hooks (`useAuth`, `useBackgroundVideo`…) | |
@@ -23,6 +24,28 @@ arranges.
 | `src/utils` | Pure helpers (sanitizer, normalizeProps, cache busting…) | No React, no HTTP |
 | `src/store` | Redux slices used by older screens | |
 | `src/styles` | Theme and animation CSS | |
+
+## Building a section with the kit
+
+```jsx
+import { Section, SectionHeader, CardGrid, FeatureCard, Accordion, CtaBanner } from "../../site";
+
+<Section tone="navy" glow>                                  {/* light | muted | navy */}
+  <SectionHeader title={title} description={intro} tone="dark" />
+  <CardGrid columns={{ sm: 2, lg: 3 }}>                     {/* equal-height rows */}
+    {items.map((i) => <FeatureCard key={i.title} variant="glass" title={i.title} description={i.text} />)}
+  </CardGrid>
+</Section>
+
+<Accordion items={faqs} variant="card" />                   {/* accessible FAQ, card | line */}
+<CtaBanner title="Ready?" description="…" buttonText="Talk to an expert" />
+```
+
+- `Section` sets the background, spacing and container, and the `data-theme` the navbar uses to pick light or dark text.
+- `SectionHeader` renders simple CMS formatting in titles safely.
+- Every piece accepts `className` / `titleClassName`-style overrides for one-off styling.
+
+Sections already built on the kit: HR Modules (also used on Payroll), HR Use Cases, HR Why Choose, HR FAQ, HR CTA, and the Payroll FAQ.
 
 ## Adding a page section
 

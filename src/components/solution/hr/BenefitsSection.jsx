@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import CTAButton from "../../CTAButton";
+import { Section, SectionHeader, CardGrid, FeatureCard } from "../../site";
 
 const BenefitsSection = ({
   data,
@@ -45,65 +46,42 @@ const BenefitsSection = ({
   });
 
   return (
-    <>
-      <section className="py-20 bg-[var(--color-bg-secondary)] animate-fade-in-up light-section">
-        <div className="max-w-6xl mx-auto px-4">
-          <header className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-4 text-[var(--color-primary-dark)]">
-              {displayData.title}
-            </h2>
-            <p className="text-lg text-[var(--color-text-secondary)] max-w-2xl mx-auto">
-              {displayData.description}
-            </p>
-          </header>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-6 lg:gap-8">
-            {displayData.features.map((b, idx) => (
-              <article
-                key={idx}
-                className={`bg-[var(--color-bg-primary)] rounded-2xl shadow-md p-8 h-full flex flex-col items-center text-center border border-[var(--color-primary)]/20 hover:border-[var(--color-primary)] hover:shadow-xl transition-all duration-[2500ms] animate-fade-in-up ${
-                  activeBenefitIdx === idx
-                    ? "scale-105 z-10 shadow-2xl border-[var(--color-primary)]"
-                    : "scale-100"
-                }`}
-                style={{
-                  transition:
-                    "transform 2.5s cubic-bezier(.4,1,.6,1), box-shadow 2.5s, border-color 2.5s",
-                }}
-                role="article"
-                aria-label={`HR Benefit: ${b.title || "HR Feature"}`}
-              >
-                <h3 className="font-bold text-xl lg:text-2xl leading-tight min-h-[2.5em] flex items-center justify-center text-[var(--color-primary-dark)] mb-3">
-                  {b.title}
-                </h3>
-                <p className="text-[var(--color-text-secondary)] text-base lg:text-lg leading-relaxed">
-                  {b.desc || b.description}
-                </p>
-              </article>
-            ))}
-          </div>
-          <div className="flex justify-center mt-12">
-            <CTAButton
-              variant={displayData.ctaButton.variant || "primary"}
-              size="lg"
-              className="shadow-lg"
-              onClick={(e) => {
-                if (onShowDemo) {
-                  e.preventDefault();
-                  onShowDemo();
-                }
-              }}
-              modalConfig={{
-                title: displayData.ctaButton.modalTitle || "See Bellatrix HR in Action",
-                subtitle: displayData.ctaButton.modalSubtitle || "Let's show you how our HR platform can transform your operations",
-                icon: ""
-              }}
-            >
-              {displayData.ctaButton.text}
-            </CTAButton>
-          </div>
-        </div>
-      </section>
-    </>
+    <Section tone="muted" className="animate-fade-in-up">
+      <SectionHeader title={displayData.title} description={displayData.description} />
+      <CardGrid columns={{ sm: 2, lg: 3 }}>
+        {displayData.features.map((b, idx) => (
+          <FeatureCard
+            key={idx}
+            variant="outline"
+            title={b.title}
+            description={b.desc || b.description}
+            ariaLabel={`HR Benefit: ${b.title || "HR Feature"}`}
+            className={activeBenefitIdx === idx ? "scale-105 z-10 shadow-2xl border-[var(--color-primary)]" : "scale-100"}
+            style={{ transition: "transform 2.5s cubic-bezier(.4,1,.6,1), box-shadow 2.5s, border-color 2.5s" }}
+          />
+        ))}
+      </CardGrid>
+      <div className="flex justify-center mt-12">
+        <CTAButton
+          variant={displayData.ctaButton.variant || "primary"}
+          size="lg"
+          className="shadow-lg"
+          onClick={(e) => {
+            if (onShowDemo) {
+              e.preventDefault();
+              onShowDemo();
+            }
+          }}
+          modalConfig={{
+            title: displayData.ctaButton.modalTitle || "See Bellatrix HR in Action",
+            subtitle: displayData.ctaButton.modalSubtitle || "Let's show you how our HR platform can transform your operations",
+            icon: "",
+          }}
+        >
+          {displayData.ctaButton.text}
+        </CTAButton>
+      </div>
+    </Section>
   );
 };
 

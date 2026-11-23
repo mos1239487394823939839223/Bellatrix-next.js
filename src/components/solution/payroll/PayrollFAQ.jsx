@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { staticContent } from "../../../services/StaticContentRepository";
+import { Section, SectionHeader, Accordion } from "../../site";
 
 
 
@@ -150,107 +151,19 @@ const PayrollFAQ = ({ faqData = {} }) => {
 
 
 
-  const toggleFAQ = (index) => {
-
-    setOpenIndex(openIndex === index ? null : index);
-
-  };
 
 
 
   return (
-
-    <>
-
-
-      <section className="py-20 bg-[var(--color-bg-secondary)]">
-
-        <div className="container mx-auto px-6 max-w-4xl">
-
-          <header className="text-center mb-12">
-
-            <h2 className="payroll-faq-title text-3xl md:text-4xl font-bold text-[var(--color-primary-dark)]">
-
-              {displayFaqData.title}
-
-            </h2>
-
-          </header>
-
-
-
-          <div className="space-y-4">
-
-            {displayFaqData.items.map((item, index) => (
-
-              <article
-
-                key={index}
-
-                className="bg-[var(--color-bg-primary)] rounded-lg shadow-md border border-[var(--color-border-primary)] overflow-hidden"
-
-                role="article"
-
-                aria-label={`FAQ: ${item.question || item.q || "Question"}`}
-
-              >
-
-                <button
-
-                  onClick={() => toggleFAQ(index)}
-
-                  className="w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none"
-
-                  aria-expanded={openIndex === index}
-
-                  aria-controls={`faq-answer-${index}`}
-
-                >
-
-                  <span className="text-lg font-medium text-[var(--color-text-primary)]">
-
-                    {item.question || item.q || "Question"}
-
-                  </span>
-
-                  <span className="ml-4 transform transition-transform duration-200">
-
-                    {openIndex === index ? "−" : "+"}
-
-                  </span>
-
-                </button>
-
-
-
-                {openIndex === index && (
-
-                  <div id={`faq-answer-${index}`} className="px-6 pb-4">
-
-                    <p className="text-[var(--color-text-secondary)] leading-relaxed">
-
-                      {item.answer || item.a || "Answer"}
-
-                    </p>
-
-                  </div>
-
-                )}
-
-              </article>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </>
-
+    <Section tone="muted" band={false} width="md" containerClassName="container px-6">
+      <SectionHeader
+        title={displayFaqData.title}
+        className="mb-12"
+        titleClassName="payroll-faq-title text-3xl md:text-4xl font-bold"
+      />
+      <Accordion variant="card" items={displayFaqData.items} openIndex={openIndex} onToggle={(i) => setOpenIndex(i)} />
+    </Section>
   );
-
 };
 
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { Section, SectionHeader, CardGrid, FeatureCard } from "../../site";
 
 
 
@@ -40,83 +41,21 @@ const ModulesSection = ({ data = {} }) => {
   });
 
   return (
-
-    <>
-
-
-      <section
-
-        className="py-20 animate-fade-in-up relative"
-
-        style={{ backgroundColor: "var(--color-brand-dark-navy)" }}
-
-      >
-
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary-dark)]/10 via-transparent to-[var(--color-primary)]/10 pointer-events-none"></div>
-
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-
-          <header className="text-center mb-10">
-
-            <h2 className="text-3xl font-bold mb-6 text-[var(--color-text-inverse)]">
-
-              {title}
-
-            </h2>
-
-            {description && (
-
-              <p className="text-lg text-[var(--color-white)] max-w-2xl mx-auto">
-
-                {description}
-
-              </p>
-
-            )}
-
-          </header>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-6 lg:gap-8">
-
-            {modules.map((m, idx) => (
-
-              <article
-
-                key={idx}
-
-                className="bg-[var(--color-text-inverse)]/5 backdrop-blur-sm rounded-2xl shadow-2xl p-8 h-full flex flex-col items-center text-center border border-[var(--color-text-inverse)]/10 hover:border-[var(--color-primary)] hover:shadow-[var(--color-primary)]/20 hover:shadow-2xl transition-all duration-300 animate-fade-in-up"
-
-                role="article"
-
-                aria-label={`HR Module: ${m.title || "Module"}`}
-
-              >
-                <h3 className="font-bold text-xl leading-tight min-h-[2.5em] flex items-center justify-center text-[var(--color-text-inverse)] mb-3">
-
-                  {m.title || "Module"}
-
-                </h3>
-
-                <p className="text-[var(--color-text-light)] text-base leading-relaxed">
-
-                  {m.description}
-
-                </p>
-
-              </article>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </>
-
+    <Section tone="navy" glow className="animate-fade-in-up">
+      <SectionHeader title={title} description={description} tone="dark" titleClassName="text-3xl font-bold mb-6" />
+      <CardGrid columns={{ sm: 2, lg: 3 }}>
+        {modules.map((m, idx) => (
+          <FeatureCard
+            key={idx}
+            variant="glass"
+            title={m.title || "Module"}
+            description={m.description}
+            ariaLabel={`HR Module: ${m.title || "Module"}`}
+          />
+        ))}
+      </CardGrid>
+    </Section>
   );
-
 };
 
 

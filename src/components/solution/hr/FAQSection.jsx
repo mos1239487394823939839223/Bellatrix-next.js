@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { staticContent } from "../../../services/StaticContentRepository";
+import { Section, SectionHeader, Accordion } from "../../site";
 
 const FAQSection = ({ data, openFAQ, setOpenFAQ }) => {
   // استخدم useState داخلي إذا لم يتم تمرير setOpenFAQ
@@ -77,60 +78,16 @@ const FAQSection = ({ data, openFAQ, setOpenFAQ }) => {
     timestamp: new Date().toISOString(),
   });
   return (
-    <>
-      <section className="py-20 bg-[var(--color-bg-primary)]/90 animate-fade-in-up light-section">
-        <div className="max-w-4xl mx-auto px-4">
-          <header className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-[var(--color-primary-dark)]">
-              {displayData.faq.title}
-            </h2>
-          </header>
-          <div className="space-y-6">
-            {(displayData.faq?.items || []).map((faq, idx) => (
-              <article
-                key={idx}
-                className="border-b border-[var(--color-primary)]/20 pb-4"
-                role="article"
-                aria-label={`FAQ: ${faq.q || "Question"}`}
-              >
-                <button
-                  className="w-full text-left flex justify-between items-center text-lg font-medium text-[var(--color-primary-dark)] focus:outline-none"
-                  onClick={() => {
-                    if (isControlled) {
-                      setOpenFAQ(openFAQ === idx ? null : idx);
-                    } else {
-                      setInternalOpenFAQ(internalOpenFAQ === idx ? null : idx);
-                    }
-                  }}
-                  aria-expanded={
-                    isControlled ? openFAQ === idx : internalOpenFAQ === idx
-                  }
-                  aria-controls={`faq-answer-${idx}`}
-                >
-                  <span>{faq.q || "(No question provided)"}</span>
-                  <span
-                    className={`ml-4 transition-transform ${
-                      (isControlled ? openFAQ === idx : internalOpenFAQ === idx) ? "rotate-180" : ""
-                    }`}
-                    aria-hidden="true"
-                  >
-                    ▼
-                  </span>
-                </button>
-                {(isControlled ? openFAQ === idx : internalOpenFAQ === idx) && (
-                  <div
-                    id={`faq-answer-${idx}`}
-                    className="mt-2 text-[var(--color-text-secondary)] animate-fade-in-up"
-                  >
-                    {faq.a || "(No answer provided)"}
-                  </div>
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+    <Section tone="light" width="md" className="bg-[var(--color-bg-primary)]/90 animate-fade-in-up">
+      <SectionHeader title={displayData.faq.title} titleClassName="text-3xl font-bold" />
+      <Accordion
+        variant="line"
+        items={displayData.faq?.items || []}
+        {...(isControlled
+          ? { openIndex: openFAQ, onToggle: setOpenFAQ }
+          : { openIndex: internalOpenFAQ, onToggle: setInternalOpenFAQ })}
+      />
+    </Section>
   );
 };
 

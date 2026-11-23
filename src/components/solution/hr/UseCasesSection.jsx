@@ -1,4 +1,5 @@
 import React from "react";
+import { Section, SectionHeader, CardGrid, FeatureCard } from "../../site";
 
 const UseCasesSection = (props) => {
   // Handle both { data: ... } usage and spread props usage from LivePreview
@@ -46,48 +47,30 @@ const UseCasesSection = (props) => {
   });
   
   return (
-    <>
-      <section className="py-20 bg-[var(--color-bg-secondary)] animate-fade-in-up light-section">
-        <div className="max-w-6xl mx-auto px-4">
-          <header className="text-center mb-10">
-            <h2 className="text-3xl font-extrabold mb-3 text-[var(--color-primary-dark)]">
-              {title}
-            </h2>
-            {description && (
-              <p className="text-lg text-[var(--color-text-secondary)] mb-3">
-                {description}
-              </p>
-            )}
-            <div className="mx-auto w-16 h-1 bg-[var(--color-primary)] rounded-full"></div>
-          </header>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-fr gap-6">
-            {useCases.length > 0 ? (
-              useCases.map((u, idx) => (
-                <article
-                  key={idx}
-                  className="bg-[var(--color-bg-primary)] rounded-2xl shadow-lg p-7 h-full flex flex-col items-center text-center border border-[var(--color-border-primary)] transition-shadow duration-300 hover:shadow-xl"
-                  role="article"
-                  aria-label={`HR Use Case: ${u.title}`}
-                >
-                  <h3 className="font-bold text-lg leading-tight min-h-[2.5em] flex items-center justify-center text-[var(--color-primary-dark)] mb-3">
-                    {u.title}
-                  </h3>
-                  {u.description && (
-                    <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-                      {u.description}
-                    </p>
-                  )}
-                </article>
-              ))
-            ) : (
-              <div className="col-span-full text-center text-gray-500 py-10">
-                No use cases added yet. Add some in the form.
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-    </>
+    <Section tone="muted" className="animate-fade-in-up">
+      <SectionHeader
+        title={title}
+        description={description}
+        accent
+        titleClassName="text-3xl font-extrabold mb-3"
+        descriptionClassName="text-lg mb-3"
+      />
+      {useCases.length > 0 ? (
+        <CardGrid columns={{ sm: 2, lg: 4 }} gap="gap-6">
+          {useCases.map((u, idx) => (
+            <FeatureCard
+              key={idx}
+              variant="elevated"
+              title={u.title}
+              description={u.description}
+              ariaLabel={`HR Use Case: ${u.title}`}
+            />
+          ))}
+        </CardGrid>
+      ) : (
+        <div className="text-center text-gray-500 py-10">No use cases added yet. Add some in the form.</div>
+      )}
+    </Section>
   );
 };
 

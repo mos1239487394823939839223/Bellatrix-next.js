@@ -6,6 +6,8 @@ import MediaPicker from "./MediaPicker";
  * MediaInputDetector - Automatically detects and enhances inputs for media selection
  * Usage: Wrap your form/component with this and it will auto-detect media inputs
  */
+const SAFE_PREVIEW_URL = /^(https?:\/\/|\/(?!\/)|\.{1,2}\/)[^\s"'<>]*$/i;
+
 const isImageUrl = (url) => {
   if (!url) return false;
   const cleanUrl = url.split("?")[0].split("#")[0];
@@ -53,7 +55,7 @@ const MediaInputDetector = ({ children, containerRef }) => {
     if (isImageUrl(url)) {
       previewContainer.innerHTML = `
         <div class="relative group w-32 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm transition-all hover:shadow-md">
-          <img src="${url}" class="w-full h-full object-cover" alt="Preview" />
+          <img data-preview-src class="w-full h-full object-cover" alt="Preview" />
           <button type="button" class="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity clear-media">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
@@ -62,7 +64,7 @@ const MediaInputDetector = ({ children, containerRef }) => {
     } else if (isVideoUrl(url)) {
       previewContainer.innerHTML = `
         <div class="relative group w-48 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm transition-all hover:shadow-md">
-          <video src="${url}" class="w-full h-full object-cover" muted preload="metadata"></video>
+          <video data-preview-src class="w-full h-full object-cover" muted preload="metadata"></video>
           <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
             <svg class="w-8 h-8 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
           </div>
@@ -75,13 +77,20 @@ const MediaInputDetector = ({ children, containerRef }) => {
       previewContainer.innerHTML = `
         <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200 text-xs text-gray-500 truncate w-full max-w-xs group">
           <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z" /></svg>
-          <span class="truncate">${url}</span>
+          <span class="truncate" data-preview-text></span>
           <button type="button" class="ml-auto p-1 text-gray-400 hover:text-red-500 clear-media">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
       `;
     }
+
+    // The address is set through DOM properties, never parsed as HTML, and only
+    // loaded when it is a normal web address or site path (no javascript:/data:).
+    const mediaEl = previewContainer.querySelector("[data-preview-src]");
+    if (mediaEl && SAFE_PREVIEW_URL.test(url.trim())) mediaEl.src = url.trim();
+    const textEl = previewContainer.querySelector("[data-preview-text]");
+    if (textEl) textEl.textContent = url;
 
     // Add clear handler
     const clearBtn = previewContainer.querySelector(".clear-media");

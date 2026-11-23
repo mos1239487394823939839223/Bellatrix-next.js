@@ -9,6 +9,15 @@ import { UserIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, ArrowRightIcon, CheckC
 
 const REMEMBERED_EMAIL_KEY = 'bellatrix-remembered-email';
 
+/** A path on this site (e.g. "/admin/pages"), otherwise the dashboard. */
+export function safeRedirect(value, fallback = '/admin/dashboard') {
+  if (typeof value !== 'string') return fallback;
+  const v = value.trim();
+  // must start with a single "/" — not "//host", "/\\host", or a scheme
+  if (!/^\/(?![\/\\])/.test(v) || /[\u0000-\u001f]/.test(v)) return fallback;
+  return v;
+}
+
 /** Save (or forget) the email, and offer the password to the browser's password manager. */
 async function rememberLogin({ email, password, rememberMe }) {
   try {
@@ -43,7 +52,8 @@ const Login = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const from = searchParams.get('from') || '/admin/dashboard';
+  // Only same-site paths: blocks open redirects like ?from=https://evil.example or //evil.example
+  const from = safeRedirect(searchParams.get('from'));
 
   // "Remember me": pre-fill the email saved at the last successful login.
   // (The password is never stored by the site — the browser's own password

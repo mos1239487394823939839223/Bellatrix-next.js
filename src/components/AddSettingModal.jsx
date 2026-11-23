@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import toast from "react-hot-toast";
+import { validate } from "../core/validation/Validator";
+import { settingSchema } from "../core/validation/schemas";
+import { validateField } from "../constants/settingsMap";
 
 import Button from "./UI/Button";
 
@@ -64,12 +67,18 @@ const AddSettingModal = ({ isOpen, onClose, onSuccess }) => {
 
     // Validation
 
-    if (!key.trim()) {
-
-      toast.error("Setting key is required");
-
-      return;
-
+    // Shared rules: safe key format + no active content in the value
+    {
+      const { valid, errors } = validate(settingSchema, { key: key.trim(), value });
+      if (!valid) {
+        toast.error(Object.values(errors)[0]);
+        return;
+      }
+      const check = validateField(key.trim(), value);
+      if (!check.isValid) {
+        toast.error(check.error);
+        return;
+      }
     }
 
 

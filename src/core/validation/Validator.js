@@ -44,7 +44,7 @@ export const rules = {
 
   /** Rejects text with markup that could become active content. */
   noScript: (msg = "Remove HTML scripts, event handlers or javascript: links.") => (v) =>
-    isBlank(v) || !/<\s*script|javascript:|\son\w+\s*=/i.test(str(v)) ? null : msg,
+    isBlank(v) || !/<\s*script|javascript:|<[^>]*\son\w+\s*=/i.test(str(v)) ? null : msg,
 
   maxLinks: (n, msg) => (v) =>
     isBlank(v) || (str(v).match(/https?:\/\/|www\./gi) || []).length <= n ? null : msg || `Please include no more than ${n} links.`,

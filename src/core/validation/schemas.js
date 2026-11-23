@@ -17,12 +17,18 @@ export const contactMessageSchema = {
   ],
 };
 
-/** Admin: page settings. */
+/** Admin: page settings (blocking rules). */
 export const pageSchema = {
-  name: [r.required("Page name is required."), r.maxLength(120), r.noScript()],
-  slug: [r.required("URL slug is required."), r.slug(), r.maxLength(80)],
-  metaTitle: [r.maxLength(70, "Keep the SEO title under 70 characters so Google shows it in full.")],
-  metaDescription: [r.maxLength(160, "Keep the SEO description under 160 characters.")],
+  name: [r.required("Page name is required."), r.minLength(2, "Page name must be at least 2 characters."), r.maxLength(100), r.noScript()],
+  slug: [r.slug(), r.maxLength(200)],
+  metaTitle: [r.maxLength(200, "The SEO title is far too long."), r.noScript()],
+  metaDescription: [r.maxLength(500, "The SEO description is far too long."), r.noScript()],
+};
+
+/** Admin: page settings (advice only — saved anyway, shown as a hint). */
+export const pageSeoHints = {
+  metaTitle: [r.maxLength(60, "Tip: SEO titles over ~60 characters are cut off in Google results.")],
+  metaDescription: [r.maxLength(160, "Tip: SEO descriptions over ~160 characters are cut off in Google results.")],
 };
 
 /** Admin: navigation category. */
@@ -60,4 +66,49 @@ export const componentSchema = {
 export const loginSchema = {
   email: [r.required("Enter your email or username.")],
   password: [r.required("Enter your password.")],
+};
+
+/** Admin: change password. */
+export const passwordChangeSchema = {
+  currentPassword: [r.required("Enter your current password.")],
+  newPassword: [
+    r.required("Enter a new password."),
+    r.minLength(10, "Use at least 10 characters."),
+    r.pattern(/[a-z]/, "Add at least one lowercase letter."),
+    r.pattern(/[A-Z]/, "Add at least one uppercase letter."),
+    r.pattern(/\d/, "Add at least one number."),
+    r.pattern(/[^A-Za-z0-9]/, "Add at least one symbol (e.g. ! @ # %)."),
+    r.custom((v, data) => (v && v === data.currentPassword ? "The new password must be different from the current one." : null)),
+  ],
+  confirmPassword: [
+    r.required("Confirm the new password."),
+    r.custom((v, data) => (v !== data.newPassword ? "The passwords don't match." : null)),
+  ],
+};
+
+/** Admin: one footer quick link. */
+export const quickLinkSchema = {
+  name: [r.required("Link text is required."), r.maxLength(60), r.noScript()],
+  url: [r.required("Link address is required."), r.url()],
+};
+
+/** Admin: company / footer settings (only validates the fields present). */
+export const companySettingsSchema = {
+  companyName: [r.maxLength(100), r.noScript()],
+  contactEmail: [r.email()],
+  linkedin: [r.url()],
+  instagram: [r.url()],
+  facebook: [r.url()],
+  twitter: [r.url()],
+  youtube: [r.url()],
+};
+
+/** Admin: generic setting key/value. */
+export const settingSchema = {
+  key: [
+    r.required("Setting key is required."),
+    r.pattern(/^[a-zA-Z][a-zA-Z0-9_.-]*$/, "Use letters, numbers, _ . - only, starting with a letter."),
+    r.maxLength(100),
+  ],
+  value: [r.maxLength(20000, "This value is too long.")],
 };

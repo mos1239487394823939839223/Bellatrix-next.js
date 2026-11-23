@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
+import toast from "react-hot-toast";
+import { validateSectionContent, describeErrors } from "../../../core/validation/sectionContent";
 import {
   DocumentTextIcon,
   CheckCircleIcon,
@@ -209,6 +211,14 @@ const EditComponentModal = ({
         newErrors.contentJson = "Invalid JSON format";
       }
     }
+
+    // Content rules shared by every section editor (safe links, no scripts,
+    // required fields from this section's form schema)
+    if (!newErrors.contentJson) {
+      const check = validateSectionContent(formData.contentJson, currentSchema?.schema);
+      if (!check.valid) newErrors.contentJson = describeErrors(check.errors);
+    }
+    if (newErrors.contentJson) toast.error(newErrors.contentJson);
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

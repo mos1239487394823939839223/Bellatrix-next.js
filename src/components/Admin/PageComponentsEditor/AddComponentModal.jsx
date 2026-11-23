@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
+import { validateSectionContent, describeErrors } from "../../../core/validation/sectionContent";
 
 import {
 
@@ -248,6 +250,14 @@ const AddComponentModal = ({
       }
 
     }
+
+    // Content rules shared by every section editor (safe links, no scripts,
+    // required fields from this section's form schema)
+    if (!newErrors.contentJson) {
+      const check = validateSectionContent(formData.contentJson, currentSchema?.schema);
+      if (!check.valid) newErrors.contentJson = describeErrors(check.errors);
+    }
+    if (newErrors.contentJson) toast.error(newErrors.contentJson);
 
 
 

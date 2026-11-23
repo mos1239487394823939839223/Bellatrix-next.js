@@ -16,7 +16,7 @@ import { Btn } from "../components/Admin/ui";
 import SettingField from "../components/SettingField";
 import AddSettingModal from "../components/AddSettingModal";
 import useSettingsSync from "../hooks/useSettingsSync";
-import { FOOTER_SETTINGS_MAP } from "../constants/settingsMap";
+import { FOOTER_SETTINGS_MAP, validateField } from "../constants/settingsMap";
 import {
   bulkUpdateSettings,
   createSetting,
@@ -92,6 +92,16 @@ const FooterSettings = () => {
     if (dirtyKeysArray.length === 0) {
       toast.error("No changes to save");
       return;
+    }
+
+    // Same per-field rules as saving one field at a time
+    for (const item of footerSettings) {
+      if (!dirtyKeysArray.includes(item.fieldDef.key)) continue;
+      const { isValid, error } = validateField(item.fieldDef.key, item.existingValue || "");
+      if (!isValid) {
+        toast.error(`${item.fieldDef.label || item.fieldDef.key}: ${error}`);
+        return;
+      }
     }
 
     setIsBulkSaving(true);

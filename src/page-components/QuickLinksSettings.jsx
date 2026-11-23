@@ -8,6 +8,8 @@ import {
   LinkIcon,
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
+import { validate } from "../core/validation/Validator";
+import { quickLinkSchema } from "../core/validation/schemas";
 import {
   getPublicSettings,
   createSetting,
@@ -74,13 +76,13 @@ const QuickLinksSettings = () => {
   };
 
   const handleSave = async () => {
-    // Validate — every entry needs both name and url
-    const invalid = links.some(
-      (l) => !l.name?.trim() || !l.url?.trim()
-    );
-    if (invalid) {
-      toast.error("All links must have both a name and a URL.");
-      return;
+    // Every link: text required (no markup), address must be a web URL or site path
+    for (let i = 0; i < links.length; i += 1) {
+      const { valid, errors } = validate(quickLinkSchema, links[i]);
+      if (!valid) {
+        toast.error(`Link ${i + 1}: ${Object.values(errors)[0]}`);
+        return;
+      }
     }
 
     setSaving(true);

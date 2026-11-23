@@ -206,7 +206,19 @@ export const getFieldDefinition = (key) => {
  * @param {string} value - Field value
  * @returns {Object} { isValid: boolean, error: string|null }
  */
+// Active content is never allowed in a setting, whatever the field
+const UNSAFE = /<\s*\/?\s*(script|iframe|object|embed)\b|javascript:|vbscript:|data:text\/html|<[^>]*\son[a-z]+\s*=/i;
+const containsUnsafe = (value) => {
+  if (typeof value === "string") return UNSAFE.test(value);
+  if (Array.isArray(value)) return value.some(containsUnsafe);
+  if (value && typeof value === "object") return Object.values(value).some(containsUnsafe);
+  return false;
+};
+
 export const validateField = (key, value) => {
+  if (containsUnsafe(value)) {
+    return { isValid: false, error: "Remove scripts, event handlers or javascript: links from this value." };
+  }
   const field = getFieldDefinition(key);
   if (!field) {
     return { isValid: true, error: null };

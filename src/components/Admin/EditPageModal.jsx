@@ -10,6 +10,8 @@ import {
 } from "@heroicons/react/24/outline";
 import Modal, { ModalFooter } from "../UI/Modal";
 import Button from "../UI/Button";
+import { validate } from "../../core/validation/Validator";
+import { pageSchema, pageSeoHints } from "../../core/validation/schemas";
 import Input from "../UI/Input";
 import PageComponentsEditor from "./PageComponentsEditor";
 import pagesAPI from "../../lib/pagesAPI";
@@ -71,32 +73,13 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
     }
   }, [page]);
 
+  // Shared page rules (src/core/validation/schemas.js); SEO lengths are advice only.
   const validateForm = () => {
-    const newErrors = {};
-
-    // Required field validation
-    if (!formData.name || formData.name.trim().length < 2) {
-      newErrors.name = "Page name must be at least 2 characters long";
-    }
-    if (formData.name && formData.name.length > 100) {
-      newErrors.name = "Page name must not exceed 100 characters";
-    }
-
-    // Optional field validation
-    if (formData.slug && formData.slug.length > 200) {
-      newErrors.slug = "Page slug must not exceed 200 characters";
-    }
-    if (formData.metaTitle && formData.metaTitle.length > 60) {
-      newErrors.metaTitle = "Meta title must not exceed 60 characters";
-    }
-    if (formData.metaDescription && formData.metaDescription.length > 160) {
-      newErrors.metaDescription =
-        "Meta description must not exceed 160 characters";
-    }
-
+    const { errors: newErrors } = validate(pageSchema, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  const seoHints = validate(pageSeoHints, formData).errors;
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -115,7 +98,7 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
 
   const handleSave = async () => {
     if (!validateForm()) {
-      showToast("Please fix the validation errors", "error");
+      showToast(Object.values(validate(pageSchema, formData).errors)[0] || "Please fix the highlighted fields", "error");
       return;
     }
 
@@ -339,8 +322,8 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
                       {errors.metaTitle}
                     </p>
                   )}
-                  <p className="text-xs text-gray-400">
-                    {formData.metaTitle.length}/70 characters
+                  <p className={`text-xs ${seoHints.metaTitle ? "text-amber-400" : "text-gray-400"}`}>
+                    {formData.metaTitle.length}/60 characters{seoHints.metaTitle ? ` — ${seoHints.metaTitle.replace(/^Tip: /, "")}` : ""}
                   </p>
                 </div>
 
@@ -367,8 +350,8 @@ const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
                       {errors.metaDescription}
                     </p>
                   )}
-                  <p className="text-xs text-gray-400">
-                    {formData.metaDescription.length}/200 characters
+                  <p className={`text-xs ${seoHints.metaDescription ? "text-amber-400" : "text-gray-400"}`}>
+                    {formData.metaDescription.length}/160 characters{seoHints.metaDescription ? ` — ${seoHints.metaDescription.replace(/^Tip: /, "")}` : ""}
                   </p>
                 </div>
               </div>

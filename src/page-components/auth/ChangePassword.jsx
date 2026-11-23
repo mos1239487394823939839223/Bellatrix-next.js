@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import { KeyIcon, ShieldCheckIcon, EyeIcon, EyeSlashIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Btn, PageHeader, Panel, inputClass } from '../../components/Admin/ui';
+import { validate } from '../../core/validation/Validator';
+import { passwordChangeSchema } from '../../core/validation/schemas';
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
@@ -28,14 +30,10 @@ const ChangePassword = () => {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
+  // Shared password rules (src/core/validation/schemas.js): 10+ characters
+  // with upper, lower, number and symbol; different from the current one.
   const validateForm = () => {
-    const newErrors = {};
-    if (!formData.currentPassword.trim()) newErrors.currentPassword = 'Enter your current password';
-    if (!formData.newPassword.trim()) newErrors.newPassword = 'Enter a new password';
-    else if (formData.newPassword.length < 6) newErrors.newPassword = 'Use at least 6 characters';
-    else if (formData.newPassword === formData.currentPassword) newErrors.newPassword = 'Must be different from your current password';
-    if (!formData.confirmPassword.trim()) newErrors.confirmPassword = 'Confirm the new password';
-    else if (formData.newPassword !== formData.confirmPassword) newErrors.confirmPassword = "Passwords don't match";
+    const { errors: newErrors } = validate(passwordChangeSchema, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -60,8 +58,8 @@ const ChangePassword = () => {
   const getPasswordStrength = (password) => {
     if (!password) return { level: 0, label: '', color: '', width: '0%' };
     let strength = 0;
-    if (password.length >= 6) strength++;
     if (password.length >= 8) strength++;
+    if (password.length >= 10) strength++;
     if (/[A-Z]/.test(password)) strength++;
     if (/[a-z]/.test(password)) strength++;
     if (/[0-9]/.test(password)) strength++;
@@ -75,7 +73,7 @@ const ChangePassword = () => {
 
   const fields = [
     { name: 'currentPassword', label: 'Current password', placeholder: 'Enter your current password', show: showCurrentPassword, toggle: setShowCurrentPassword, autoComplete: 'current-password' },
-    { name: 'newPassword', label: 'New password', placeholder: 'At least 6 characters', show: showNewPassword, toggle: setShowNewPassword, autoComplete: 'new-password' },
+    { name: 'newPassword', label: 'New password', placeholder: '10+ characters, incl. A-Z, a-z, 0-9 and a symbol', show: showNewPassword, toggle: setShowNewPassword, autoComplete: 'new-password' },
     { name: 'confirmPassword', label: 'Confirm new password', placeholder: 'Re-enter the new password', show: showConfirmPassword, toggle: setShowConfirmPassword, autoComplete: 'new-password' },
   ];
 

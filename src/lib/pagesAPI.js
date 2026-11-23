@@ -1,4 +1,19 @@
 import api from "./api.js";
+import { assertValid, ValidationError } from "../core/validation/Validator";
+import { pageSchema } from "../core/validation/schemas";
+import { validateSectionContent, describeErrors } from "../core/validation/sectionContent";
+
+/** Reject unsafe section content before any request is sent. */
+function assertSafeSections(components = []) {
+  for (const c of components || []) {
+    if (!c) continue;
+    const check = validateSectionContent(c.contentJson ?? c.content ?? {});
+    if (!check.valid) {
+      const name = c.componentName || c.componentType || "Section";
+      throw new ValidationError({ content: `${name}: ${describeErrors(check.errors)}` });
+    }
+  }
+}
 
 import pageComponentsAPI from "./pageComponentsAPI.js";
 
@@ -240,6 +255,8 @@ const pagesAPI = {
         fullPayload: JSON.stringify(dataToSend, null, 2),
       });
 
+      assertValid(pageSchema, dataToSend);
+      assertSafeSections(dataToSend.components);
       const response = await api.post(endpoint, dataToSend);
 
       return response.data;
@@ -307,30 +324,8 @@ const pagesAPI = {
         isPublished: pageData.isPublished || false,
       };
 
-      // Validate required fields
-
-      if (!updateData.name || updateData.name.length < 2) {
-        throw new Error("Page name must be at least 2 characters long");
-      }
-
-      if (updateData.name.length > 100) {
-        throw new Error("Page name must not exceed 100 characters");
-      }
-
-      if (updateData.slug && updateData.slug.length > 200) {
-        throw new Error("Page slug must not exceed 200 characters");
-      }
-
-      if (updateData.metaTitle && updateData.metaTitle.length > 60) {
-        throw new Error("Meta title must not exceed 60 characters");
-      }
-
-      if (
-        updateData.metaDescription &&
-        updateData.metaDescription.length > 160
-      ) {
-        throw new Error("Meta description must not exceed 160 characters");
-      }
+      // Shared page rules (src/core/validation/schemas.js)
+      assertValid(pageSchema, updateData);
 
       const response = await api.put("/Pages", updateData);
 
@@ -433,6 +428,7 @@ const pagesAPI = {
    */
 
   async createPageComponent(pageId, componentData) {
+    assertSafeSections([componentData]);
     try {
       const createData = {
         pageId: pageId,
@@ -504,6 +500,7 @@ const pagesAPI = {
    */
 
   async updatePageComponent(componentId, componentData) {
+    assertSafeSections([componentData]);
     try {
       // Prepare the complete component data structure as expected by the API
 

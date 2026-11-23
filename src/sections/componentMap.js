@@ -3,7 +3,7 @@
  * Thin adapter over the single section registry (src/sections) — the list of
  * sections is no longer maintained here.
  */
-import { catalogTypeToPath, loadSectionByPath, pathForType } from "../sections/registry";
+import { catalogTypeToPath, loadSectionByPath, pathForType } from "./registry";
 
 /** Catalog types → component path (what the admin "Add component" list offers). */
 export const idToPathMap = catalogTypeToPath;

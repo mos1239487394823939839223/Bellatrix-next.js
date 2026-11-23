@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import pagesAPI from "../lib/pagesAPI";
-import { cachedFetch, invalidateCacheByPrefix } from "../lib/apiCache";
+import pagesAPI from "../services/legacy/pagesAPI";
+import { cachedFetch, invalidateCacheByPrefix } from "../services/legacy/apiCache";
 
 /**
  * Fetches and manages page data for a given slug.

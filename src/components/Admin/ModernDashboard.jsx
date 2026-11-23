@@ -14,8 +14,8 @@ import {
   PlusIcon,
   ViewColumnsIcon,
 } from "@heroicons/react/24/outline";
-import dashboardAPI from "../../lib/dashboardAPI";
-import { getContactMessages } from "../../lib/contactMessagesAPI";
+import dashboardAPI from "../../services/legacy/dashboardAPI";
+import { getContactMessages } from "../../services/legacy/contactMessagesAPI";
 import { useAuth } from "../../hooks/useAuth";
 import {
   Badge,

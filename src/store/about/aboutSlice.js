@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api, { getAuthTokenFromState } from "../../lib/api";
+import api, { getAuthTokenFromState } from "../../services/legacy/api";
 
 const initialState = {
   item: null, // About is typically a single object

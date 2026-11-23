@@ -14,7 +14,7 @@ import { validate } from "../../core/validation/Validator";
 import { pageSchema, pageSeoHints } from "../../core/validation/schemas";
 import Input from "../UI/Input";
 import PageComponentsEditor from "./PageComponentsEditor";
-import pagesAPI from "../../lib/pagesAPI";
+import pagesAPI from "../../services/legacy/pagesAPI";
 
 const EditPageModal = ({ isOpen, onClose, page, onSave, showToast }) => {
   const [currentStep, setCurrentStep] = useState("page"); // "page" or "components"

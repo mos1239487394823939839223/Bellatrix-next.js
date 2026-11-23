@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import pagesAPI from "../lib/pagesAPI";
+import pagesAPI from "../services/legacy/pagesAPI";
 
 const ITEMS_PER_PAGE = 10;
 

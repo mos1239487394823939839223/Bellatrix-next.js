@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api, { getAuthTokenFromState } from "../../lib/api";
+import api, { getAuthTokenFromState } from "../../services/legacy/api";
 
 /**
  * @typedef {'idle' | 'loading' | 'succeeded' | 'failed'} LoadStatus

@@ -35,7 +35,7 @@ const LOCATION_ICON_MAP = {
 import { useState, useEffect } from "react";
 
 
-import { getPublicDictionary } from "../services/settingsApi";
+import { getPublicDictionary } from "../services/legacy/settingsApi";
 
 import { services } from "../services";
 

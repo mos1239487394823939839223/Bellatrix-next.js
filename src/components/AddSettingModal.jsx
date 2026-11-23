@@ -7,11 +7,11 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { validate } from "../core/validation/Validator";
 import { settingSchema } from "../core/validation/schemas";
-import { validateField } from "../constants/settingsMap";
+import { validateField } from "../config/settingsMap";
 
 import Button from "./UI/Button";
 
-import { createSetting, getSettingByKey } from "../services/settingsApi";
+import { createSetting, getSettingByKey } from "../services/legacy/settingsApi";
 
 
 

@@ -40,7 +40,7 @@ import {
   updateMedia,
   uploadFile,
   validateFile,
-} from "../../lib/mediaService";
+} from "../../services/legacy/mediaService";
 
 const PAGE_SIZE = 48;
 const FILTERS = [

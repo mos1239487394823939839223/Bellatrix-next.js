@@ -12,7 +12,7 @@ import Button from "../UI/Button";
 
 import Card, { CardContent, CardHeader, CardTitle } from "../UI/Card";
 
-import { getComponentPathFromId, loadComponent } from "../componentMap";
+import { getComponentPathFromId, loadComponent } from "../../sections/componentMap";
 
 import { normalizeProps, validateProps } from "../../utils/normalizeProps";
 

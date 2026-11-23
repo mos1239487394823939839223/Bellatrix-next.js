@@ -46,11 +46,11 @@ import DynamicFormGenerator from "../../UI/DynamicFormGenerator";
 
 import { LivePreview } from "../../UI/LivePreview";
 
-import { generalComponentSchemas } from "../../../data/generalComponentSchemas";
+import { generalComponentSchemas } from "../../../sections/schemas/generalComponentSchemas";
 
-import { supportComponentSchemas } from "../../../data/supportComponentSchemas";
+import { supportComponentSchemas } from "../../../sections/schemas/supportComponentSchemas";
 
-import { aboutComponentSchemas } from "../../../data/aboutComponentSchemas";
+import { aboutComponentSchemas } from "../../../sections/schemas/aboutComponentSchemas";
 
 // Same schema lookup as the Edit window, so a section's form (dropdowns, media
 // pickers, lists) is identical whether you add it or edit it later.

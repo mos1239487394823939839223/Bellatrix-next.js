@@ -1,6 +1,6 @@
-import { getGeneralComponentSchema } from "../data/generalComponentSchemas";
-import { getAboutComponentSchema } from "../data/aboutComponentSchemas";
-import { getSupportComponentSchema } from "../data/supportComponentSchemas";
+import { getGeneralComponentSchema } from "../sections/schemas/generalComponentSchemas";
+import { getAboutComponentSchema } from "../sections/schemas/aboutComponentSchemas";
+import { getSupportComponentSchema } from "../sections/schemas/supportComponentSchemas";
 import { categorizeComponent, getComponentIcon } from "./componentHelpers";
 
 /**
@@ -11,7 +11,7 @@ import { categorizeComponent, getComponentIcon } from "./componentHelpers";
  */
 export const loadAvailableComponents = async () => {
     try {
-        const { getAllComponents } = await import("../data/componentRegistry");
+        const { getAllComponents } = await import("../sections/schemas/componentRegistry");
 
         const registryComponents = getAllComponents();
 
@@ -45,7 +45,7 @@ export const loadAvailableComponents = async () => {
 
         // Also include any components from the legacy componentMap
         // that are not already covered by the registry
-        const { idToPathMap } = await import("../components/componentMap");
+        const { idToPathMap } = await import("../sections/componentMap");
 
         const registryComponentTypes = new Set(
             formattedComponents.map((c) => c.componentType),

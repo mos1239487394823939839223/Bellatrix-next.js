@@ -21,9 +21,9 @@ import {
   generateFormFieldsFromJson,
   updateJsonFromFormFields,
 } from "../../../utils/jsonFormUtils";
-import { generalComponentSchemas } from "../../../data/generalComponentSchemas";
-import { supportComponentSchemas } from "../../../data/supportComponentSchemas";
-import { aboutComponentSchemas } from "../../../data/aboutComponentSchemas";
+import { generalComponentSchemas } from "../../../sections/schemas/generalComponentSchemas";
+import { supportComponentSchemas } from "../../../sections/schemas/supportComponentSchemas";
+import { aboutComponentSchemas } from "../../../sections/schemas/aboutComponentSchemas";
 import { normalizeProps } from "../../../utils/normalizeProps";
 
 // Merge all schema registries into one lookup so every component type resolves correctly

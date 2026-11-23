@@ -7,9 +7,9 @@
  * the same token handling, timeout, envelope unwrapping and ApiError.
  * New code should use `services` from src/services instead.
  */
-import { http } from "../services";
-import { tokenStore } from "../core/http/TokenStore";
-import { getApiBaseUrlWithApi } from "../config/api.js";
+import { http } from "..";
+import { tokenStore } from "../../core/http/TokenStore";
+import { getApiBaseUrlWithApi } from "../../config/api.js";
 
 const call = (method) => async (url, a, b) => {
   const hasBody = method === "POST" || method === "PUT" || method === "PATCH";

@@ -16,13 +16,13 @@ import { Btn } from "../components/Admin/ui";
 import SettingField from "../components/SettingField";
 import AddSettingModal from "../components/AddSettingModal";
 import useSettingsSync from "../hooks/useSettingsSync";
-import { FOOTER_SETTINGS_MAP, validateField } from "../constants/settingsMap";
+import { FOOTER_SETTINGS_MAP, validateField } from "../config/settingsMap";
 import {
   bulkUpdateSettings,
   createSetting,
   getPublicSettings,
   getSettingByKey,
-} from "../services/settingsApi";
+} from "../services/legacy/settingsApi";
 
 /**
  * FooterSettings Component

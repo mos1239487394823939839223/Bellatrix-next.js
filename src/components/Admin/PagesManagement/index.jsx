@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import hotToast from "react-hot-toast";
 import EditPageModal from "../EditPageModal";
-import pagesAPI from "../../../lib/pagesAPI";
+import pagesAPI from "../../../services/legacy/pagesAPI";
 import { usePagesManagement } from "../../../hooks/usePagesManagement";
 import PagesStats from "./PagesStats";
 import PagesTable from "./PagesTable";

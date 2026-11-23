@@ -4,7 +4,7 @@
  * This can be adapted for integration, consulting, payroll following the same pattern
  */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api, { getAuthTokenFromState } from "../../lib/api";
+import api, { getAuthTokenFromState } from "../../services/legacy/api";
 
 const initialState = {
   hero: { item: null, status: "idle", error: null, lastFetchedAt: null },

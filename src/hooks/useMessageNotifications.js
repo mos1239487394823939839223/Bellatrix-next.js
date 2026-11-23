@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-import api from '../lib/api';
+import api from '../services/legacy/api';
 
 // Module-level flags: _blocked persists across remounts, _inFlight prevents StrictMode double-invoke
 let _contactMessagesBlocked = false;

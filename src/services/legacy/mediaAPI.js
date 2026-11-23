@@ -3,8 +3,8 @@
  * Same functions and return shapes as before, now delegating to
  * MediaService (src/services) instead of its own requests.
  */
-import { services } from "../services";
-import { getAbsoluteBaseUrl } from "../config/api.js";
+import { services } from "..";
+import { getAbsoluteBaseUrl } from "../../config/api.js";
 
 const BASE_HOST_ABSOLUTE = getAbsoluteBaseUrl();
 

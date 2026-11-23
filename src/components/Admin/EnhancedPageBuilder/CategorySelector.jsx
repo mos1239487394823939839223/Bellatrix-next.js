@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import api from "../../../lib/api";
+import api from "../../../services/legacy/api";
 
 const CategorySelector = ({ value, onChange }) => {
   const router = useRouter();

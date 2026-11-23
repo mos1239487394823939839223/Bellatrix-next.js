@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   getAllComponents,
   componentCategories,
-} from "../../data/componentRegistry";
-import { loadComponent } from "../../components/componentMap";
+} from "../../sections/schemas/componentRegistry";
+import { loadComponent } from "../../sections/componentMap";
 import Card, { CardContent, CardHeader, CardTitle } from "../../components/UI/Card";
 import {
   MagnifyingGlassIcon,

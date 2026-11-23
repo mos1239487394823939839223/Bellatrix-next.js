@@ -1,7 +1,8 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { authService } from '../services/authApi';
+import { authService } from '../services/legacy/authApi';
 import { toast } from 'react-hot-toast';
 import { getAuthToken, setAuthToken, setUserData, getUserData, clearAuthData } from '../utils/tokenManager';
+import { tokenStore } from '../core/http/TokenStore';
 
 // Create Auth Context
 const AuthContext = createContext();
@@ -105,7 +106,7 @@ export const AuthProvider = ({ children }) => {
         };
         
         // Store token and user data using centralized token manager
-        setAuthToken(token);
+        tokenStore.setToken(token, { remember: Boolean(credentials.rememberMe) });
         setUserData(normalizedUser);
         setUser(normalizedUser);
         setIsAuthenticated(true);

@@ -35,11 +35,11 @@ const ChevronDown = ({ className = "ml-1 h-4 w-4 shrink-0" }) => (
 
 import Link from "next/link";
 
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 import { setupSectionThemeDetection, detectCurrentSectionTheme } from "../utils/sectionThemeDetection";
 
-import { cachedFetch } from "../lib/apiCache.js";
+import { cachedFetch } from "../services/legacy/apiCache.js";
 import { services } from "../services";
 
 const Navbar = ({ initialCategories = [] }) => {

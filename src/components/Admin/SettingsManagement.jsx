@@ -3,8 +3,8 @@ import {
   Cog6ToothIcon,
   LinkIcon,
 } from "@heroicons/react/24/outline";
-import FooterSettings from "../../page-components/FooterSettings";
-import QuickLinksSettings from "../../page-components/QuickLinksSettings";
+import FooterSettings from "../../views/FooterSettings";
+import QuickLinksSettings from "../../views/QuickLinksSettings";
 import { PageHeader, Tabs } from "./ui";
 
 const TABS = [

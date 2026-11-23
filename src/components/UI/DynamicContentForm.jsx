@@ -12,11 +12,11 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
-import api from "../../lib/api";
+import api from "../../services/legacy/api";
 
-import mediaAPI from "../../lib/mediaAPI";
+import mediaAPI from "../../services/legacy/mediaAPI";
 
-import { getFieldConfigForComponent } from "../../data/componentSchemas";
+import { getFieldConfigForComponent } from "../../sections/schemas/componentSchemas";
 
 import { getAvailableVariants } from "../../utils/variantSystem";
 

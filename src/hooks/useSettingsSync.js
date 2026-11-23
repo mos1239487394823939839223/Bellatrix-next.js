@@ -8,9 +8,9 @@ import {
 
   getPublicDictionary,
 
-} from "../services/settingsApi";
+} from "../services/legacy/settingsApi";
 
-import { FOOTER_SETTINGS_MAP } from "../constants/settingsMap";
+import { FOOTER_SETTINGS_MAP } from "../config/settingsMap";
 
 
 

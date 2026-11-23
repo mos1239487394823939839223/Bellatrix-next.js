@@ -1,4 +1,4 @@
-import { cachedFetch } from "../lib/apiCache";
+import { cachedFetch } from "../services/legacy/apiCache";
 import { staticContent } from "../services/StaticContentRepository";
 
 const TEN_MINUTES = 10 * 60 * 1000;

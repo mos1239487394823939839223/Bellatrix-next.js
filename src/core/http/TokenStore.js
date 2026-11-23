@@ -26,10 +26,19 @@ export class TokenStore {
   }
 
   /** @param {string} token @param {{ remember?: boolean }} [opts] */
+  /**
+   * remember=true  → survives closing the browser (localStorage)
+   * remember=false → ends when the browser closes (sessionStorage)
+   * The other storage is cleared so an old session can't linger.
+   */
   setToken(token, { remember = true } = {}) {
     if (!hasWindow() || !token) return;
-    const store = remember ? window.localStorage : window.sessionStorage;
+    const [store, other] = remember
+      ? [window.localStorage, window.sessionStorage]
+      : [window.sessionStorage, window.localStorage];
     try {
+      other.removeItem(KEYS.token);
+      other.removeItem(KEYS.legacyToken);
       store.setItem(KEYS.token, token);
       store.setItem(KEYS.legacyToken, token);
     } catch {

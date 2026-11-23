@@ -7,7 +7,7 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 
 import Card, { CardContent, CardHeader, CardTitle } from "../UI/Card";
 
-import { getComponentByType } from "../../config/previewComponentRegistry";
+import { getComponentByType } from "../../sections/previewRegistry";
 
 import PreviewError from "./LivePreview/PreviewError";
 

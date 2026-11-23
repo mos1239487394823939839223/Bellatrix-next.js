@@ -9,7 +9,7 @@
  * here, so adding a section means adding one entry.
  *
  * Schemas (admin form fields) and prop normalizers stay keyed by type in
- * src/data/*Schemas.js and src/utils/normalizeProps.js.
+ * src/sections/schemas/*Schemas.js and src/utils/normalizeProps.js.
  */
 
 export const SECTIONS = [

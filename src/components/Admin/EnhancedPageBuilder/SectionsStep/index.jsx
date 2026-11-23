@@ -6,9 +6,9 @@ import { useFilteredComponents } from "../../../../hooks/useFilteredComponents";
 import AvailableComponentsSection from "./AvailableComponentsSection";
 import ComponentConfigurationSection from "./ComponentConfigurationSection";
 import ComponentInputModal from "./ComponentInputModal";
-import { getAboutComponentSchema } from "../../../../data/aboutComponentSchemas";
-import { getGeneralComponentSchema } from "../../../../data/generalComponentSchemas";
-import { getSupportComponentSchema } from "../../../../data/supportComponentSchemas";
+import { getAboutComponentSchema } from "../../../../sections/schemas/aboutComponentSchemas";
+import { getGeneralComponentSchema } from "../../../../sections/schemas/generalComponentSchemas";
+import { getSupportComponentSchema } from "../../../../sections/schemas/supportComponentSchemas";
 import { generateDynamicSchema } from "../../../../utils/dynamicSchemaGenerator";
 
 const SectionsStep = ({

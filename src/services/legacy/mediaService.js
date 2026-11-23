@@ -4,7 +4,7 @@
 // HttpClient's auth, timeouts and errors; this module keeps the UI helpers
 // (URLs, file kinds, sizes, client-side checks).
 
-import { services } from "../services";
+import { services } from "..";
 
 // nginx in front of the API accepts request bodies up to 50 MB
 // (client_max_body_size 50M); the API itself allows more.

@@ -30,7 +30,7 @@ import FancyToggle from "../UI/FancyToggle";
 
 import { LivePreview } from "../UI/LivePreview";
 
-import pagesAPI from "../../lib/pagesAPI";
+import pagesAPI from "../../services/legacy/pagesAPI";
 
 import { updateMediaVersion } from "../../utils/cacheBusting";
 

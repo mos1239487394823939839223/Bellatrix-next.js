@@ -3,8 +3,8 @@
  * Provides default JSON structures for different component types
  */
 
-import { generalComponentSchemas } from "../data/generalComponentSchemas";
-import { aboutComponentSchemas } from "../data/aboutComponentSchemas";
+import { generalComponentSchemas } from "../sections/schemas/generalComponentSchemas";
+import { aboutComponentSchemas } from "../sections/schemas/aboutComponentSchemas";
 
 export const getBasicJsonForComponent = (componentType) => {
   // First, check if we have a specific schema for this component type in generalComponentSchemas

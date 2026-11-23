@@ -14,7 +14,7 @@ import {
   getPublicSettings,
   createSetting,
   updateSetting,
-} from "../services/settingsApi";
+} from "../services/legacy/settingsApi";
 
 const SETTING_KEY = "footer_quick_links";
 

@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { usePageData } from "../../hooks/usePageData";
-import { getSsrComponent } from "../ssrComponentMap";
+import { getSsrComponent } from "../../sections/ssrComponentMap";
 import LoadingState from "./LoadingState";
 import ErrorState from "./ErrorState";
 import EmptyState from "./EmptyState";

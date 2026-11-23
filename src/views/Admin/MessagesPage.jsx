@@ -29,7 +29,7 @@ import {
   markMessageAsReplied,
   markMessageAsUnreplied,
   deleteContactMessage,
-} from "../../lib/contactMessagesAPI";
+} from "../../services/legacy/contactMessagesAPI";
 import {
   Badge,
   Btn,

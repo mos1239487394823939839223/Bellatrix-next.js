@@ -20,12 +20,12 @@ import {
   Map,
 } from "@mui/icons-material";
 import toast from "react-hot-toast";
-import { validateField } from "../constants/settingsMap";
+import { validateField } from "../config/settingsMap";
 import {
   updateSetting,
   createSetting,
   getSettingByKey,
-} from "../services/settingsApi";
+} from "../services/legacy/settingsApi";
 
 const LOCATION_ICONS = [
   { value: "LocationOn", label: "Google Maps Pin", Icon: LocationOn },

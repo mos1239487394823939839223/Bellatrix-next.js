@@ -1,7 +1,7 @@
 import api from "./api.js";
-import { assertValid, ValidationError } from "../core/validation/Validator";
-import { pageSchema } from "../core/validation/schemas";
-import { validateSectionContent, describeErrors } from "../core/validation/sectionContent";
+import { assertValid, ValidationError } from "../../core/validation/Validator";
+import { pageSchema } from "../../core/validation/schemas";
+import { validateSectionContent, describeErrors } from "../../core/validation/sectionContent";
 
 /** Reject unsafe section content before any request is sent. */
 function assertSafeSections(components = []) {
@@ -17,7 +17,7 @@ function assertSafeSections(components = []) {
 
 import pageComponentsAPI from "./pageComponentsAPI.js";
 
-import { getApiBaseUrlWithApi } from "../config/api.js";
+import { getApiBaseUrlWithApi } from "../../config/api.js";
 
 const BASE_URL = getApiBaseUrlWithApi();
 

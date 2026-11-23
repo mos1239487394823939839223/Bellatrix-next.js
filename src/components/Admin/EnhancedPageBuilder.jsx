@@ -50,15 +50,15 @@ import DynamicFormGenerator from "../UI/DynamicFormGenerator";
 
 import { LivePreview, SplitScreenPreview } from "../UI/LivePreview";
 
-import { getAboutComponentSchema } from "../../data/aboutComponentSchemas";
+import { getAboutComponentSchema } from "../../sections/schemas/aboutComponentSchemas";
 
-import { getGeneralComponentSchema } from "../../data/generalComponentSchemas";
+import { getGeneralComponentSchema } from "../../sections/schemas/generalComponentSchemas";
 
-import { getSupportComponentSchema } from "../../data/supportComponentSchemas";
+import { getSupportComponentSchema } from "../../sections/schemas/supportComponentSchemas";
 
 import {} from "../../utils/dynamicSchemaGenerator";
 
-import pagesAPI from "../../lib/pagesAPI";
+import pagesAPI from "../../services/legacy/pagesAPI";
 
 import { updateMediaVersion } from "../../utils/cacheBusting";
 

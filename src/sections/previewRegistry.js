@@ -5,8 +5,8 @@
  * <Suspense>.
  */
 import { lazy } from "react";
-import { SECTIONS } from "../sections/sections";
-import { resolveSection } from "../sections/registry";
+import { SECTIONS } from "./sections";
+import { resolveSection } from "./registry";
 
 const lazyByPath = new Map();
 const lazyFor = (entry) => {

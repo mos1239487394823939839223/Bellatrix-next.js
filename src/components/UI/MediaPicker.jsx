@@ -20,11 +20,11 @@ import Button from "./Button";
 import Toast from "./Toast";
 
 
-import mediaAPI from "../../lib/mediaAPI";
+import mediaAPI from "../../services/legacy/mediaAPI";
 
 import { services } from "../../services";
 
-import { MEDIA_MAX_MB, uploadFile as uploadWithProgress, validateFile } from "../../lib/mediaService";
+import { MEDIA_MAX_MB, uploadFile as uploadWithProgress, validateFile } from "../../services/legacy/mediaService";
 
 import { getAbsoluteBaseUrl } from "../../config/api.js";
 

@@ -20,7 +20,7 @@ import Card, { CardContent, CardHeader, CardTitle } from "../../UI/Card";
 
 import { DraggableComponent } from "../DraggableComponent";
 
-import pagesAPI from "../../../lib/pagesAPI";
+import pagesAPI from "../../../services/legacy/pagesAPI";
 
 
 

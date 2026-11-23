@@ -1,11 +1,33 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import { motion } from 'framer-motion';
 import { UserIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+
+const REMEMBERED_EMAIL_KEY = 'bellatrix-remembered-email';
+
+/** Save (or forget) the email, and offer the password to the browser's password manager. */
+async function rememberLogin({ email, password, rememberMe }) {
+  try {
+    if (rememberMe) localStorage.setItem(REMEMBERED_EMAIL_KEY, email.trim());
+    else localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+  } catch {
+    /* storage unavailable */
+  }
+  // Chrome / Edge: explicit "Save password?" prompt. Other browsers offer it
+  // from the form's autocomplete attributes after a successful sign-in.
+  if (rememberMe && typeof window !== 'undefined' && 'PasswordCredential' in window && navigator.credentials) {
+    try {
+      // eslint-disable-next-line no-undef
+      await navigator.credentials.store(new PasswordCredential({ id: email.trim(), password, name: email.trim() }));
+    } catch {
+      /* user dismissed or unsupported */
+    }
+  }
+}
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +44,18 @@ const Login = () => {
   const searchParams = useSearchParams();
 
   const from = searchParams.get('from') || '/admin/dashboard';
+
+  // "Remember me": pre-fill the email saved at the last successful login.
+  // (The password is never stored by the site — the browser's own password
+  // manager is asked to save it, which is encrypted and fills it in securely.)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(REMEMBERED_EMAIL_KEY);
+      if (saved) setFormData((prev) => ({ ...prev, email: saved, rememberMe: true }));
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
   const successMessage = searchParams.get('message');
 
   const handleChange = (e) => {
@@ -49,7 +83,10 @@ const Login = () => {
     setIsSubmitting(true);
     try {
       const result = await login(formData);
-      if (result.success) router.replace(from);
+      if (result.success) {
+        rememberLogin(formData);
+        router.replace(from);
+      }
     } catch (error) {
       console.error('Login error:', error);
     } finally {
@@ -175,17 +212,18 @@ const Login = () => {
               <p className="text-white/50 text-sm mt-1">Enter your credentials to continue</p>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} method="post" className="space-y-5" autoComplete="on">
               {/* Email Field */}
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
+                <label htmlFor="login-email" className="block text-sm font-medium text-white/80 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
                   <input
+                    id="login-email"
                     name="email"
                     type="email"
-                    autoComplete="email"
+                    autoComplete="username"
                     value={formData.email}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 bg-white/5 border ${
@@ -199,11 +237,12 @@ const Login = () => {
               
               {/* Password Field */}
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
+                <label htmlFor="login-password" className="block text-sm font-medium text-white/80 mb-2">
                   Password
                 </label>
                 <div className="relative">
                   <input
+                    id="login-password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
@@ -217,6 +256,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
                   >
                     {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}

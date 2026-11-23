@@ -2,7 +2,7 @@
  * Auth endpoints used by useAuth. Runs on the shared HttpClient; returns the
  * backend envelope ({ success, data, message }) exactly as callers expect.
  */
-import { http } from "./index";
+import { http } from "../index";
 
 const post = async (path, body) => (await http.request("POST", path, { body, unwrap: false })).raw;
 

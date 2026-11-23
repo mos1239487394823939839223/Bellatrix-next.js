@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api, { uploadForm } from "../../lib/api";
+import api, { uploadForm } from "../../services/legacy/api";
 import { getAuthToken, setAuthToken } from "../../utils/tokenManager";
 
 /**

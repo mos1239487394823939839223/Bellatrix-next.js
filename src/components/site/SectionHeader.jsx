@@ -11,13 +11,27 @@ import { smartRender } from "../../utils/htmlSanitizer";
 const COLORS = {
   light: { title: "text-[var(--color-primary-dark)]", text: "text-[var(--color-text-secondary)]" },
   dark: { title: "text-[var(--color-text-inverse)]", text: "text-[var(--color-white)]" },
+  none: { title: "", text: "" }, // colours come from titleClassName / descriptionClassName
 };
+
+/** Split a plain title into [normal, highlighted] for the highlight modes. */
+function splitTitle(title, mode, highlightSingleWord) {
+  const words = title.trim().split(/\s+/);
+  if (words.length < 2) return mode === "last" && highlightSingleWord ? ["", title] : [title, ""];
+  return mode === "rest"
+    ? [words[0], words.slice(1).join(" ")]
+    : [words.slice(0, -1).join(" "), words[words.length - 1]];
+}
 
 /**
  * @param {object} props
  * @param {string} props.title
  * @param {string} [props.description]
- * @param {"light"|"dark"} [props.tone="light"]
+ * @param {"light"|"dark"|"none"} [props.tone="light"]
+ * @param {"last"|"rest"} [props.highlight]   colour the last word, or every word after the first
+ * @param {string} [props.highlightClassName]
+ * @param {object} [props.highlightStyle]
+ * @param {boolean} [props.highlightSingleWord=true]  "last" mode: highlight a one-word title
  * @param {boolean} [props.accent]   short brand bar under the header
  * @param {"center"|"left"} [props.align="center"]
  * @param {string} [props.titleClassName]        replaces the default size/weight/spacing
@@ -33,6 +47,10 @@ export default function SectionHeader({
   id,
   className = "mb-10",
   titleClassName = "text-3xl font-bold mb-4",
+  highlight,
+  highlightClassName = "text-[var(--color-primary)]",
+  highlightStyle,
+  highlightSingleWord = true,
   descriptionClassName = "text-lg max-w-2xl mx-auto",
   children,
 }) {
@@ -42,7 +60,22 @@ export default function SectionHeader({
   return (
     <header className={cn(align === "center" ? "text-center" : "text-left", className)}>
       {title &&
-        (html ? (
+        (highlight && !html ? (
+          <Heading id={id} className={cn(titleClassName, c.title)}>
+            {(() => {
+              const [lead, hi] = splitTitle(title, highlight, highlightSingleWord);
+              if (!hi && highlight === "last") return lead;
+              return (
+                <>
+                  {lead && <>{lead} </>}
+                  <span className={highlightClassName} style={highlightStyle}>
+                    {hi}
+                  </span>
+                </>
+              );
+            })()}
+          </Heading>
+        ) : html ? (
           <Heading id={id} className={cn(titleClassName, c.title)} dangerouslySetInnerHTML={html} />
         ) : (
           <Heading id={id} className={cn(titleClassName, c.title)}>

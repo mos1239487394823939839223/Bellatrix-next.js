@@ -1,6 +1,7 @@
 import React from "react";
 import { addMediaVersionToBust } from "../../utils/cacheBusting";
 import OptimizedImg from "../OptimizedImg";
+import { Section, SectionHeader, CardGrid } from "../site";
 
 const WhatWeOfferSection = ({
   data,
@@ -54,28 +55,19 @@ const WhatWeOfferSection = ({
 
   return (
     <>
-      <section className="w-full bg-gray-50 py-16 light-section">
-        <div className="max-w-6xl mx-auto px-4">
-          <header className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              {sectionData.title.includes(" ") ? (
-                <>
-                  {sectionData.title.split(" ").slice(0, -1).join(" ")}{" "}
-                  <span className="text-blue-600">
-                    {sectionData.title.split(" ").slice(-1)[0]}
-                  </span>
-                </>
-              ) : (
-                sectionData.title
-              )}
-            </h2>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-              {sectionData.subtitle}
-            </p>
-          </header>
-
-          {/* Cards Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <Section tone="plain" padding="md" className="w-full bg-gray-50">
+        <SectionHeader
+          title={sectionData.title}
+          description={sectionData.subtitle}
+          tone="none"
+          className="mb-12"
+          titleClassName="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
+          descriptionClassName="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto"
+          highlight="last"
+          highlightClassName="text-blue-600"
+          highlightSingleWord={false}
+        />
+        <CardGrid columns={{ md: 3 }} gap="gap-8" equalHeight={false}>
             {sectionData.cards.map((card, index) => (
               <article
                 key={index}
@@ -102,9 +94,8 @@ const WhatWeOfferSection = ({
                 </p>
               </article>
             ))}
-          </div>
-        </div>
-      </section>
+</CardGrid>
+      </Section>
     </>
   );
 };

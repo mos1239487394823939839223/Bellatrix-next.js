@@ -1,6 +1,7 @@
 // KeyModulesSection.jsx
 import React from "react";
 import ModuleCard from "./ModuleCard";
+import { Section, SectionHeader, CardGrid } from "../../site";
 
 const KeyModulesSection = ({ keyModulesSection, keyModules }) => {
   // Ensure we always have a valid section object and modules array to avoid runtime errors
@@ -11,36 +12,28 @@ const KeyModulesSection = ({ keyModulesSection, keyModules }) => {
   };
 
   const safeTitle = section.title || "Key Training Modules";
-  const [firstWord, ...restWords] = safeTitle.split(" ");
-  const highlightedTitle = restWords.join(" ");
 
   const modules = Array.isArray(keyModules) ? keyModules : [];
   return (
     <>
-      <section
-        className="py-12"
-        style={{
-          backgroundColor: "#001038",
-        }}
-      >
-        <div className="container mx-auto px-6 relative z-10">
-          <header className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              {firstWord}{" "}
-              <span style={{ color: "#60a5fa" }}>{highlightedTitle}</span>
-            </h2>
-            <p className="text-lg text-[var(--color-white)] leading-relaxed max-w-3xl mx-auto">
-              {section.description}
-            </p>
-          </header>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <Section tone="navy" padding="sm" width="container" containerClassName="px-6 relative z-10" style={{ backgroundColor: "#001038" }}>
+        <SectionHeader
+          title={safeTitle}
+          description={section.description}
+          tone="none"
+          className="mb-12"
+          titleClassName="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
+          descriptionClassName="text-lg text-[var(--color-white)] leading-relaxed max-w-3xl mx-auto"
+          highlight="rest"
+          highlightClassName=""
+          highlightStyle={{ color: "#60a5fa" }}
+        />
+        <CardGrid columns={{ md: 2, lg: 3 }} gap="gap-8" equalHeight={false}>
             {modules.map((module, index) => (
               <ModuleCard key={index} module={module} index={index} />
             ))}
-          </div>
-        </div>
-      </section>
+</CardGrid>
+      </Section>
     </>
   );
 };

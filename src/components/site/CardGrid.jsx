@@ -28,7 +28,7 @@ export default function CardGrid({
   children,
 }) {
   const cols = [
-    COLS.base[columns.base ?? 1],
+    columns.base !== null && COLS.base[columns.base ?? 1],
     columns.sm && COLS.sm[columns.sm],
     columns.md && COLS.md[columns.md],
     columns.lg && COLS.lg[columns.lg],

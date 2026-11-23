@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Section, SectionHeader, CardGrid } from "../site";
 
 const AboutDifferentiators = ({ differentiators = [], data = {} }) => {
   // Static fallback data (CMS data comes via props)
@@ -22,21 +23,16 @@ const AboutDifferentiators = ({ differentiators = [], data = {} }) => {
     differentiators.length > 0 ? differentiators : displayData.items;
     
   return (
-    <section className="bg-gray-50 py-20 light-section">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--color-text-primary)] transition-colors duration-600 ease-in-out"
-          >
-            {displayData.title}
-          </h2>
-          <p
-            className="text-lg leading-relaxed max-w-3xl mx-auto text-[var(--color-text-secondary)] transition-colors duration-600 ease-in-out"
-          >
-            {displayData.description}
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <Section tone="plain" width="container" containerClassName="px-6" className="bg-gray-50">
+      <SectionHeader
+        title={displayData.title}
+        description={displayData.description}
+        tone="none"
+        className="mb-16"
+        titleClassName="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--color-text-primary)] transition-colors duration-600 ease-in-out"
+        descriptionClassName="text-lg leading-relaxed max-w-3xl mx-auto text-[var(--color-text-secondary)] transition-colors duration-600 ease-in-out"
+      />
+      <CardGrid columns={{ base: null, md: 2, lg: 4 }} gap="gap-8" equalHeight={false}>
           {Array.isArray(displayDifferentiators) &&
             displayDifferentiators.map((item, index) => (
               <motion.div
@@ -59,9 +55,8 @@ const AboutDifferentiators = ({ differentiators = [], data = {} }) => {
                 </p>
               </motion.div>
             ))}
-        </div>
-      </div>
-    </section>
+</CardGrid>
+    </Section>
   );
 };
 

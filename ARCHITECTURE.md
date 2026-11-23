@@ -45,7 +45,10 @@ import { Section, SectionHeader, CardGrid, FeatureCard, Accordion, CtaBanner } f
 - `SectionHeader` renders simple CMS formatting in titles safely.
 - Every piece accepts `className` / `titleClassName`-style overrides for one-off styling.
 
-Sections already built on the kit: HR Modules (also used on Payroll), HR Use Cases, HR Why Choose, HR FAQ, HR CTA, and the Payroll FAQ.
+- `SectionHeader highlight="last"` colours the title's last word (`"rest"` colours every word after the first). For sections that set their own colours, use `tone="none"` with your own `titleClassName`.
+- `Section` also takes `tone="plain"` (set the background yourself), `width="container"`, `padding="sm"` and a `backdrop` for decorative layers.
+
+Sections already built on the kit: HR Modules (also used on Payroll), HR Use Cases, HR Why Choose, HR FAQ, HR CTA, the Payroll FAQ, Retail Features (also used on Professional Services), Support What We Offer, About What Sets Us Apart, and Training Key Modules.
 
 ## Adding a page section
 

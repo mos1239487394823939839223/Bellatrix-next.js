@@ -1,4 +1,5 @@
 
+import { Section, SectionHeader, CardGrid } from "../../site";
 const FeaturesSection = ({
   data,
   // Direct props from Page Builder schema
@@ -69,8 +70,12 @@ const FeaturesSection = ({
 
   // Show default content even without data
   return (
-    <section className="py-20 relative overflow-hidden theme-bg-primary bg-[var(--color-brand-dark-navy)]">
-
+    <Section
+      tone="navy"
+      width="container"
+      containerClassName="px-6"
+      className="overflow-hidden theme-bg-primary bg-[var(--color-brand-dark-navy)]"
+      backdrop={
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full">
           <svg
@@ -93,29 +98,19 @@ const FeaturesSection = ({
           </svg>
         </div>
       </div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        <header className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            {finalTitle.includes(" ") ? (
-              <>
-                {finalTitle.split(" ").slice(0, -1).join(" ")}{" "}
-                <span className="theme-highlight-text text-[var(--color-cyan-400)] transition-colors duration-600 ease-in-out">
-                  {finalTitle.split(" ").slice(-1)[0]}
-                </span>
-              </>
-            ) : (
-              <span className="theme-highlight-text text-[var(--color-cyan-400)] transition-colors duration-600 ease-in-out">
-                {finalTitle}
-              </span>
-            )}
-          </h2>
-          <p className="text-lg text-[var(--color-white)] leading-relaxed max-w-3xl mx-auto">
-            {finalSubtitle}
-          </p>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      }
+    >
+      <SectionHeader
+        title={finalTitle}
+        description={finalSubtitle}
+        tone="none"
+        className="mb-16"
+        titleClassName="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
+        descriptionClassName="text-lg text-[var(--color-white)] leading-relaxed max-w-3xl mx-auto"
+        highlight="last"
+        highlightClassName="theme-highlight-text text-[var(--color-cyan-400)] transition-colors duration-600 ease-in-out"
+      />
+      <CardGrid columns={{ md: 2 }} gap="gap-8" equalHeight={false}>
           {finalFeatures.map((feature, index) => (
             <article
               key={index}
@@ -178,9 +173,8 @@ const FeaturesSection = ({
               </div>
             </article>
           ))}
-        </div>
-      </div>
-    </section>
+      </CardGrid>
+    </Section>
   );
 };
 
